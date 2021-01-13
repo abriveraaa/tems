@@ -29,15 +29,15 @@ Other assets used:
 - You can login to adminpanel with the following credentials:
 
 Administrator:
-username - __administrator@tems.com__ 
+- username - __administrator@tems.com__ 
 
-password - __password__
+- password - __password__
 
 
 Assistant:
-username - __administrator@tems.com__ 
+- username - __administrator@tems.com__ 
 
-password - __password__
+- password - __password__
 
 
 ## License
