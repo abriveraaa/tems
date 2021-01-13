@@ -1,0 +1,159 @@
+$(document).ready(function () {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $('#add-categories').click(function() {
+        $('#action').val('1');
+        $('#categories-form').trigger("reset");         
+        $('#description').val('');
+        $('#code').val('');
+        $('#id').val('')
+        $('.modal-title').html("Submit");
+        $('#save-data').text("Save Changes");
+    });
+
+    var categoriestable = $('#categories-table').DataTable({
+        processing: true,
+        serverSide: true,
+        order: [[1, "asc"]],
+        ajax: 'data/categories',
+        columns: [
+            { data: 'description'},
+            { data: "deleted_at", visible: false },
+            { data: 'action', orderable: false, searchable: false},
+        ],
+        "createdRow": function( row, data, dataIndex){
+            $(row).addClass('deleted');
+            if( data.deleted_at !=  null){
+                $(row).addClass('bannedClass');
+                
+            }
+        },
+    });
+
+    $('body').on('click', '.edit-categories', function () {
+        var id = $(this).data('id');
+        $('#action').val('2');
+        $.get("data/categories/" + id, function (data) { 
+            $('#categories-form').trigger("reset");         
+            $('#description').val(data[0].description);
+            $('#id').val(data[0].id)
+            $('.modal-title').html("Edit categories");
+            $('#save-data').text("Update");
+        })
+    });
+
+    $('#save-data').click(function(event) {
+        event.preventDefault();
+        var action = $('#action').val();
+        if(action == 1)
+        {
+            var info = $('#categories-form').serialize();
+            $(this).html("Sending...");
+            $.ajax({
+                url: "data/categories",
+                method: "POST",
+                data: info,
+                dataType: 'json',
+                success: function(data) {
+                    if (data.success) {
+                        $('#categories-form').trigger('reset');
+                        $('.show').hide();
+                        toastr.success('New record has been saved successfully', 'SAVED', {timeOut: 5000});
+                        categoriestable.ajax.reload();
+                        categoriestable.draw();
+                    } else {
+                        toastr.error(data.error, 'ERROR', {timeOut: 5000});
+                        $('#save-data').html('Submit');
+                    }
+                },
+                error: function(jqXHR) {
+                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                    $('#save-data').html('Submit');
+                    
+                }
+            });
+            $('#categories-form').trigger("reset"); 
+        }
+        if(action == 2)
+        {
+            var id = $('#id').val();
+            var info = $('#categories-form').serialize();
+            $(this).html("Sending...");
+            $.ajax({
+                url: "data/categories/" + id,
+                method: "PUT",
+                data: info,
+                dataType: 'json',
+                success: function(data) {
+                    if (data.success) {
+                        $('#categories-form').trigger('reset');
+                        $('.show').hide();
+                        toastr.success('Record has been updated successfully', 'SAVED', {timeOut: 5000});
+                        categoriestable.ajax.reload();
+                        categoriestable.draw();
+                    } else {
+                        toastr.error(data.error, 'ERROR', {timeOut: 5000});
+                        $('#save-data').html('Update category');
+                    }
+                },
+                error: function(jqXHR) {
+                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                    $('#save-data').html('Submit');
+                    
+                }
+            });
+        }
+    })
+
+    $('body').on('click', '.del-categories', function () {
+        var id = $(this).data('id');
+        $('.modal-title').text("DELETE RECORDS");
+        $('#del-id').val(id);  
+    });  
+
+    $('body').on('click', '#confirm-yes', function () {
+        var categories = $('#del-id').val();
+        $.ajax({
+            url: "data/categories/" + categories,
+            type: "DELETE",
+            success: function (data) {
+                toastr.warning(data.success, 'Deleted', {timeOut: 1000});
+                categoriestable.ajax.reload();
+                categoriestable.draw();
+                $("#delete .close").click();
+            },
+            error: function(jqXHR) {
+                toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                $('#save-data').html('Submit');
+            }
+        });
+    })
+
+    $('body').on('click', '.res-categories', function () {
+        var id = $(this).data('id');
+        $('.modal-title').text("RESTORE RECORDS");
+        $('#res-id').val(id);  
+    });  
+
+    $(document).on('click', '#confirm-res', function () {
+        var categories = $('#res-id').val();
+        $.ajax({
+            url: "data/categories/" + categories,
+            type: "POST",
+            success: function (data) {
+                toastr.success(data.success, 'Restored', {timeOut: 1000});
+                categoriestable.ajax.reload();
+                categoriestable.draw();
+                $("#restore .close").click();
+            },
+            error: function(jqXHR) {
+                toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                $('#save-data').html('Submit');
+            }
+        });
+    })
+});
