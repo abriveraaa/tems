@@ -2,7 +2,9 @@
 
 A simple system that will greatly help the college department' s laboratory office in updating, maintaining records of their tools and equipment, providing transaction history of the borrower and providing a monitoring system that will speed up the process in request and inventory of the tools and equipment in the laboratory office.
 
-You can manage your Admin, Borrower, Tools and Equipment, Colleges, Courses, Administrator's permission, Reports.
+The system admin has two roles; the administrator and the assistant. The administrator has all the permission(including changing the permission of the assistant) in the system while the assistant can only manage the dashboard and request. 
+
+You can manage your Admin, Borrower, Tools and Equipment, Tool Categories, Colleges, Courses, Room, Reports.
 
 ---
 
