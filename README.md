@@ -42,8 +42,9 @@ Assistant:
 
 ## License
 
-Basically, feel free to use and re-use any way you want.
+Basically, feel free to use any way you want.
 
 ---
 
-### Copyright 2021 Team Drawing of DICT 3-1
+## Connect with me
+- [Facebook](http://facebook.com/abriveraaa)
