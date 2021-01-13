@@ -26,9 +26,14 @@ Other assets used:
 - Run __php artisan key:generate__
 - Run __php artisan migrate --seed__ [has a default data(admin and assistant)to access the system]
 - Run __php artisan serve__
-- You can login to adminpanel with default administraot credentials __administrator@tems.com__ - __password__ for administrator
-- You can login to adminpanel with default assistant credentials __assistant@tems.com__ - __password__ for assistant
+- You can login to adminpanel with the following credentials 
+Administrator:
+username - __administrator@tems.com__ 
+password - __password__
 
+Assistant:
+username - __administrator@tems.com__ 
+password - __password__
 
 ## License
 
