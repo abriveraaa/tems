@@ -1,17 +1,17 @@
 # Tools and Equipment Monitoring System | Laravel 7
 
-Simple project to manage appointments for companies like beauty salon, medical clinic or car repair shop.
+A simple system that will greatly help the college department' s laboratory office in updating, maintaining records of their tools and equipment, providing transaction history of the borrower and providing a monitoring system that will speed up the process in request and inventory of the tools and equipment in the laboratory office.
 
-You can manage your Services, Employees, Clients and Appointments, viewing them in a calendar.
+You can manage your Admin, Borrower, Tools and Equipment, Colleges, Courses, Administrator's permission, Reports.
 
 ---
 
-System is mostly generated with [QuickAdminPanel](https://2019.quickadminpanel.com), with some small tweaks afterwards.
+System is mostly generated with AdminLTE(https://github.com/jeroennoten/Laravel-AdminLTE).
 
 Other assets used:
 
 - [CoreUI Free theme](https://coreui.io/demo/#main.html) (Bootstrap 4)
-- [FullCalendar library](https://fullcalendar.io/) (version 3)
+- [Laratrust V6](https://laratrust.santigarcor.me/)
 
 
 ---
