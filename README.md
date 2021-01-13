@@ -41,4 +41,4 @@ Basically, feel free to use and re-use any way you want.
 
 ---
 
-## Team Drawing
+### Copyright 2021 Team Drawing of DICT 3-1
