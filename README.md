@@ -41,7 +41,7 @@ Administrator:
 
 
 Assistant:
-- username - __administrator@tems.com__ 
+- username - __assistant@tems.com__ 
 
 - password - __password__
 
