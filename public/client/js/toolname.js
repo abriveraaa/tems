@@ -4,6 +4,12 @@ $(document).ready(function () {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    
+    $(document).keypress(function(event){
+        if (event.which == '13') {
+        event.preventDefault();
+        }
+    });
 
     var toolnametable = $('#toolname-table').DataTable({
         processing: true,
