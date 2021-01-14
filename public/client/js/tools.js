@@ -9,6 +9,7 @@ $(document).ready(function(){
     $('#repreason').select2({ width: '100%' });
     $('#category').select2({ width: '100%' });
     $('#description').select2({ width: '100%' });
+    $('#print-tools').hide();
 
     var load = function(){
         $.get("/category/toolcategories", function(res){
@@ -185,6 +186,7 @@ $(document).ready(function(){
 
     $(document).on('click', '#tools-add', function() {
         $('#tools-form').trigger("reset");
+        $('#print-tools').hide();
         $('#description').empty();
         $('.barcodes').show();
         $('#category').val("").trigger('change');
@@ -202,6 +204,7 @@ $(document).ready(function(){
 
     $(document).on('click', '#edit-tools', function() {
         var id = $(this).data("id");
+        $('#print-tools').show();
         $('.barcodes').hide();
         $('#save-tools').html('<i class="fas fa-save mr-2"></i>Update');
         $.get("data/tools/"+ id, function(data) {
@@ -409,12 +412,16 @@ $(document).ready(function(){
                         toastr.success('Item added succesfully!', 'ADDED', {timeOut: 5000});
                     } else {
                         toastr.error(data.error, 'ERROR', {timeOut: 5000});
-                         $('#save-tools').html('Submit');
+                         $('#save-tools').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');
                         }
                     },
                     error: function(jqXHR){
                         toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                        $('#save-tools').html('Submit');
+                        $('#save-tools').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');
                     }
             });
         }
@@ -444,12 +451,16 @@ $(document).ready(function(){
                         .removeClass('uploading');
                     } else {
                         toastr.error(data.error, 'ERROR', {timeOut: 5000});
-                         $('#save-tools').html('Submit');
+                         $('#save-tools').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');
                     }
                 },
                 error: function(jqXHR){
                     toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                    $('#save-tools').html('Submit');
+                    $('#save-tools').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');
                 }
             });
         }
