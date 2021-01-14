@@ -37,6 +37,7 @@ return [
         'smtp' => [
             'transport' => 'smtp',
             'host' => env('MAIL_HOST', 'smtp.googlemail.com'),
+            'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
             'port' => env('MAIL_PORT', 465),
             'username' => env('MAIL_USERNAME', 'itechmonitoringsystem@gmail.com'),
             'password' => env('MAIL_PASSWORD', 'krmzjmvrufctzbvo'),
