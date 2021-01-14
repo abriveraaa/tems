@@ -12,7 +12,7 @@ System requirements:
 - [Laravel 7+](https://laravel.com/docs/7.x/releases)
 - [PHP V7.3](https://www.apachefriends.org/download.html)
 
-System is mostly generated with AdminLTE(https://github.com/jeroennoten/Laravel-AdminLTE).
+System is mostly generated with [AdminLTE](https://github.com/jeroennoten/Laravel-AdminLTE).
 
 Other assets used:
 
