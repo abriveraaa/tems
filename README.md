@@ -7,6 +7,10 @@ The system admin has two roles; the administrator and the assistant. The adminis
 You can manage your Admin, Borrower, Tools and Equipment, Tool Categories, Colleges, Courses, Room, Reports.
 
 ---
+System requirements:
+
+- [Laravel 7+](https://laravel.com/docs/7.x/releases)
+- [PHP V7.3](https://www.apachefriends.org/download.html)
 
 System is mostly generated with AdminLTE(https://github.com/jeroennoten/Laravel-AdminLTE).
 
