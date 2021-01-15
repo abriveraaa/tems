@@ -112,6 +112,13 @@ class CategoryController extends Controller
         return response()->json($res);
     }
 
+    public function getToolDesc($category)
+    {
+        $data = Tools::find($category);
+        $res = $data->toolname()->wherePivot('tools_id', $category)->get();
+        return response()->json($res);
+    }
+
     public function getLastId($lastid)
     {
         $category = Category::where('id', $lastid)->first();
@@ -324,7 +331,7 @@ class CategoryController extends Controller
                             INNER JOIN tools ON tools.id = tool_toolnames.tools_id
                             INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
                             INNER JOIN categories ON categories.id = category_toolnames.category_id
-                            WHERE tools.created_at < '$start'
+                            WHERE tools.created_at < '$start' AND tools.deleted_at < '$start'
                             GROUP BY tool_names.id) D
                             ON A.id = D.id
                             LEFT OUTER JOIN
