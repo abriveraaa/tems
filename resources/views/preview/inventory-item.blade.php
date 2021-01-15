@@ -2,7 +2,6 @@
     <div class="invoice p-3 mb-3">
         <div class="row float-right">
             <button type="submit" class="btn btn-outline-secondary btn-flat pdf-inventory"><i class="fas fa-download"></i> PDF</button>
-            <!-- <a href="{{ url('/report/dailyinventory') }}" target="_blank" class="btn btn-outline-secondary btn-flat"><i class="fas fa-download"></i> PDF</!-->
         </div>
         <div class="row">
             <div class="col text-center mt-3 mb-3">
