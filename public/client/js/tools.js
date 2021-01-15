@@ -208,9 +208,11 @@ $(document).ready(function(){
         $('.barcodes').hide();
         $('#save-tools').html('<i class="fas fa-save mr-2"></i>Update');
         $.get("data/tools/"+ id, function(data) {
-            $('#category').val(data.toolcategory[0].id).trigger('change');
             $.get("/category/toolname/" + data.toolcategory[0].id, function(results){
-                $('#description').val(results.items[0].id).trigger('change');
+                $('#category').val(results.id).trigger('change');
+                $.get("/category/tooldesc/" + data.id, function(res){
+                    $('#description').val(res[0].id).trigger('change');
+                });
             });
             $('#room').val(data.toolroom[0].id).trigger('change');  
             $('#brand').val(data.brand);
@@ -269,7 +271,6 @@ $(document).ready(function(){
     $(document).on('click', '.view-category', function(e){
         var id = $(this).data("id");
         $('#categorymodaltable').DataTable().clear().destroy();
-        // $('.modal-title').html(data.data[0].description);
         $('.changing').html("Item Name");
         categorydata = $('#categorymodaltable').DataTable({
             async: false,
