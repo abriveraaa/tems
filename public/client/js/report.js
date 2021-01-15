@@ -33,8 +33,13 @@ $(document).ready(function(){
     $(document).on('click', '.pdf-itemusage', function(){
         var startdate = $('#start').val();
         var enddate = $('#end').val();
-        window.location.href = '/report/usageitem/start/' + startdate + '/end/' + enddate;
-        
+        window.location.href = '/report/usageitem/start/' + startdate + '/end/' + enddate;     
+    });
+    
+    $(document).on('click', '.pdf-inventory', function(){
+        var startdate = $('#start').val();
+        var enddate = $('#end').val();
+        window.location.href = '/report/inventory/start/' + startdate + '/end/' + enddate;
     });
 
     $('#type').on('change', function(e){
@@ -96,6 +101,7 @@ $(document).ready(function(){
         $('.reporteditems').hide();
         $('.itemusage').hide();
         $('.unserviceableitems').hide();
+        $('.inventory-daily').hide();
         $('.serviceableitems').hide();
         $('.activeuser').hide();
         $('.banneduser').hide();
