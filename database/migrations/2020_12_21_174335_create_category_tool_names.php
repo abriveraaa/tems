@@ -16,7 +16,6 @@ class CreateCategoryToolNames extends Migration
         Schema::create('category_toolnames', function (Blueprint $table) {
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('tool_name_id');
-            $table->softDeletes();
 
             $table->foreign('category_id')->references('id')->on('categories')
                 ->onUpdate('cascade')->onDelete('cascade');
