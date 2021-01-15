@@ -127,15 +127,6 @@ class ReportController extends Controller
                             WHERE tools.created_at <= '$end'
                             GROUP BY tool_names.id) A
                             LEFT OUTER JOIN
-                            (SELECT tool_names.id, COUNT(tool_names.id) AS second_count FROM tool_names
-                            INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
-                            INNER JOIN tools ON tools.id = tool_toolnames.tools_id
-                            INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
-                            INNER JOIN categories ON categories.id = category_toolnames.category_id
-                            WHERE tools.created_at BETWEEN '$start' AND '$end'
-                            GROUP BY tool_names.id) B
-                            ON A.id = B.id
-                            LEFT OUTER JOIN
                             (SELECT tool_names.id, COUNT(tool_names.id) AS third_count FROM tool_names
                             INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
                             INNER JOIN tools ON tools.id = tool_toolnames.tools_id
@@ -171,15 +162,6 @@ class ReportController extends Controller
                             WHERE tools.reason = 'Damaged' AND tools.deleted_at BETWEEN '$start' AND '$end'
                             GROUP BY tool_names.id) F
                             ON A.id = F.id
-                            LEFT OUTER JOIN
-                            (SELECT tool_names.id, COUNT(tool_names.id) AS seventh_count FROM tool_names
-                            INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
-                            INNER JOIN tools ON tools.id = tool_toolnames.tools_id
-                            INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
-                            INNER JOIN categories ON categories.id = category_toolnames.category_id
-                            WHERE tools.deleted_at BETWEEN '$start' AND '$end'
-                            GROUP BY tool_names.id) G
-                            ON A.id = G.id
                             ");
         
 		view()->share('inventory',['data' => $data, 'date' => $date]);
