@@ -333,6 +333,74 @@ $(document).ready(function(){
             },
         });
     });
+    
+    $(document).on('click', '.view-itemname', function(e){
+        var id = $(this).data("id");
+        $('#categorymodaltable').DataTable().clear().destroy();
+        // $('.modal-title').html(data.data[0].description);
+        $('.changing').html("Item Name");
+        categorydata = $('#categorymodaltable').DataTable({
+            async: false,
+            processing: true,
+            serverSide: true,
+            ajax: "/category/toolcategory/" + id,
+            columns: [
+                { data: "barcode" },
+                { data: "toolname",
+                    "render": function (data, type, row) {
+                        return data[0].pivot.tool_name_id;
+                    },   
+                    visible: false 
+                },
+                { data: "toolname",
+                    "render": function ( data, type, row ) {
+                        if(data == null || data == ''){
+                            return '';
+                        }else{
+                            return data[0].description;
+                        }
+                    },
+                    searchable: true,
+                },
+                { data: "brand" },
+                { data: "property" },
+                { data: "toolroom",
+                    "render": function ( data, type, row ) {
+                        if(data == null || data == ''){
+                            return '';
+                        }else{
+                            return data[0].code;
+                        }
+                    },
+                    searchable: true,
+                },
+                { data: "created_at",
+                    render: function(d) {
+                        return moment(d).format("MM/DD/YYYY HH:mm:ss");
+                    }
+                },
+                { data: 'tooladmin',
+                    "render": function (data) {
+                        var getFirstWord = string => {
+                            const words = string.split(' ');
+                            return words[0];
+                        };
+                        if(data == null || data == ''){
+                            return '';
+                        }else{
+                            var nam = getFirstWord(data[0].name);
+                            return nam;
+                        }
+                    },
+                },
+            ],
+            "rowCallback": function( row, result, index ) {
+                if (result.toolname[0].pivot.tool_name_id != id) {
+                    $(row).hide();
+                }
+            },
+        });
+    });
 
     $(document).on('click', '#save-report', function(event) {
         event.preventDefault();
