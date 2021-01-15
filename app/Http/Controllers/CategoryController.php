@@ -148,7 +148,7 @@ class CategoryController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function($row){
                if($row->tools_count > 0){
-                $btn = '<a href="javascript:void(0)" class="view-category btn btn-primary btn-sm mr-2" data-id="'. $row->id .'" data-toggle="modal" data-target="#categorymodal"><i class="fas fa-tv mr-2"></i>View</a>';
+                $btn = '<a href="javascript:void(0)" class="view-itemname btn btn-primary btn-sm mr-2" data-id="'. $row->id .'" data-toggle="modal" data-target="#categorymodal"><i class="fas fa-tv mr-2"></i>View</a>';
                 // $btn .= '<a href="javascript:void(0)" class="print-category btn btn-warning btn-sm" data-id="'. $row->id .'" data-toggle="modal" data-target="#"><i class="fas fa-print mr-2"></i>Print</a>';
                 return $btn; 
                }else{
