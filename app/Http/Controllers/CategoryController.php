@@ -281,53 +281,81 @@ class CategoryController extends Controller
 		return response()->json($data);
     }
     
-    // public function inventoryItem(Request $request)
-    public function inventoryItem()
+    public function inventoryItem(Request $request)
     {
-        // $startdate = $request->start;
-        // $enddate = $request->end;
-        $startdate = '01/01/2021';
-		$enddate = '01/03/2021';
+        $startdate = $request->start;
+        $enddate = $request->end;
 
 		$start = Carbon::parse($startdate)->format('Y-m-d ').'00:00:00';
         $end = Carbon::parse($enddate)->format('Y-m-d ').'23:59:59';
 
-        // $result = ToolName::with('tools')->withCount('tools')->get();
-
         $startnow = Carbon::now()->format('Y-m-d ').'00:00:00';
         $endnow = Carbon::now()->format('Y-m-d ').'23:59:59';
         
-        $prioqty = DB::SELECT("SELECT categories.description, COUNT( categories.id ) AS priorqty
-                        FROM categories
-                        INNER JOIN tool_category ON categories.id = tool_category.category_id
-                        INNER JOIN tools ON tools.id = tool_category.tools_id
-                        WHERE tools.created_at NOT BETWEEN '$start' AND '$end'
-                        GROUP BY category_id
-                    ");
-        
-        $category = DB::SELECT("SELECT categories.id, categories.description FROM categories
-                            INNER JOIN tool_category ON categories.id = tool_category.category_id
-                            INNER JOIN tools ON tools.id = tool_category.tools_id
-                            WHERE tools.created_at BETWEEN '$start' AND '$end'
-                            GROUP BY categories.id
-                        ");
-        
-        $itemname = DB::SELECT("SELECT tool_names.description FROM tool_names
+        $itemname = DB::SELECT("SELECT A.id, IFNULL(D.fourth_count, 0) AS previous, A.category, A.itemname, IFNULL(C.third_count, 0) AS quantityadded,IFNULL(E.fifth_count, 0) AS lost_count, IFNULL(F.sixth_count, 0) AS damaged_count, IF(A.first_count>B.second_count, (IFNULl(A.first_count,0)-IFNULL(G.seventh_count,0)), (IFNULL(IFNULL(B.second_count,A.first_count),0) - IFNULL(G.seventh_count,0))) AS quantityonhand FROM
+                            (SELECT tool_names.id, tool_names.description AS itemname, categories.description AS category, COUNT(tool_names.id) AS first_count FROM tool_names
                             INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
                             INNER JOIN tools ON tools.id = tool_toolnames.tools_id
-                            WHERE tools.created_at BETWEEN '$start' AND '$end'
-                            GROUP BY tool_name_id
-                        ");
-
-        $addedqty = DB::SELECT("SELECT tool_names.description, COUNT( tool_names.id ) AS added_qty
-                            FROM tool_names
+                            INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
+                            INNER JOIN categories ON categories.id = category_toolnames.category_id
+                            WHERE tools.created_at <= '$end'
+                            GROUP BY tool_names.id) A
+                            LEFT OUTER JOIN
+                            (SELECT tool_names.id, COUNT(tool_names.id) AS second_count FROM tool_names
                             INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
                             INNER JOIN tools ON tools.id = tool_toolnames.tools_id
-                            WHERE tools.created_at BETWEEN '$startnow' AND '$endnow'
-                            GROUP BY tool_name_id
-                        ");
+                            INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
+                            INNER JOIN categories ON categories.id = category_toolnames.category_id
+                            WHERE tools.created_at BETWEEN '$start' AND '$end'
+                            GROUP BY tool_names.id) B
+                            ON A.id = B.id
+                            LEFT OUTER JOIN
+                            (SELECT tool_names.id, COUNT(tool_names.id) AS third_count FROM tool_names
+                            INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
+                            INNER JOIN tools ON tools.id = tool_toolnames.tools_id
+                            INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
+                            INNER JOIN categories ON categories.id = category_toolnames.category_id
+                            WHERE tools.created_at BETWEEN '$start' AND '$end'
+                            GROUP BY tool_names.id) C
+                            ON A.id = C.id
+                            LEFT OUTER JOIN
+                            (SELECT tool_names.id, COUNT(tool_names.id) AS fourth_count FROM tool_names
+                            INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
+                            INNER JOIN tools ON tools.id = tool_toolnames.tools_id
+                            INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
+                            INNER JOIN categories ON categories.id = category_toolnames.category_id
+                            WHERE tools.created_at < '$start'
+                            GROUP BY tool_names.id) D
+                            ON A.id = D.id
+                            LEFT OUTER JOIN
+                            (SELECT tool_names.id, COUNT(tool_names.id) AS fifth_count FROM tool_names
+                            INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
+                            INNER JOIN tools ON tools.id = tool_toolnames.tools_id
+                            INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
+                            INNER JOIN categories ON categories.id = category_toolnames.category_id
+                            WHERE tools.reason = 'Lost' AND tools.deleted_at BETWEEN '$start' AND '$end'
+                            GROUP BY tool_names.id) E
+                            ON A.id = E.id
+                            LEFT OUTER JOIN
+                            (SELECT tool_names.id, COUNT(tool_names.id) AS sixth_count FROM tool_names
+                            INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
+                            INNER JOIN tools ON tools.id = tool_toolnames.tools_id
+                            INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
+                            INNER JOIN categories ON categories.id = category_toolnames.category_id
+                            WHERE tools.reason = 'Damaged' AND tools.deleted_at BETWEEN '$start' AND '$end'
+                            GROUP BY tool_names.id) F
+                            ON A.id = F.id
+                            LEFT OUTER JOIN
+                            (SELECT tool_names.id, COUNT(tool_names.id) AS seventh_count FROM tool_names
+                            INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
+                            INNER JOIN tools ON tools.id = tool_toolnames.tools_id
+                            INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
+                            INNER JOIN categories ON categories.id = category_toolnames.category_id
+                            WHERE tools.deleted_at BETWEEN '$start' AND '$end'
+                            GROUP BY tool_names.id) G
+                            ON A.id = G.id
+                            ");
         
-		return response()->json([$prioqty, $category, $itemname, $addedqty]);
-
+		return response()->json($itemname);
     }
 }
