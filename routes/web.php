@@ -164,13 +164,14 @@ Route::middleware(['route'])->group(function() {
         Route::get('/room', ['as' => 'category.room', 'uses' => 'CategoryController@getRoom']);
         Route::get('/collegeuser/{college}', ['as' => 'category.collegeuser', 'uses' => 'CategoryController@getCollegeUser']);
         Route::get('/course/{course}', ['as' => 'category.course', 'uses' => 'CategoryController@getCourse']);
+        Route::get('/toolname/{toolname}', ['as' => 'category.toolname', 'uses' => 'CategoryController@getToolName']);
+        Route::get('/tooldesc/{tooldesc}', ['as' => 'category.tooldesc', 'uses' => 'CategoryController@getToolDesc']);
         Route::get('/borrower/{borrower}', ['as' => 'category.borrower', 'uses' => 'CategoryController@getBorrower']);
         Route::get('/courseuser/{course}', ['as' => 'category.courseuser', 'uses' => 'CategoryController@getCourseUser']);
         Route::get('/toolcategories', ['as' => 'category.toolcategories', 'uses' => 'CategoryController@getToolCategories']);
         Route::get('/toolcategory/{toolcategory}', ['as' => 'category.toolcategory', 'uses' => 'CategoryController@toolCategory']);
         Route::get('/alltools', ['as' => 'category.alltools', 'uses' => 'CategoryController@getAllTools']);
         Route::get('/reported', ['as' => 'tools.reported', 'uses' => 'CategoryController@getReportedTools']);
-        Route::get('/toolname/{toolname}', ['as' => 'category.toolname', 'uses' => 'CategoryController@getToolName']);
         Route::get('/lastid/{lastid}', ['as' => 'category.lastid', 'uses' => 'CategoryController@getLastId']);
         Route::get('/sortcategory', ['as' => 'tools.sortcategory', 'uses' => 'CategoryController@sortCategory']);
         Route::get('/sortitemname', ['as' => 'tools.sortitemname', 'uses' => 'CategoryController@sortItemName']);
@@ -200,7 +201,7 @@ Route::middleware(['route'])->group(function() {
         Route::get('/activeborrower', ['as' => 'report.activeborrower', 'uses' => 'ReportController@activeBorrower']);
         Route::get('/bannedborrower', ['as' => 'report.bannedborrower', 'uses' => 'ReportController@bannedBorrower']);
         Route::get('/usageitem/start/{startdate}/end/{enddate}', ['as' => 'report.usageitem', 'uses' => 'ReportController@usageItem']);
-         Route::get('/inventory/start/{startdate}/end/{enddate}', ['as' => 'report.inventory', 'uses' => 'ReportController@inventory']);
+        Route::get('/inventory/start/{startdate}/end/{enddate}', ['as' => 'report.inventory', 'uses' => 'ReportController@inventory']);
         Route::get('/reporteditem', ['as' => 'report.reporteditem', 'uses' => 'ReportController@reportedItem']);
         Route::get('/serviceableitem', ['as' => 'report.serviceableitem', 'uses' => 'ReportController@serviceItem']);
         Route::get('/lhofborrower/{dat}', ['as' => 'report.lhofborrower', 'uses' => 'ReportController@lhofBorrower']);
