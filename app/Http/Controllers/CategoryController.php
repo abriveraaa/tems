@@ -299,7 +299,8 @@ class CategoryController extends Controller
         $startnow = Carbon::now()->format('Y-m-d ').'00:00:00';
         $endnow = Carbon::now()->format('Y-m-d ').'23:59:59';
         
-        $itemname = DB::SELECT("SELECT A.id, IFNULL(D.fourth_count, 0) AS previous, A.category, A.itemname, IFNULL(C.third_count, 0) AS quantityadded,IFNULL(E.fifth_count, 0) AS lost_count, IFNULL(F.sixth_count, 0) AS damaged_count, IF(A.first_count>B.second_count, (IFNULl(A.first_count,0)-IFNULL(G.seventh_count,0)), (IFNULL(IFNULL(B.second_count,A.first_count),0) - IFNULL(G.seventh_count,0))) AS quantityonhand FROM
+        $itemname = DB::SELECT("SELECT A.id, IFNULL(D.fourth_count, 0) AS previous, A.category, A.itemname, IFNULL(C.third_count, 0) AS quantityadded,IFNULL(E.fifth_count, 0) AS lost_count, IFNULL(F.sixth_count, 0) AS damaged_count, 
+        (IFNULL(D.fourth_count,0)+IFNULL(C.third_count,0) - (IFNULl(E.fifth_count,0)+IFNULL(F.sixth_count,0))) as quantityonhand FROM
                             (SELECT tool_names.id, tool_names.description AS itemname, categories.description AS category, COUNT(tool_names.id) AS first_count FROM tool_names
                             INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
                             INNER JOIN tools ON tools.id = tool_toolnames.tools_id
