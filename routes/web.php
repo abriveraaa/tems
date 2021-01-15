@@ -200,6 +200,7 @@ Route::middleware(['route'])->group(function() {
         Route::get('/activeborrower', ['as' => 'report.activeborrower', 'uses' => 'ReportController@activeBorrower']);
         Route::get('/bannedborrower', ['as' => 'report.bannedborrower', 'uses' => 'ReportController@bannedBorrower']);
         Route::get('/usageitem/start/{startdate}/end/{enddate}', ['as' => 'report.usageitem', 'uses' => 'ReportController@usageItem']);
+         Route::get('/inventory/start/{startdate}/end/{enddate}', ['as' => 'report.inventory', 'uses' => 'ReportController@inventory']);
         Route::get('/reporteditem', ['as' => 'report.reporteditem', 'uses' => 'ReportController@reportedItem']);
         Route::get('/serviceableitem', ['as' => 'report.serviceableitem', 'uses' => 'ReportController@serviceItem']);
         Route::get('/lhofborrower/{dat}', ['as' => 'report.lhofborrower', 'uses' => 'ReportController@lhofBorrower']);
