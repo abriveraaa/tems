@@ -14,19 +14,19 @@
                 <table class="table table-striped table-bordered" id="inventory">
                     <thead>
                         <tr>
-                            <th rowspan="3" class="width-100">Quantity As of Prior Inventory</th>
-                            <th rowspan="3">Item Description</th>
-                            <th rowspan="3">Item Category</th>
-                            <th colspan="3">Changes Prior Inventory</th>
-                            <th rowspan="3" class="width-100">Current Quantity on Hand</th>
+                            <th rowspan="3" style="text-align:center">Quantity <br>As Of Prior<br> Inventory</th>
+                            <th rowspan="3" style="width:20%">Item Category</th>
+                            <th rowspan="3" style="width:20%">Item Name</th>
+                            <th colspan="3" style="text-align:center">Changes Prior Inventory</th>
+                            <th rowspan="3" style="text-align:center">Quantity  <br>on Hand</th>
                         </tr>
                         <tr>
-                            <th rowspan="2">Quantity Added</th>
-                            <th colspan="2">Quantity Deleted</th>
+                            <th rowspan="2" style="text-align:center">Quantity <br> Added</th>
+                            <th colspan="2" style="text-align:center">Quantity Deleted</th>
                         </tr>
                         <tr>
-                            <th>Lost</th>
-                            <th>Damaged</th>
+                            <th style="text-align:center">Lost</th>
+                            <th style="text-align:center">Damaged</th>
                         </tr>
                     </thead>
                     <tbody class="added">
