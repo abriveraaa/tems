@@ -294,14 +294,40 @@ class CategoryController extends Controller
 
         // $result = ToolName::with('tools')->withCount('tools')->get();
 
-        $result = Tools::withTrashed()->leftJoin('tool_category', function($join){
-            $join->on('tools.id', '=', 'tool_category.tools_id')->where('tool_category.category_id', '=', 'categories.id');
-          })->leftJoin('tool_toolnames', function($join){
-            $join->on('tools.id', '=', 'tool_toolnames.tools_id');
-          })
-          ->get();
+        $startnow = Carbon::now()->format('Y-m-d ').'00:00:00';
+        $endnow = Carbon::now()->format('Y-m-d ').'23:59:59';
         
-		return response()->json($result);
+        $prioqty = DB::SELECT("SELECT categories.description, COUNT( categories.id ) AS priorqty
+                        FROM categories
+                        INNER JOIN tool_category ON categories.id = tool_category.category_id
+                        INNER JOIN tools ON tools.id = tool_category.tools_id
+                        WHERE tools.created_at NOT BETWEEN '$start' AND '$end'
+                        GROUP BY category_id
+                    ");
+        
+        $category = DB::SELECT("SELECT categories.id, categories.description FROM categories
+                            INNER JOIN tool_category ON categories.id = tool_category.category_id
+                            INNER JOIN tools ON tools.id = tool_category.tools_id
+                            WHERE tools.created_at BETWEEN '$start' AND '$end'
+                            GROUP BY categories.id
+                        ");
+        
+        $itemname = DB::SELECT("SELECT tool_names.description FROM tool_names
+                            INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
+                            INNER JOIN tools ON tools.id = tool_toolnames.tools_id
+                            WHERE tools.created_at BETWEEN '$start' AND '$end'
+                            GROUP BY tool_name_id
+                        ");
+
+        $addedqty = DB::SELECT("SELECT tool_names.description, COUNT( tool_names.id ) AS added_qty
+                            FROM tool_names
+                            INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
+                            INNER JOIN tools ON tools.id = tool_toolnames.tools_id
+                            WHERE tools.created_at BETWEEN '$startnow' AND '$endnow'
+                            GROUP BY tool_name_id
+                        ");
+        
+		return response()->json([$prioqty, $category, $itemname, $addedqty]);
 
     }
 }
