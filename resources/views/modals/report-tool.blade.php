@@ -12,7 +12,7 @@
                     <div class="row mb-3">
                         <div class="col">
                             <label for="rep-barcode" class="form__label">Barcode</label>
-                            <input type="text" name="rep-barcode" id="rep-barcode" class="form-control color-red" value="" readonly="">
+                            <input type="text" name="repBarcode" id="rep-barcode" class="form-control color-red" value="" readonly="">
                             <input type="hidden" name="reptoolId" id="reptoolId">
                         </div>
                             <div class="col">
