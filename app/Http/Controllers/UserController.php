@@ -121,16 +121,6 @@ class UserController extends Controller
             }
         }
 
-        // $user_data = array (
-        //     'salutation' => ucwords(mb_strtolower($request->salutation)),
-        //     'name' => ucwords(mb_strtolower($request->name)),
-        //     'position' => ucwords(mb_strtolower($request->position)),
-        //     'email' => $request->email,
-        //     'password' => Hash::make($request->password),
-        //     'image' => $image_name 
-        // );
-
-        // User::create($user_data);
         $userType = 'App\Models\User';
         $newUser = new User;
         $newUser->image = $image_name;
@@ -169,13 +159,14 @@ class UserController extends Controller
                 'admin_image' => 'image|max:2048',
                 'name' => 'required',
                 'position' => 'required',
-                'email' => 'required',
+                'email' => 'required|unique:users,email,'.$request->admin_id,
             );
 
             $messages = array(
                 'name.required' => 'Fullname is required. <br>',
                 'position.required' => 'Position is required. <br>',
                 'email.required' => 'Email is required. <br>',
+                'email.unique' => 'Email has already been taken.<br>',
             );
 
             $validate = Validator::make($request->all(), $rules, $messages);
@@ -191,13 +182,14 @@ class UserController extends Controller
                 'admin_image' => 'image|max:2048',
                 'name' => 'required',
                 'position' => 'required',
-                'email' => 'required',
+                'email' => 'required|unique:users,email,'.$request->admin_id,
             );
 
             $messages = array(
                 'name.required' => 'Fullname is required. <br>',
                 'position.required' => 'Position is required. <br>',
                 'email.required' => 'Email is required. <br>',
+                'email.unique' => 'Email has already been taken.<br>',
             );
 
             $validate = Validator::make($request->all(), $rules, $messages);
