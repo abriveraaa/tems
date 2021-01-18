@@ -78,10 +78,10 @@ class CourseController extends Controller
         
         $messages = array(
             'college.required' => 'College is required.<br>',
-            'description.required' => 'Course description is required.<br>',
-            'description.unique' => 'Course description is already in the database.<br>',
+            'description.required' => 'Course name is required.<br>',
+            'description.unique' => 'Course name has already been taken.<br>',
             'code.required' => 'Course code is required.<br>',
-            'code.unique' => 'Course code is already in the database.<br>',
+            'code.unique' => 'Course code has already been taken.<br>',
         );
             
         $validate = Validator::make($request->all(), $rules, $messages);
@@ -119,16 +119,21 @@ class CourseController extends Controller
      */
     public function update(Request $request)
     {
+        $college = $request->college;
+        $course = $request->idcourse;
+        
         $rules = array(
             'college' => 'required',
-            'description' => 'required',
-            'code' => 'required'
+            'description' => 'required|unique:courses,description,'.$course,
+            'code' => 'required|unique:courses,code,'.$course,
         );
         
         $messages = array(
             'college.required' => 'College is required.<br>',
             'description.required' => 'Course description is required.<br>',
             'code.required' => 'Course code is required.<br>',
+            'code.unique' => 'Course code has already been taken.<br>',
+            'description.unique' => 'Course name has already been taken.<br>',
         );
 
         $validator = \Validator::make($request->all(), $rules, $messages);
@@ -139,9 +144,6 @@ class CourseController extends Controller
         }
         else
         {
-            $college = $request->college;
-            $course = $request->idcourse;
-
             $data = Course::where('id', $course)->first();
             $data->description = $request->description;
             $data->code = strtoupper($request->code);
