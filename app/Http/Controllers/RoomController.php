@@ -71,10 +71,10 @@ class RoomController extends Controller
         );
 
         $messages = array(
-            'description.required' => 'Description is required. <br>',
-            'description.unique' => 'Description has already been taken. <br>',
-            'code.required' => 'Room code is required. <br>',
-            'code.unique' => 'Room code has already been taken',
+            'description.required' => 'Room name is required. <br>',
+            'description.unique' => 'Room name has already been taken. <br>',
+            'code.required' => 'Room number is required. <br>',
+            'code.unique' => 'Room number has already been taken',
         );
 
         $validator = \Validator::make($request->all(), $rules, $messages);
@@ -112,14 +112,14 @@ class RoomController extends Controller
     {
         $rules = array(
             'description' => 'bail|required',
-            'code' => 'bail|required|max:10'
+            'code' => 'bail|required|max:10|unique:rooms,code,'.$request->id,
         );
 
         $messages = array(
-            'description.required' => 'Description is required. <br>',
-            'description.unique' => 'Description has already been taken. <br>',
-            'code.required' => 'Room code is required. <br>',
-            'code.unique' => 'Room code has already been taken',
+            'description.required' => 'Room name is required. <br>',
+            'description.unique' => 'Room name has already been taken. <br>',
+            'code.required' => 'Room number is required. <br>',
+            'code.unique' => 'Room number has already been taken',
         );
 
         $validator = \Validator::make($request->all(), $rules, $messages);
