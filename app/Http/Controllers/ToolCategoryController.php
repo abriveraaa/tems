@@ -101,11 +101,12 @@ class ToolCategoryController extends Controller
     public function update(Request $request)
     {
         $rules = array(
-            'description' => 'bail|required',
+            'description' => 'bail|required|unique:categories,description,'.$request->id,
         );
 
         $messages = array(
-            'description.required' => 'Description is required. <br>',
+            'description.required' => 'Tool category is required. <br>',
+            'description.unique' => 'Category name has already been taken.<br>', 
         );
 
         $validator = \Validator::make($request->all(), $rules, $messages);
