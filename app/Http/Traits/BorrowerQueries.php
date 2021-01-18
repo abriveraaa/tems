@@ -38,9 +38,6 @@ trait BorrowerQueries {
                         $btn .= '<a href="javascript:void(0)" class="btn btn-danger btn-sm" id="ban-borrower" data-id="'. $row->id .'" data-toggle="modal" data-target="#delete"><i class="fas fa-user-lock mr-2"></i>Ban</a>';
                         return $btn;
                     }else{
-                        // $btn = '';
-                        // $btn .= '';
-                        // return $btn;
 
                     }
                 }else{
@@ -49,9 +46,6 @@ trait BorrowerQueries {
                     $btn .= '<a href="javascript:void(0)" class="btn btn-success btn-sm" id="res-borrower" data-id="'. $row->id .'" data-toggle="modal" data-target="#restore"><i class="fas fa-user-check mr-2"></i>Unlock</a>';
                     return $btn;
                     }else{
-                        // $btn = '';
-                        // $btn .= '';
-                        // return $btn;
                     }
                 }
             })
@@ -150,7 +144,7 @@ trait BorrowerQueries {
 
         $borrower = new Borrower;
         $borrower->image = $image_name;
-        $borrower->studnum = ucwords(mb_strtoupper($request->studnum));
+        $borrower->studnum = strtoupper($request->studnum);
         $borrower->firstname = ucwords(mb_strtolower($request->firstname));
         $borrower->midname = ucwords(mb_strtolower($request->midname));
         $borrower->lastname = ucwords(mb_strtolower($request->lastname));
@@ -267,7 +261,7 @@ trait BorrowerQueries {
 
         $borrower = Borrower::where('id', $borrowerId)->first();
         $borrower->image = $image_name;
-        $borrower->studnum = ucwords(mb_strtoupper($request->studnum));
+        $borrower->studnum = strtoupper($request->studnum);
         $borrower->firstname = ucwords(mb_strtolower($request->firstname));
         $borrower->midname = ucwords(mb_strtolower($request->midname));
         $borrower->lastname = ucwords(mb_strtolower($request->lastname));
