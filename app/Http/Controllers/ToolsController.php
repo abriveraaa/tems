@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Tools;
 use App\Models\Category;
 use App\Models\Borrower;
+use App\Models\Requests;
 
 use Carbon\Carbon;
 use DataTables;
@@ -181,7 +182,18 @@ class ToolsController extends Controller
 
         $borrower = $request->repnum;
         $toolId = $request->reptoolId;
+        $barcode = $request->repBarcode;
         $admin = Auth()->user()->id;
+        
+        $check = Tools::where('id', $toolId)->where('reason', 'Borrowed')->exists();
+        if($check){
+            $returned = Requests::where('tool', $barcode)->where('status', 'Borrowed')->first();
+            $returned->status = "Returned";
+            $returned->save();
+
+            $returned->return()->sync($admin, $returned);
+        }
+        
         $tools = Tools::whereId($toolId)->first();
         $tools->reason = $request->repreason;
         $tools->deleted_at = Carbon::now()->toDateTimeString();
