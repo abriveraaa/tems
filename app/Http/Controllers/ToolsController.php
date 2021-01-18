@@ -84,7 +84,7 @@ class ToolsController extends Controller
             $tools = new Tools;
             $tools->barcode = $request->barcode;
             $tools->brand = $request->brand;
-            $tools->property = $request->property;
+            $tools->property = strtoupper($request->property);
             $tools->save();
     
             $tools->toolname()->sync($description, $tools);
@@ -142,7 +142,7 @@ class ToolsController extends Controller
 
         $tools = Tools::where('id', $toolId)->first();
         $tools->brand = $request->brand;
-        $tools->property = $request->property;
+        $tools->property = strtoupper($request->property);
         $tools->save();
 
         $tools->toolname()->sync($description, $tools);
