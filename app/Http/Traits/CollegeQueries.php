@@ -114,13 +114,13 @@ trait CollegeQueries {
     {
         
         $rules = array(
-            'description' => 'bail|required',
-            'code' => 'bail|required|max:10'
+            'description' => 'bail|required|unique:colleges,description,'.$request->id,
+            'code' => 'bail|required|max:10|unique:colleges,code,'.$request->id,
         );
 
         $messages = array(
-            'description.required' => 'Description is required. <br>',
-            'description.unique' => 'Description has already been taken. <br>',
+            'description.required' => 'College name is required. <br>',
+            'description.unique' => 'College name has already been taken. <br>',
             'code.required' => 'College code is required. <br>',
             'code.unique' => 'College code has already been taken',
         );
