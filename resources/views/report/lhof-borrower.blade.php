@@ -10,7 +10,7 @@
                         <fieldset style="width:100%;">
                             <table border="0" cellpadding="1" cellspacing="0" style="padding:0;line-height:1;">
                                     <tr>
-                                        <td rowspan="4"><img style="height:50px" src="http://localhost/inventory/public/client/img/pup_logo.png"/></td>
+                                        <td rowspan="4"><img style="height:50px" src="http://127.0.0.1:8000/img/pup_logo.png"/></td>
                                         <td rowspan="4"></td>
                                         <td style="font-family: Calibri; font-size: 8pt">Republic of the Philippines</td>
                                     </tr>
