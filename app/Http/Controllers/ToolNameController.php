@@ -69,7 +69,7 @@ class ToolNameController extends Controller
         $messages = array(
             'toolcategory.required' => 'Tool category is required.<br>',
             'description.required' => 'Tool name is required.<br>',
-            'description.unique' => 'Tool name is already in the database.<br>',
+            'description.unique' => 'Tool name has already been taken.<br>',
         );
             
         $validate = Validator::make($request->all(), $rules, $messages);
@@ -100,17 +100,6 @@ class ToolNameController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ToolName  $toolName
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ToolName $toolName)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -118,15 +107,19 @@ class ToolNameController extends Controller
     public function update(Request $request)
     {
         $toolcategory = $request->toolcategory;
+        $toolcategory = $request->toolcategory;
+        $toolname = $request->idtoolname;
+
         
         $rules = array(
             'toolcategory' => 'required',
-            'description' => 'required',
+            'description' => 'required|unique:tool_names,description,'.$toolname,
         );
         
         $messages = array(
             'toolcategory.required' => 'Tool category is required.<br>',
             'description.required' => 'Tool name is required.<br>',
+            'description.unique' => 'Tool name has already been taken.<br>',
         );
             
         $validate = Validator::make($request->all(), $rules, $messages);
@@ -135,9 +128,7 @@ class ToolNameController extends Controller
             
             return response()->json(['error' => $validate->errors()->all()]);
         }else {
-            $toolcategory = $request->toolcategory;
-            $toolname = $request->idtoolname;
-
+           
             $toolname = ToolName::where('id', $toolname)->first();
             $toolname->description = $request->description;
             $toolname->save();
