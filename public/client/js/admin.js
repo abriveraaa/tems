@@ -20,6 +20,8 @@ $(document).ready(function(){
     var admintable = $('#admin-table').DataTable({
         processing: true,
         serverSide: true,
+        pageLength : 5,
+        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
         ajax: "data/admin",
         order: [[ 3, 'asc']],
         columns: [
