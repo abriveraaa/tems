@@ -54,6 +54,8 @@ $(document).ready(function(){
         async: false,
         processing: true,
         serverSide: true,
+        pageLength : 5,
+        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
         order: [[6, "desc"]],
         ajax: "/data/tools",
         columns: [
@@ -112,6 +114,8 @@ $(document).ready(function(){
         async: false,
         processing: true,
         serverSide: true,
+        pageLength : 5,
+        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
         ajax: "/category/sortcategory",
         columns: [
             { data: 'description' },
@@ -124,6 +128,8 @@ $(document).ready(function(){
         async: false,
         processing: true,
         serverSide: true,
+        pageLength : 5,
+        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
         ajax: "/category/reported",
         columns: [
             { data: 'toolreport',
@@ -174,6 +180,8 @@ $(document).ready(function(){
         async: false,
         processing: true,
         serverSide: true,
+        pageLength : 5,
+        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
         ajax: "/category/sortitemname",
         columns: [
             { data: 'description' },
@@ -276,6 +284,8 @@ $(document).ready(function(){
             async: false,
             processing: true,
             serverSide: true,
+            pageLength : 5,
+            lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
             ajax: "/category/toolcategory/" + id,
             columns: [
                 { data: "barcode" },
@@ -344,6 +354,8 @@ $(document).ready(function(){
             async: false,
             processing: true,
             serverSide: true,
+            pageLength : 5,
+            lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
             ajax: "/category/toolcategory/" + id,
             columns: [
                 { data: "barcode" },
