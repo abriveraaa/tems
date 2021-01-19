@@ -62,7 +62,7 @@ $(document).ready(function () {
             }
         });
         $('.modal-title').html("Add course");
-        $('#save-data').text("Save Changes");
+        $('#save-data').text("Submit");
     });
 
     $('body').on('click', '#edit-course', function () {
@@ -111,6 +111,9 @@ $(document).ready(function () {
         e.preventDefault();
         var action = $('#action-course').val();
         var info = $('#course-form').serialize();
+         $('#save-data').prop('disabled', true)
+        .html("")
+        .addClass('uploading');
         if(action == "Add")
         {
             $.ajax({
@@ -120,20 +123,26 @@ $(document).ready(function () {
                 dataType:"json",
                 success:function(data){
                     if(data.success){
-                        toastr.success(data.success, 'COURSE ADDED', {timeOut: 5000});
+                        toastr.success(data.success, 'COURSE ADDED', {timeOut: 3000});
                         coursetable.ajax.reload();
                         coursetable.draw();
                         $("#add-course .close").click();
-                        $('#save-data').html("Submit");                    }
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');               }
                     if(data.error)
                     {
-                        toastr.error(data.error, 'ERROR', {timeOut: 5000});
-                        $('#save-data').html("Submit");
+                        toastr.error(data.error, 'ERROR', {timeOut: 3000});
+                         $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');
                     }
                 },
-                error: function(data){
-                    toastr.error(data.error, 'ERROR', {timeOut: 5000});
-                    $('#save-data').html("Submit");
+                error: function(jqXHR) {
+                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                    $('#save-data').prop('disabled', false)
+                    .html("Submit")
+                    .removeClass('uploading');
                 }
             })
         }
@@ -147,21 +156,27 @@ $(document).ready(function () {
                 dataType:"json",
                 success:function(data){
                     if(data.success){
-                        toastr.success(data.success, 'COURSE UPDATED', {timeOut: 5000});
+                        toastr.success(data.success, 'COURSE UPDATED', {timeOut: 3000});
                         coursetable.ajax.reload();
                         coursetable.draw();
                         $("#add-course .close").click();
-                        $('#save-data').html("Submit");
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');  
                     }
                     if(data.error)
                     {
-                        toastr.error(data.error, 'ERROR', {timeOut: 5000});
-                        $('#save-data').html("Submit");
+                        toastr.error(data.error, 'ERROR', {timeOut: 3000});
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');  
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                    $('#save-data').html("Submit");
+                    $('#save-data').prop('disabled', false)
+                    .html("Submit")
+                    .removeClass('uploading');  
                 }
             })
         }
@@ -180,7 +195,9 @@ $(document).ready(function () {
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                $('#save-data').html("Submit");
+                $('#save-data').prop('disabled', false)
+                .html("Submit")
+                .removeClass('uploading');  
             }
         });
     });  
@@ -198,7 +215,9 @@ $(document).ready(function () {
             },
             error: function(jqXHR) {
                 toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                $('#save-data').html("Submit");
+                $('#save-data').prop('disabled', false)
+                .html("Submit")
+                .removeClass('uploading');  
             }
         });
     });
