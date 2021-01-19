@@ -127,7 +127,6 @@ class ToolsController extends Controller
         $rules = array(
             'category' => 'required',
             'description' => 'required',
-            'barcode' => 'required|unique:tools,barcode,'.$toolId,
             'room' => 'required',
             'property' => 'unique:tools,property,'.$toolId,
         );
@@ -135,7 +134,6 @@ class ToolsController extends Controller
             $messages = array(
             'category.required' => 'Category is required. <br>',
             'description.required' => 'Description is required. <br>',
-            'barcode.required' => 'Barcode is required. <br>',
             'room.required' => 'Room is required.<br>',
             'property.unique' => 'Property number has already been taken.<br>', 
             'barcode.unique' => 'Barcode number has already been taken.<br>', 
