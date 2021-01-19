@@ -4,7 +4,7 @@
 <body>
     <table width="100%"  cellspacing="1" cellpadding="0"; style="border-collapse: collapse; line-height:1;">
         <tr>
-            <td rowspan="5" style="width: 10%;"><img src="http://localhost/inventory/public/client/img/pup_logo.png"/></td>
+            <td rowspan="5" style="width: 10%;"><img src="http://localhost/tems/public/client/img/pup_logo.png"/></td>
             <td rowspan="5" style="width: 1%;"></td>
             <td style="font-family: Calibri; font-size: 11pt">Republic of the Philippines</td>
         </tr>
