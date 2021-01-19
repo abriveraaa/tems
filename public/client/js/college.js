@@ -7,7 +7,7 @@ $(document).ready(function () {
         $('#code').val('');
         $('#id').val('')
         $('.modal-title').html("Add College");
-        $('#save-data').text("Save Changes");
+        $('#save-data').text("Submit");
     });
 
     var collegetable = $('#college-table').DataTable({
@@ -46,6 +46,9 @@ $(document).ready(function () {
     $('#save-data').click(function(event) {
         event.preventDefault();
         var action = $('#action').val();
+        $('#save-data').prop('disabled', true)
+        .html("")
+        .addClass('uploading');
         if(action == 1)
         {
             var info = $('#college-form').serialize();
@@ -59,16 +62,24 @@ $(document).ready(function () {
                     if (data.success) {
                         $('#college-form').trigger('reset');
                         $('.show').hide();
-                        toastr.success('New record has been saved successfully', 'SAVED', {timeOut: 5000});
+                        toastr.success('New record has been saved successfully', 'SAVED', {timeOut: 3000});
                         collegetable.ajax.reload();
                         collegetable.draw();
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');
                     } else {
-                        toastr.error(data.error, 'ERROR', {timeOut: 5000});
-                        $('#save-data').html('Add College');
+                        toastr.error(data.error, 'ERROR', {timeOut: 3000});
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');
                     }
                 },
-                error: function(data) {
-                    
+                error: function(jqXHR) {
+                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                    $('#save-data').prop('disabled', false)
+                    .html("Submit")
+                    .removeClass('uploading');
                 }
             });
             $('#college-form').trigger("reset"); 
@@ -87,16 +98,24 @@ $(document).ready(function () {
                     if (data.success) {
                         $('#college-form').trigger('reset');
                         $('.show').hide();
-                        toastr.success('Record has been updated successfully', 'SAVED', {timeOut: 5000});
+                        toastr.success('Record has been updated successfully', 'SAVED', {timeOut: 3000});
                         collegetable.ajax.reload();
                         collegetable.draw();
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');
                     } else {
-                        toastr.error(data.error, 'ERROR', {timeOut: 5000});
-                        $('#save-data').html('Update College');
+                        toastr.error(data.error, 'ERROR', {timeOut: 3000});
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');
                     }
                 },
-                error: function(data) {
-                    
+                error: function(jqXHR) {
+                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                    $('#save-data').prop('disabled', false)
+                    .html("Submit")
+                    .removeClass('uploading');
                 }
             });
         }
@@ -119,8 +138,11 @@ $(document).ready(function () {
                 collegetable.draw();
                 $("#delete .close").click();
             },
-            error: function (data) {
-                console.log('Error:', data);
+            error: function(jqXHR) {
+                toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                $('#save-data').prop('disabled', false)
+                .html("Submit")
+                .removeClass('uploading');
             }
         });
     })
@@ -142,8 +164,11 @@ $(document).ready(function () {
                 collegetable.draw();
                 $("#restore .close").click();
             },
-            error: function (data) {
-                console.log('Error:', data);
+            error: function(jqXHR) {
+                toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                $('#save-data').prop('disabled', false)
+                .html("Submit")
+                .removeClass('uploading');
             }
         });
     })
