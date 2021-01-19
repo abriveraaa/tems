@@ -56,7 +56,7 @@
                                                 <th></th>
                                                 <th>Contact</th>
                                                 <th></th>
-                                                <th>Action</th>
+                                                <th style="width:20%">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>  
