@@ -18,7 +18,7 @@ $(document).ready(function () {
         $('#code').val('');
         $('#id').val('')
         $('.modal-title').html("Submit");
-        $('#save-data').text("Save Changes");
+        $('#save-data').text("Submit");
     });
 
     var categoriestable = $('#categories-table').DataTable({
@@ -55,6 +55,9 @@ $(document).ready(function () {
     $('#save-data').click(function(event) {
         event.preventDefault();
         var action = $('#action').val();
+         $('#save-data').prop('disabled', true)
+        .html("")
+        .addClass('uploading');
         if(action == 1)
         {
             var info = $('#categories-form').serialize();
@@ -71,14 +74,21 @@ $(document).ready(function () {
                         toastr.success('New record has been saved successfully', 'SAVED', {timeOut: 5000});
                         categoriestable.ajax.reload();
                         categoriestable.draw();
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');  
                     } else {
                         toastr.error(data.error, 'ERROR', {timeOut: 5000});
-                        $('#save-data').html('Submit');
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');  
                     }
                 },
                 error: function(jqXHR) {
                     toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                    $('#save-data').html('Submit');
+                    $('#save-data').prop('disabled', false)
+                    .html("Submit")
+                    .removeClass('uploading');  
                     
                 }
             });
@@ -98,18 +108,24 @@ $(document).ready(function () {
                     if (data.success) {
                         $('#categories-form').trigger('reset');
                         $('.show').hide();
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');  
                         toastr.success('Record has been updated successfully', 'SAVED', {timeOut: 5000});
                         categoriestable.ajax.reload();
                         categoriestable.draw();
                     } else {
                         toastr.error(data.error, 'ERROR', {timeOut: 5000});
-                        $('#save-data').html('Update category');
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');  
                     }
                 },
                 error: function(jqXHR) {
                     toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                    $('#save-data').html('Submit');
-                    
+                    $('#save-data').prop('disabled', false)
+                    .html("Submit")
+                    .removeClass('uploading');              
                 }
             });
         }
@@ -158,7 +174,9 @@ $(document).ready(function () {
             },
             error: function(jqXHR) {
                 toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                $('#save-data').html('Submit');
+                $('#save-data').prop('disabled', false)
+                .html("Submit")
+                .removeClass('uploading');  
             }
         });
     })
