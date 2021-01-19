@@ -67,7 +67,7 @@ $(document).ready(function () {
             }
         });
         $('.modal-title').html("Add toolname");
-        $('#save-data').text("Save Changes");
+        $('#save-data').text("Submit");
     });
 
     $('body').on('click', '#edit-toolname', function () {
@@ -116,6 +116,9 @@ $(document).ready(function () {
         e.preventDefault();
         var action = $('#action-toolname').val();
         var info = $('#toolname-form').serialize();
+        $('#save-data').prop('disabled', true)
+        .html("")
+        .addClass('uploading');
         if(action == "Add")
         {
             $.ajax({
@@ -129,16 +132,22 @@ $(document).ready(function () {
                         toolnametable.ajax.reload();
                         toolnametable.draw();
                         $("#add-toolname .close").click();
-                        $('#save-data').html("Save Information");                    }
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');                      }
                     if(data.error)
                     {
                         toastr.error(data.error, 'ERROR', {timeOut: 3000});
-                        $('#save-data').html("Save Information");
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');  
                     }
                 },
                 error: function(jqXHR) {
                     toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                    $('#save-data').html('Submit');
+                    $('#save-data').prop('disabled', false)
+                    .html("Submit")
+                    .removeClass('uploading');  
                 }
             })
         }
@@ -156,17 +165,23 @@ $(document).ready(function () {
                         toolnametable.ajax.reload();
                         toolnametable.draw();
                         $("#add-toolname .close").click();
-                        $('#save-data').html("Save Information");
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');  
                     }
                     if(data.error)
                     {
                         toastr.error(data.error, 'ERROR', {timeOut: 3000});
-                        $('#save-data').html("Save Information");
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');  
                     }
                 },
                 error: function(jqXHR) {
                     toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                    $('#save-data').html('Submit');
+                    $('#save-data').prop('disabled', false)
+                    .html("Submit")
+                    .removeClass('uploading');  
                 }
             })
         }
@@ -185,7 +200,9 @@ $(document).ready(function () {
             },
             error: function(jqXHR) {
                 toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                $('#save-data').html('Submit');
+                $('#save-data').prop('disabled', false)
+                .html("Submit")
+                .removeClass('uploading');  
             }
         });
     });  
@@ -203,7 +220,9 @@ $(document).ready(function () {
             },
             error: function(jqXHR) {
                 toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                $('#save-data').html('Submit');
+                $('#save-data').prop('disabled', false)
+                .html("Submit")
+                .removeClass('uploading');  
             }
         });
     });
