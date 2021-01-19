@@ -13,6 +13,8 @@ $(document).ready(function () {
     var collegetable = $('#college-table').DataTable({
         processing: true,
         serverSide: true,
+        pageLength : 5,
+        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
         order: [[1, "asc"]],
         ajax: 'data/college',
         columns: [
