@@ -14,6 +14,8 @@ $(document).ready(function () {
     var toolnametable = $('#toolname-table').DataTable({
         processing: true,
         serverSide: true,
+        pageLength : 5,
+        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
         order: [[4, "desc"]],
         ajax: 'data/toolname',
         columns: [
