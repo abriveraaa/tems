@@ -18,6 +18,8 @@ $(document).ready(function () {
     var roomtable = $('#room-table').DataTable({
         processing: true,
         serverSide: true,
+        pageLength : 5,
+        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
         order: [[0, "asc"]],
         ajax: 'data/room',
         columns: [
