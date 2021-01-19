@@ -77,21 +77,25 @@ trait BorrowerQueries {
                 'sex' => 'required', 
                 'year' => 'bail|required|integer|gte:1|lte:5', 
                 'section' => 'required', 
+                'college' => 'required',
+                'course' => 'required',
             );
 
              $messages = array(
-                'studnum.unique' => 'Student number is already taken. <br>',
+                'studnum.unique' => 'Student number has already been taken. <br>',
                 'studnum.required' => 'Student number is required. <br>',
                 'firstname.required' => 'Firstname is required. <br>',
                 'lastname.required' => 'Lastname is required. <br>',
-                'contact.required' => 'Contact is required. <br>',
-                'contact.unique' => 'Contact is already taken. <br>',
+                'contact.required' => 'Contact is required. <br>Contact must be a valid contact number.<br>Please add area code if you are using telephone number. <br>',
+                'contact.unique' => 'Contact has already been taken. <br>',
                 'sex.required' => 'Sex is required. <br>',
                 'year.required' => 'Year is required. <br>',
                 'year.integer' => 'Year must be a number. <br>',
                 'year.gte' => 'Year must be a greater than 0. <br>',
                 'year.lte' => 'Year must be a less than 6. <br>',
                 'section.required' => 'Section is required. <br>',
+                'college.required' => 'College is required. <br>',
+                'course.required' => 'Course is required. <br>',
             );
 
             $validate = Validator::make($request->all(), $rules, $messages);
@@ -117,6 +121,8 @@ trait BorrowerQueries {
                 'sex' => 'required', 
                 'year' => 'bail|required|integer|gte:1|lte:5', 
                 'section' => 'required', 
+                'college' => 'required',
+                'course' => 'required',
             );
 
              $messages = array(
@@ -124,7 +130,7 @@ trait BorrowerQueries {
                 'firstname.required' => 'Firstname is required. <br>',
                 'lastname.required' => 'Lastname is required. <br>',
                 'contact.required' => 'Contact is required. <br>',
-                'contact.phone' => 'Contact must be a valid contact number.<br>Please add area code if you are using telephone number',
+                'contact.phone' => 'Contact must be a valid contact number.<br>Please add area code if you are using telephone number <br>',
                 'contact.unique' => 'Contact is already taken. <br>',
                 'sex.required' => 'Sex is required. <br>',
                 'year.required' => 'Year is required. <br>',
@@ -132,6 +138,8 @@ trait BorrowerQueries {
                 'year.gte' => 'Year must be a greater than 0. <br>',
                 'year.lte' => 'Year must be a less than 6. <br>',
                 'section.required' => 'Section is required. <br>',
+                'college.required' => 'College is required. <br>',
+                'course.required' => 'Course is required. <br>',
             );
 
             $validate = Validator::make($request->all(), $rules, $messages);
@@ -189,26 +197,32 @@ trait BorrowerQueries {
         {
             $rules = array(
                 'borrower_image' => 'image|max:2048',
-                'studnum' => 'bail|required',
+                'studnum' => 'bail|required|unique:borrowers,studnum,'.$borrowerId,
                 'firstname' => 'required',
                 'lastname' => 'required',
-                'contact' => 'bail|required', 
+                'contact' => 'bail|required|unique:borrowers,contact,'.$borrowerId, 
                 'sex' => 'required', 
                 'year' => 'bail|required|integer|gte:1|lte:5', 
                 'section' => 'required', 
+                'college' => 'required',
+                'course' => 'required',
             );
 
              $messages = array(
                 'studnum.required' => 'Student number is required. <br>',
+                'studnum.unique' => 'Student number has already been taken. <br>',
                 'firstname.required' => 'Firstname is required. <br>',
                 'lastname.required' => 'Lastname is required. <br>',
                 'contact.required' => 'Contact is required. <br>',
+                'contact.unique' => 'Contact number has already been taken. <br>',
                 'sex.required' => 'Sex is required. <br>',
                 'year.required' => 'Year is required. <br>',
                 'year.integer' => 'Year must be a number. <br>',
                 'year.gte' => 'Year must be a greater than 0. <br>',
                 'year.lte' => 'Year must be a less than 6. <br>',
                 'section.required' => 'Section is required. <br>',
+                'college.required' => 'College is required. <br>',
+                'course.required' => 'Course is required. <br>',
             );
 
             $validate = Validator::make($request->all(), $rules, $messages);
@@ -227,13 +241,15 @@ trait BorrowerQueries {
         {
             $rules = array(
                 'borrower_image' => 'image|max:2048',
-                'studnum' => 'required|unique:borrowers,studnum,'.$borrowerId,
+                'studnum' => 'bail|required|unique:borrowers,studnum,'.$borrowerId,
                 'firstname' => 'required',
                 'lastname' => 'required',
-                'contact' => 'bail|required|phone', 
+                'contact' => 'bail|required|unique:borrowers,contact,'.$borrowerId, 
                 'sex' => 'required', 
                 'year' => 'bail|required|integer|gte:1|lte:5', 
                 'section' => 'required', 
+                'college' => 'required',
+                'course' => 'required',
             );
 
              $messages = array(
@@ -242,13 +258,15 @@ trait BorrowerQueries {
                 'firstname.required' => 'Firstname is required. <br>',
                 'lastname.required' => 'Lastname is required. <br>',
                 'contact.required' => 'Contact is required. <br>',
-                'contact.phone' => 'Contact must be a valid contact number.<br>Please add area code if you are using telephone number',
+                'contact.unique' => 'Contact number has already been taken. <br>',
                 'sex.required' => 'Sex is required. <br>',
                 'year.required' => 'Year is required. <br>',
                 'year.integer' => 'Year must be a number. <br>',
                 'year.gte' => 'Year must be a greater than 0. <br>',
                 'year.lte' => 'Year must be a less than 6. <br>',
                 'section.required' => 'Section is required. <br>',
+                'college.required' => 'College is required. <br>',
+                'course.required' => 'Course is required. <br>',
             );
 
             $validate = Validator::make($request->all(), $rules, $messages);
