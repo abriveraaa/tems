@@ -26,21 +26,30 @@ Other assets used:
 
 ## How to use
 
+### Preparation
+
 - Clone the repository with __git clone__ or download the file
 - Copy __.env.example__ file to __.env__ and edit database credentials
 - Run __composer install__
 - Run __php artisan key:generate__
 - Run __php artisan migrate --seed__ [has a default data(admin and assistant)to access the system]
 - Run __php artisan serve__
-- You can login to adminpanel with the following credentials:
 
-Administrator:
+### Deployment
+Run the following command or read the official documentation for [deployment](https://laravel.com/docs/7.x/deployment)
+- Run __composer install --optimize-autoloader --no-dev__
+- Run __php artisan config:cache__
+- Run __php artisan route:cache__
+- Run __php artisan view:cache__
+
+### Default credentials
+You can login to adminpanel with the following credentials:
+#### Administrator:
 - username - __administrator@tems.com__ 
 
 - password - __password__
 
-
-Assistant:
+#### Assistant:
 - username - __assistant@tems.com__ 
 
 - password - __password__
