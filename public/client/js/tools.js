@@ -16,7 +16,7 @@ $(document).ready(function(){
             if(res)
             {
                 $("#category").empty();
-                $("#category").append('<option selected value="">Please choose one</option>');
+                $("#category").append('<option value="" selected disabled>Please choose one</option>');
                 $.each(res,function(key,value){
                     $("#category").append('<option value="'+key+'">'+value+'</option>');
                 });
@@ -27,7 +27,7 @@ $(document).ready(function(){
             if(result)
             {
                 $("#room").empty();
-                $("#room").append('<option selected value="">Select one</option>');
+                $("#room").append('<option value="" selected disabled>Select one</option>');
                 $.each(result,function(key,value){
                     $("#room").append('<option value="'+key+'">'+value+'</option>');
                 });
@@ -39,7 +39,7 @@ $(document).ready(function(){
                 if(data)
                 {
                     $("#description").empty();
-                    $("#description").append('<option value="">Select Tool Name</option>');
+                    $("#description").append('<option value="" selected disabled>Select Tool Name</option>');
                     $.each(data.items,function(key,value){
                         $("#description").append('<option value="'+value.id+'">'+value.description+'</option>');
                     });
