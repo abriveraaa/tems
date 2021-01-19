@@ -12,7 +12,7 @@ $(document).ready(function () {
         $('#code').val('');
         $('#id').val('')
         $('.modal-title').html("Add room");
-        $('#save-data').text("Save Changes");
+        $('#save-data').html("Submit");
     });
 
     var roomtable = $('#room-table').DataTable({
@@ -51,6 +51,9 @@ $(document).ready(function () {
     $('#save-data').click(function(event) {
         event.preventDefault();
         var action = $('#action').val();
+        $('#save-data').prop('disabled', true)
+        .html("")
+        .addClass('uploading');
         if(action == 1)
         {
             var info = $('#room-form').serialize();
@@ -64,17 +67,24 @@ $(document).ready(function () {
                     if (data.success) {
                         $('#room-form').trigger('reset');
                         $('.show').hide();
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');  
                         toastr.success('New record has been saved successfully', 'SAVED', {timeOut: 3000});
                         roomtable.ajax.reload();
                         roomtable.draw();
                     } else {
                         toastr.error(data.error, 'ERROR', {timeOut: 3000});
-                        $('#save-data').html('Add room');
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');  
                     }
                 },
                 error: function(jqXHR) {
                     toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                    $('#save-data').html('Submit');
+                    $('#save-data').prop('disabled', false)
+                    .html("Submit")
+                    .removeClass('uploading');  
                 }
             });
             $('#room-form').trigger("reset"); 
@@ -93,17 +103,24 @@ $(document).ready(function () {
                     if (data.success) {
                         $('#room-form').trigger('reset');
                         $('.show').hide();
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');  
                         toastr.success('Record has been updated successfully', 'SAVED', {timeOut: 3000});
                         roomtable.ajax.reload();
                         roomtable.draw();
                     } else {
                         toastr.error(data.error, 'ERROR', {timeOut: 3000});
-                        $('#save-data').html('Submit');
+                        $('#save-data').prop('disabled', false)
+                        .html("Submit")
+                        .removeClass('uploading');  
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                    $('#save-data').html('Submit');
+                    $('#save-data').prop('disabled', false)
+                    .html("Submit")
+                    .removeClass('uploading');  
                 }
             });
         }
