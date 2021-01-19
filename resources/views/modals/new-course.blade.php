@@ -33,7 +33,7 @@
             </div>
             <div class="modal-footer">
                 <input type="hidden" id="action-course">
-                <button type="button" id="save-data" class="btn btn-block btn-outline-primary btn-flat text-uppercase">Save Changes</button>
+                <button type="submit" id="save-data" class="btn btn-primary text-uppercase">Submit</button>
             </div>
                 </form>
         </div>
