@@ -228,7 +228,7 @@ $(document).ready(function(){
                         $('.reporteditems').hide();
                         $('.added').empty();
                         $.each(data,function(key,value){
-                            $('.added').append('<tr><td style="text-align:center">'+value.previous+'</td><td>'+value.itemname+'</td><td>'+value.description+'</td><td style="text-align:center">'+value.quantityadded+'</td><td style="text-align:center">'+value.lostitem+'</td><td style="text-align:center">'+value.damageditem+'</td><td style="text-align:center">'+value.quantityonhand+'</td></tr>');
+                            $('.added').append('<tr><td style="text-align:center">'+value.previous+'</td><td>'+value.category+'</td><td>'+value.itemname+'</td><td style="text-align:center">'+value.quantityadded+'</td><td style="text-align:center">'+value.lost_count+'</td><td style="text-align:center">'+value.damaged_count+'</td><td style="text-align:center">'+value.quantityonhand+'</td></tr>');
                         });
                     } else {
                         
