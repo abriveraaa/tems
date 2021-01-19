@@ -181,7 +181,7 @@ Route::middleware(['route'])->group(function() {
         Route::get('/activeitem', ['as' => 'dashboard.activeitem', 'uses' => 'CategoryController@activeItem']);
         Route::get('/reporteditem', ['as' => 'dashboard.reporteditem', 'uses' => 'CategoryController@reportedItem']);
         Route::get('/useditem', ['as' => 'dashboard.useditem', 'uses' => 'CategoryController@getUsageCount']);
-        Route::get('/bannedborrower', ['as' => 'dashboard.activeborrower', 'uses' => 'CategoryController@bannedBorrower']);
+        Route::get('/bannedborrower', ['as' => 'dashboard.bannedborrower', 'uses' => 'CategoryController@bannedBorrower']);
         Route::get('/countbanned', ['as' => 'dashboard.countbanned', 'uses' => 'CategoryController@countBannedBorrower']);
         Route::get('/counttools', ['as' => 'dashboard.counttools', 'uses' => 'CategoryController@countServiceableItems']);
         Route::get('/inventorycount', ['as' => 'dashboard.inventorycount', 'uses' => 'CategoryController@inventoryItem']);
