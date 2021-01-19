@@ -36,7 +36,7 @@ $(document).ready(function () {
                 if(data)
                 {
                     $("#course").empty();
-                    $("#course").append('<option value="">Select Course</option>');
+                    $("#course").append('<option value="" selected disabled>Select Course</option>');
                     $.each(data.courses,function(key,value){
                         $("#course").append('<option value="'+value.id+'">'+value.description+'</option>');
                     });
