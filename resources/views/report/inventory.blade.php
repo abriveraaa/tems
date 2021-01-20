@@ -83,7 +83,7 @@
                 @if($staff == null)
                 <td style="text-align:center; text-transform:uppercase;"></td>
                 @else
-                <td style="text-align:center;font-style: italic; font-size: 11pt; padding-right: 30px">{{ $staff->position }}</td>
+                <td style="text-align:center;font-style: italic; font-size: 11pt;">{{ $staff->position }}</td>
                 @endif
             </tr>
             <tr>
