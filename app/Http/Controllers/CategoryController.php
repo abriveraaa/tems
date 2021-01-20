@@ -137,7 +137,6 @@ class CategoryController extends Controller
             ->addColumn('action', function($row){
                 if($row->tools_count > 0){
                     $btn = '<a href="javascript:void(0)" class="view-category btn btn-primary btn-sm mr-2" data-id="'. $row->id .'" data-toggle="modal" data-target="#categorymodal"><i class="fas fa-tv mr-2"></i>View</a>';
-                    // $btn .= '<a href="javascript:void(0)" class="print-category btn btn-warning btn-sm" data-id="'. $row->id .'" data-toggle="modal" data-target="#"><i class="fas fa-print mr-2"></i>Print</a>';
                     return $btn; 
                    }else{
                        $btn ='';
@@ -156,7 +155,6 @@ class CategoryController extends Controller
             ->addColumn('action', function($row){
                if($row->tools_count > 0){
                 $btn = '<a href="javascript:void(0)" class="view-itemname btn btn-primary btn-sm mr-2" data-id="'. $row->id .'" data-toggle="modal" data-target="#categorymodal"><i class="fas fa-tv mr-2"></i>View</a>';
-                // $btn .= '<a href="javascript:void(0)" class="print-category btn btn-warning btn-sm" data-id="'. $row->id .'" data-toggle="modal" data-target="#"><i class="fas fa-print mr-2"></i>Print</a>';
                 return $btn; 
                }else{
                    $btn ='';
@@ -284,7 +282,6 @@ class CategoryController extends Controller
         INNER JOIN requests ON requests.id = request_item.requests_id
         WHERE requests.status = 'Returned' AND requests.created_at BETWEEN '$start' AND '$end'
         GROUP BY tool_name_id");
-        // $data = Requests::select(\DB::raw('COUNT(tool) as item_count'),'lhof', 'id', 'tool', 'status', 'created_at', 'updated_at')->where('status', 'Returned')->whereBetween('created_at', [$start, $end])->groupBy('tool')->with(['borrower', 'item', 'room', 'borrow'])->toSql();
 		return response()->json($data);
     }
     
