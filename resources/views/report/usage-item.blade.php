@@ -74,12 +74,21 @@
                 <td><br><br><br><br> </td>
                 <td></td>
             </tr>
+           @if ($head == null)
+            <tr style="text-align:center; margin-top:10px; font-weight:500; text-transform:uppercase;">
+                <td colspan="2"></td>
+            </tr>
+            <tr style="text-align:center; font-style: italic; font-size: 11pt;">
+                <td colspan="2"></td>
+            </tr>
+            @else    
             <tr style="text-align:center; margin-top:10px; font-weight:500; text-transform:uppercase;">
                 <td colspan="2">Prof. {{ $head->name }}</td>
             </tr>
             <tr style="text-align:center; font-style: italic; font-size: 11pt;">
                 <td colspan="2">{{ $head->position }}</td>
             </tr>
+            @endif
         </table>
     </div> 
 </body>
