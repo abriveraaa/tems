@@ -46,35 +46,41 @@
         </table>
     </div>
     <div><br><br>
-            <table border="0" cellspacing="0" style="width: 100%;">
-                <tr>
-                    <td colspan="2">Prepared by:</td>
-                </tr>
-                <tr>
-                    <td><br><br> </td>
-                    <td></td>
-                </tr>
-                <tr style="text-align:center; font-weight:500;">
-                    <td style="text-transform:uppercase; text-decoration:underline;">________{{ Auth::user()->name }}________</td>
-                    <td style="text-transform:uppercase;">Mr. JAY A. PADILLA</td>
-                </tr>
-                <tr style="text-align:center;font-style: italic; font-size: 11pt;">
-                    <td>(Printed Name and signature)</td>
-                    <td>Laboratory Staff</td>
-                </tr>
-                <tr>
-                    <td><br><br><br><br> </td>
-                    <td></td>
-                </tr>
-                <tr style="text-align:center; margin-top:10px; font-weight:500;">
-                    <td colspan="2">Prof. REMEGIO C. RIOS</td>
-                </tr>
-                <tr style="text-align:center; font-style: italic; font-size: 11pt;">
-                    <td colspan="2">Laboratory Head</td>
-                </tr>
-            </table>
-        </div> 
-            
+         <table border="0" cellspacing="0" style="width: 100%;">
+            <tr>
+                <td colspan="2">Inventory by:</td>
+            </tr>
+            <tr>
+                <td><br><br> </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="text-align:left; font-weight:500; text-transform:uppercase; text-decoration:underline;">___{{ Auth::user()->name }}___</td>
+                @if($staff == null)
+                <td style="text-transform:uppercase;"></td>
+                @else
+                <td style="text-align:right; font-weight:500; text-transform:uppercase;">{{ $staff->name }}</td>
+                @endif
+            </tr>
+            <tr>
+                <td style="text-align:left;font-style: italic; font-size: 11pt;">(Printed Name and signature)</td>
+                @if($staff == null)
+                <td style="text-align:right; text-transform:uppercase;"></td>
+                @else
+                <td style="text-align:right;font-style: italic; font-size: 11pt; padding-right: 30px">{{ $staff->position }}</td>
+                @endif
+            </tr>
+            <tr>
+                <td><br><br><br><br> </td>
+                <td></td>
+            </tr>
+            <tr style="text-align:center; margin-top:10px; font-weight:500; text-transform:uppercase;">
+                <td colspan="2">Prof. {{ $head->name }}</td>
+            </tr>
+            <tr style="text-align:center; font-style: italic; font-size: 11pt;">
+                <td colspan="2">{{ $head->position }}</td>
+            </tr>
+        </table>
+    </div> 
 </body>
-
 </html>
