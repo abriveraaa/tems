@@ -77,15 +77,15 @@
                 @if($staff == null)
                 <td style="text-transform:uppercase;"></td>
                 @else
-                <td style="text-align:right; font-weight:500; text-transform:uppercase;">{{ $staff->name }}</td>
+                <td style="text-align:center; font-weight:500; text-transform:uppercase;">{{ $staff->name }}</td>
                 @endif
             </tr>
             <tr>
                 <td style="text-align:left;font-style: italic; font-size: 11pt;">(Printed Name and signature)</td>
                 @if($staff == null)
-                <td style="text-align:right; text-transform:uppercase;"></td>
+                <td style="text-align:center; text-transform:uppercase;"></td>
                 @else
-                <td style="text-align:right;font-style: italic; font-size: 11pt; padding-right: 30px">{{ $staff->position }}</td>
+                <td style="text-align:center;font-style: italic; font-size: 11pt; padding-right: 30px">{{ $staff->position }}</td>
                 @endif
             </tr>
             <tr>
