@@ -71,7 +71,7 @@
                 <td></td>
             </tr>
             <tr>
-                <td style="text-align:left; font-weight:500; text-transform:uppercase; text-decoration:underline;">___{{ Auth::user()->name }}___</td>
+                <td style="text-align:left; font-weight:500; text-transform:uppercase; text-decoration:underline;">_______________________</td>
                 @if($staff == null)
                 <td style="text-transform:uppercase;"></td>
                 @else
