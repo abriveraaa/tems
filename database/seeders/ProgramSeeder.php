@@ -29,7 +29,9 @@ class ProgramSeeder extends Seeder
         $mapPermission = collect(config('college_course.course_map'));
 
         foreach ($config as $key => $modules) {
-
+            
+            $acronym = $this->generate($key);	
+            
             // Create a new college
             $college = \App\Models\College::firstOrCreate([
                 'description' => str_replace('_', ' ', $key),
