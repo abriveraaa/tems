@@ -15,8 +15,13 @@ class ReportController extends Controller
 {
     public function activeBorrower() {
         $data = Borrower::where('reported_at', '=', null)->with(['borrowercourse'])->get();
-        view()->share('activeborrower',$data);
-        $pdf = PDF::loadView('report.active-borrower', $data);
+
+        $head = User::where('position', 'Laboratory Head')->first();
+
+        $staff = User::where('position', 'Laboratory Staff')->first();
+
+        view()->share('activeborrower', $data);
+        $pdf = PDF::loadView('report.active-borrower', ['data' => $data, 'head' => $head, 'staff' => $staff]);
   
         return $pdf->download('TEMS_Active-Borrower.pdf');
     }
@@ -24,8 +29,12 @@ class ReportController extends Controller
     public function bannedBorrower() {
         $data = Borrower::where('reported_at', '<>', null)->with(['borrowercourse'])->get();
 
+        $head = User::where('position', 'Laboratory Head')->first();
+
+        $staff = User::where('position', 'Laboratory Staff')->first();
+
         view()->share('bannedborrower',$data);
-        $pdf = PDF::loadView('report.banned-borrower', $data);
+        $pdf = PDF::loadView('report.banned-borrower', ['data' => $data, 'head' => $head, 'staff' => $staff]);
   
         return $pdf->download('TEMS_Banned-Borrower.pdf');
     }
@@ -33,8 +42,12 @@ class ReportController extends Controller
     public function serviceItem() {
         $data = Tools::with(['tooladmin', 'toolcategory', 'toolname', 'toolroom', 'toolreport'])->get();
 
+        $head = User::where('position', 'Laboratory Head')->first();
+
+        $staff = User::where('position', 'Laboratory Staff')->first();
+
         view()->share('serviceitem',$data);
-        $pdf = PDF::loadView('report.serviceable-item', $data);
+        $pdf = PDF::loadView('report.serviceable-item', ['data' => $data, 'head' => $head, 'staff' => $staff]);
   
         return $pdf->download('TEMS_Serviceable-Item.pdf');
     }
@@ -42,8 +55,12 @@ class ReportController extends Controller
     public function reportedItem() {
         $data = Tools::onlyTrashed()->with(['tooladmin', 'toolcategory', 'toolname', 'toolroom', 'toolreport'])->get();
 
+        $head = User::where('position', 'Laboratory Head')->first();
+
+        $staff = User::where('position', 'Laboratory Staff')->first();
+
         view()->share('reporteditem',$data);
-        $pdf = PDF::loadView('report.reported-item', $data);
+        $pdf = PDF::loadView('report.reported-item', ['data' => $data, 'head' => $head, 'staff' => $staff]);
   
         return $pdf->download('TEMS_Reported-Item.pdf');
     }
@@ -69,7 +86,7 @@ class ReportController extends Controller
         GROUP BY tool_name_id");
 
         view()->share('usageitem',['data' => $data, 'date' => $date]);
-        $pdf = PDF::loadView('report.usage-item', ['data' => $data, 'date' => $date]);
+        $pdf = PDF::loadView('report.usage-item', ['data' => $data, 'date' => $date, 'head' => $head, 'staff' => $staff]);
         return $pdf->download('TEMS_Usage-Item.pdf');    
     }
 
@@ -116,6 +133,10 @@ class ReportController extends Controller
         } else {
             $date = Carbon::parse($startdate)->isoFormat('MMMM D, YYYY').' - '. Carbon::parse($enddate)->isoFormat('MMMM D, YYYY');
         }        
+
+        $head = User::where('position', 'Laboratory Head')->first();
+
+        $staff = User::where('position', 'Laboratory Staff')->first();
         
         $data = DB::SELECT("SELECT A.id, IFNULL((D.previous_count - B.deleted_count), IFNULL(D.previous_count, 0)) AS previous, A.category, A.itemname, IFNULL(C.added_count, 0) AS quantityadded,IFNULL(E.losts_count, 0) AS lost_count, IFNULL(F.damages_count, 0) AS damaged_count, 
          IFNULL(D.previous_count - B.deleted_count, IFNULL(D.previous_count, 0)) + IFNULL(C.added_count, 0) - IFNULL(E.losts_count, 0) - IFNULL(F.damages_count, 0) as quantityonhand FROM
@@ -173,8 +194,9 @@ class ReportController extends Controller
                             ON A.id = F.id
                             ");
         
+        
 		view()->share('inventory',['data' => $data, 'date' => $date]);
-        $pdf = PDF::loadView('report.inventory', ['data' => $data, 'date' => $date]);
+        $pdf = PDF::loadView('report.inventory', ['data' => $data, 'date' => $date, 'head' => $head, 'staff' => $staff]);
         return $pdf->download('TEMS_Inventory.pdf');    
     }
 }
