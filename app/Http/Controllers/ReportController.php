@@ -141,7 +141,7 @@ class ReportController extends Controller
                             INNER JOIN tools ON tools.id = tool_toolnames.tools_id
                             INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
                             INNER JOIN categories ON categories.id = category_toolnames.category_id
-                            WHERE tools.created_at < '$start' AND tools.deleted_at < '$start'
+                            WHERE tools.created_at < '$start'
                             GROUP BY tool_names.id) D
                             ON A.id = D.id
                             LEFT OUTER JOIN
