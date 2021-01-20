@@ -117,9 +117,9 @@ class ReportController extends Controller
             $date = Carbon::parse($startdate)->isoFormat('MMMM D, YYYY').' - '. Carbon::parse($enddate)->isoFormat('MMMM D, YYYY');
         }        
         
-        $data = DB::SELECT("SELECT A.id, IFNULL(D.fourth_count, 0) AS previous, A.category, A.itemname, IFNULL(C.third_count, 0) AS quantityadded,IFNULL(E.fifth_count, 0) AS lost_count, IFNULL(F.sixth_count, 0) AS damaged_count, 
-        (IFNULL(D.fourth_count,0)+IFNULL(C.third_count,0) - (IFNULl(E.fifth_count,0)+IFNULL(F.sixth_count,0))) as quantityonhand FROM
-                            (SELECT tool_names.id, tool_names.description AS itemname, categories.description AS category, COUNT(tool_names.id) AS first_count FROM tool_names
+        $data = DB::SELECT("SELECT A.id, IFNULL((D.previous_count - B.deleted_count), IFNULL(D.previous_count, 0)) AS previous, A.category, A.itemname, IFNULL(C.added_count, 0) AS quantityadded,IFNULL(E.losts_count, 0) AS lost_count, IFNULL(F.damages_count, 0) AS damaged_count, 
+         IFNULL(D.previous_count - B.deleted_count, IFNULL(D.previous_count, 0)) + IFNULL(C.added_count, 0) - IFNULL(E.losts_count, 0) - IFNULL(F.damages_count, 0) as quantityonhand FROM
+                            (SELECT tool_names.id, tool_names.description AS itemname, categories.description AS category FROM tool_names
                             INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
                             INNER JOIN tools ON tools.id = tool_toolnames.tools_id
                             INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
@@ -127,7 +127,16 @@ class ReportController extends Controller
                             WHERE tools.created_at <= '$end'
                             GROUP BY tool_names.id) A
                             LEFT OUTER JOIN
-                            (SELECT tool_names.id, COUNT(tool_names.id) AS third_count FROM tool_names
+                            (SELECT tool_names.id, COUNT(tool_names.id) AS deleted_count FROM tool_names
+                            INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
+                            INNER JOIN tools ON tools.id = tool_toolnames.tools_id
+                            INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
+                            INNER JOIN categories ON categories.id = category_toolnames.category_id
+                            WHERE tools.deleted_at < '$start'
+                            GROUP BY tool_names.id) B
+                            ON A.id = B.id
+                            LEFT OUTER JOIN
+                            (SELECT tool_names.id, COUNT(tool_names.id) AS added_count FROM tool_names
                             INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
                             INNER JOIN tools ON tools.id = tool_toolnames.tools_id
                             INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
@@ -136,7 +145,7 @@ class ReportController extends Controller
                             GROUP BY tool_names.id) C
                             ON A.id = C.id
                             LEFT OUTER JOIN
-                            (SELECT tool_names.id, COUNT(tool_names.id) AS fourth_count FROM tool_names
+                            (SELECT tool_names.id, COUNT(tool_names.id) AS previous_count FROM tool_names
                             INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
                             INNER JOIN tools ON tools.id = tool_toolnames.tools_id
                             INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
@@ -145,7 +154,7 @@ class ReportController extends Controller
                             GROUP BY tool_names.id) D
                             ON A.id = D.id
                             LEFT OUTER JOIN
-                            (SELECT tool_names.id, COUNT(tool_names.id) AS fifth_count FROM tool_names
+                            (SELECT tool_names.id, COUNT(tool_names.id) AS losts_count FROM tool_names
                             INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
                             INNER JOIN tools ON tools.id = tool_toolnames.tools_id
                             INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
@@ -154,7 +163,7 @@ class ReportController extends Controller
                             GROUP BY tool_names.id) E
                             ON A.id = E.id
                             LEFT OUTER JOIN
-                            (SELECT tool_names.id, COUNT(tool_names.id) AS sixth_count FROM tool_names
+                            (SELECT tool_names.id, COUNT(tool_names.id) AS damages_count FROM tool_names
                             INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
                             INNER JOIN tools ON tools.id = tool_toolnames.tools_id
                             INNER JOIN category_toolnames ON category_toolnames.tool_name_id = tool_names.id
