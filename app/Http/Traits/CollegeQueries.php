@@ -22,7 +22,6 @@ trait CollegeQueries {
      */
     public function index()
     {
-        // $data = CollegeResource::collection(College::all());
         $data = College::withTrashed()->get();
         return Datatables::of($data)
                 ->addIndexColumn()
