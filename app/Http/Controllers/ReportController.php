@@ -77,6 +77,10 @@ class ReportController extends Controller
         } else {
             $date = Carbon::parse($startdate)->isoFormat('MMMM D, YYYY').' - '. Carbon::parse($enddate)->isoFormat('MMMM D, YYYY');
         }
+        
+        $head = User::where('position', 'Laboratory Head')->first();
+
+        $staff = User::where('position', 'Laboratory Staff')->first();
 
         $data = DB::SELECT("SELECT requests.created_at, tool_names.id, tool_names.description, COUNT( tool_names.id ) AS count
         FROM tool_names
