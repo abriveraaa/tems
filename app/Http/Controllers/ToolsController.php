@@ -136,7 +136,6 @@ class ToolsController extends Controller
             'description.required' => 'Description is required. <br>',
             'room.required' => 'Room is required.<br>',
             'property.unique' => 'Property number has already been taken.<br>', 
-            'barcode.unique' => 'Barcode number has already been taken.<br>', 
         );
 
         $validate = Validator::make($request->all(), $rules, $messages);
