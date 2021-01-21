@@ -11,7 +11,7 @@ use App\Http\Traits\Acronym;
 class ProgramSeeder extends Seeder
 {
     use Acronym;
-    
+
     /**
      * Run the database seeds.
      *
@@ -32,13 +32,13 @@ class ProgramSeeder extends Seeder
         $mapPermission = collect(config('college_course.course_map'));
 
         foreach ($config as $key => $modules) {
-            
-            $acronym = $this->generate($key);	
+           
+            $collegeAcronym = $this->generateCollege($key);	
             
             // Create a new college
             $college = \App\Models\College::firstOrCreate([
                 'description' => str_replace('_', ' ', $key),
-                'code' => $key
+                'code' => $collegeAcronym
             ]);
             $courses = [];
 
@@ -51,12 +51,16 @@ class ProgramSeeder extends Seeder
 
                     $permissionValue = $mapPermission->get($perm);
 
+                    $courseKey = $module . ' ' . $permissionValue;
+
+                    $courseAcronym = $this->generateCourse($courseKey);	
+
                     $courses[] = \App\Models\Course::firstOrCreate([
                         'description' => ucfirst($module) . ' ' . ucfirst($permissionValue),
-                        'code' => $module . '-' . $permissionValue,
+                        'code' => $courseAcronym,
                     ])->id;
 
-                    $this->command->info('Creating Permission to '.$permissionValue.' for '. $module);
+                    $this->command->info('Creating '.$courseAcronym.' to '. $collegeAcronym);
                 }
             }
 
