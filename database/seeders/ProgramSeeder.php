@@ -32,8 +32,8 @@ class ProgramSeeder extends Seeder
         $mapPermission = collect(config('college_course.course_map'));
 
         foreach ($config as $key => $modules) {
-           
-            $collegeAcronym = $this->generateCollege($key);	
+            
+        	$collegeAcronym = $this->generateCollege($key);	
             
             // Create a new college
             $college = \App\Models\College::firstOrCreate([
@@ -44,7 +44,6 @@ class ProgramSeeder extends Seeder
 
             $this->command->info('Creating College '. strtoupper($key));
 
-            // Reading role permission modules
             foreach ($modules as $module => $value) {
 
                 foreach (explode(',', $value) as $p => $perm) {
@@ -53,7 +52,7 @@ class ProgramSeeder extends Seeder
 
                     $courseKey = $module . ' ' . $permissionValue;
 
-                    $courseAcronym = $this->generateCourse($courseKey);	
+                    $courseAcronym = $this->generateCourse($courseKey, $collegeAcronym);	
 
                     $courses[] = \App\Models\Course::firstOrCreate([
                         'description' => ucfirst($module) . ' ' . ucfirst($permissionValue),
