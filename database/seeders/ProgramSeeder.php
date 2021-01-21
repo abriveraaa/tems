@@ -6,9 +6,12 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use App\Http\Traits\Acronym;
 
 class ProgramSeeder extends Seeder
 {
+    use Acronym;
+    
     /**
      * Run the database seeds.
      *
