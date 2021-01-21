@@ -7,12 +7,16 @@ return [
     'truncate_tables' => true,
 
     'degree_structure' => [
+        'College_of_Business_Administration' => [
+            'Bachelor of Science in' => 'ENTREP,OA',
+            'Bachelor of Science in Business Administration Major in' => 'HRM,MM',
+        ],
         'Institute_of_Technology' => [
             'Diploma in' => 'ICT,CET',
         ],
         'College_of_Computer_and_Information_Sciences' => [
-            'Bachelor of Science' => 'IT,CS',
-        ]
+            'Bachelor of Science in' => 'IT,CS',
+        ],  
     ],
     
     'course_map' => [
@@ -20,5 +24,9 @@ return [
         'CET' => 'Computer Engineering Technology',
         'IT' => 'Information Technology',
         'CS' => 'Computer Science',
+        'HRM' => 'Human Resource Management',
+        'MM' => 'Marketing Management',
+        'ENTREP' => 'Entrepreneurship',
+        'OA' => 'Office Administration',
     ]
 ];
