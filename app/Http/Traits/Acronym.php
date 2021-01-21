@@ -10,22 +10,34 @@ trait Acronym
      * @param string $key
      * @return string
      */
-    public function generate($str, $as_space = array('-', 'of', 'and'))
+    public function generateCollege($key, $as_space = array('_', 'of', 'and'))
     {
-       	$str = str_replace($as_space, ' ', trim($str));
+
+		$str = str_replace($as_space, '-', trim($key));
+		$str1 = str_replace('---', '-', trim($str));
 	    $ret = '';
-	    foreach (explode(' ', $str) as $word) {
-	        $ret .= strtoupper($word[0]);
+	    foreach (explode('-', $str1) as $word) {
+			$ret .= strtoupper($word[0]);
 	    }
+		if($ret == "IT"){
+			$ret = "ITECH";
+		}
+	    return $ret;
+	}
+	
+    public function generateCourse($key, $as_space = array(' of', ' in', ' and', ' Major'))
+    {
+
+		$str = str_replace($as_space, '-', trim($key));
+		$space = array('--', '- ', ' ');
+		$str1 = str_replace($space, '-', trim($str));
+	    $ret = '';
+	    foreach (explode('-', $str1) as $word) {
+			$ret .= strtoupper($word[0]);
+		}
+		if($ret == "BSE"){
+			$ret = "BSENTREP";
+		}
 	    return $ret;
     }
-
-    protected function makeInitialsFromSingleWord(string $key) : string
-	{
-	    preg_match_all('#([A-Z]+)#', $key, $capitals);
-	    if (count($capitals[1]) >= 2) {
-	        return substr(implode('', $capitals[1]), 0, 2);
-	    }
-	    return strtoupper(substr($key, 0, 2));
-	}
 }
