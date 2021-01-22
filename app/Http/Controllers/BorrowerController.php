@@ -88,14 +88,14 @@ class BorrowerController extends Controller
 
     public function destroy($borrower)
     {
-        $this->updateReport($borrowerId, $this->date);
+        $this->updateReport($borrower, $this->date);
 
         return response()->json(["success" => "Borrower banned succesfully!"], 201);
     }
 
     public function restore($borrower)
     {
-        $this->updateReport($borrowerId, null);
+        $this->updateReport($borrower, null);
 
         return response()->json(['success'=>'Record unlocked successfully.'], 201);
     }
