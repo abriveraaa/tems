@@ -76,16 +76,14 @@ class CollegeController extends Controller
 
     public function destroy($college)
     {
-        College::whereId($college)->delete();
+        $this->deleteCollege($college);
 
         return response()->json(['success'=>'Record deleted successfully.']);
     }
 
     public function restore($college)
     {
-        College::withTrashed()
-            ->where('id', $college)
-            ->restore();
+        $this->restoreCollege($college);
 
         return response()->json(['success'=>'Record deleted successfully.']);
     }
