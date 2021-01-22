@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CourseRequest extends FormRequest
+class BorrowerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,23 +24,45 @@ class CourseRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => ['required', 'unique:courses,description'],
-            'code' => ['required', 'unique:courses,code']
-        ];
-    }
-    
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'description.required' => 'Course description is required. <br>',
-            'description.unique' => 'Course description is already in the database. <br>',
-            'code.required' => 'Course code is required. <br>',
-            'code.unique' => 'Course code is already in the database. <br>',
+            'borrower_image' => [
+                'image',
+                'max:2048',
+            ],
+            'studnum' => [
+                'required',
+                'unique:borrowers,studnum,'.$this->borrower_id,
+            ],
+            'firstname' => [
+                'required',
+            ],
+            'midname' => [
+                '',
+            ],
+            'lastname' => [
+                'required',
+            ],
+            'contact' => [
+                'required',
+                'unique:borrowers,contact,'.$this->borrower_id,
+            ], 
+            'sex' => [
+                'required',
+            ], 
+            'year' => [
+                'required',
+                'integer',
+                'gte:1',
+                'lte:5',
+            ], 
+            'section' => [
+                'required',
+            ], 
+            'college' => [
+                'required',
+            ],
+            'course' => [
+                'required',
+            ],
         ];
     }
 }
