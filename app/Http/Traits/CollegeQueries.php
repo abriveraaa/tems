@@ -39,4 +39,20 @@ trait CollegeQueries {
 
         return $college;
     }
+    
+    public function deleteCollege($college)
+    {
+        $colleges = College::whereId($college)->delete();
+
+        return $colleges;
+    }
+
+    public function restoreCollege($college)
+    {
+        $colleges = College::withTrashed()
+        ->where('id', $college)
+        ->restore();
+
+        return $colleges;
+    }
 }
