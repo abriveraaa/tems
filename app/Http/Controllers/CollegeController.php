@@ -55,9 +55,9 @@ class CollegeController extends Controller
         return response()->json(['success'=>'Record added successfully.']);
     }
 
-    public function show(College $college)
+    public function show($college)
     {
-        $colleges = College::find($college);
+        $colleges = $this->getCollege($college);
 
         $data = CollegeResource::collection($colleges);
 
