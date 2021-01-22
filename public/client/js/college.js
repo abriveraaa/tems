@@ -67,7 +67,7 @@ $(document).ready(function () {
                 data: info,
                 dataType: 'json',
                 success: function(data) {
-                    if (data.success) {
+                    if (data) {
                         $('#college-form').trigger('reset');
                         $('.show').hide();
                         toastr.success('New record has been saved successfully', 'SAVED', {timeOut: 3000});
@@ -76,15 +76,10 @@ $(document).ready(function () {
                         $('#save-data').prop('disabled', false)
                         .html("Submit")
                         .removeClass('uploading');
-                    } else {
-                        toastr.error(data.error, 'ERROR', {timeOut: 3000});
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');
                     }
                 },
-                error: function(jqXHR) {
-                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                error: function(data) {
+                    toastr.error(data.responseJSON.message, "ERROR", {timeOut: 3000});
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
                     .removeClass('uploading');
@@ -103,7 +98,7 @@ $(document).ready(function () {
                 data: info,
                 dataType: 'json',
                 success: function(data) {
-                    if (data.success) {
+                    if (data) {
                         $('#college-form').trigger('reset');
                         $('.show').hide();
                         toastr.success('Record has been updated successfully', 'SAVED', {timeOut: 3000});
@@ -112,15 +107,10 @@ $(document).ready(function () {
                         $('#save-data').prop('disabled', false)
                         .html("Submit")
                         .removeClass('uploading');
-                    } else {
-                        toastr.error(data.error, 'ERROR', {timeOut: 3000});
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');
                     }
                 },
-                error: function(jqXHR) {
-                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                error: function(data) {
+                    toastr.error(data.responseJSON.message, "ERROR", {timeOut: 3000});
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
                     .removeClass('uploading');
@@ -146,8 +136,8 @@ $(document).ready(function () {
                 collegetable.draw();
                 $("#delete .close").click();
             },
-            error: function(jqXHR) {
-                toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+            error: function(data) {
+                toastr.error(data.responseJSON.message, "ERROR", {timeOut: 3000});
                 $('#save-data').prop('disabled', false)
                 .html("Submit")
                 .removeClass('uploading');
@@ -172,8 +162,8 @@ $(document).ready(function () {
                 collegetable.draw();
                 $("#restore .close").click();
             },
-            error: function(jqXHR) {
-                toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+            error: function(data) {
+                toastr.error(data.responseJSON.message, "ERROR", {timeOut: 3000});
                 $('#save-data').prop('disabled', false)
                 .html("Submit")
                 .removeClass('uploading');
