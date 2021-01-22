@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(LaratrustSeeder::class);
         $this->call(ProgramSeeder::class);
+        $this->call(ToolsSeeder::class);
     }
 }
