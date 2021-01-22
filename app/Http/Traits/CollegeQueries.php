@@ -22,6 +22,13 @@ trait CollegeQueries {
 
         return $college;
     }
+    
+    public function getCollege($college)
+    {
+        $colleges = College::whereId($college)->get();
+
+        return $colleges;
+    }
 
     public function updateCollege($collegeId, $validated)
     {
