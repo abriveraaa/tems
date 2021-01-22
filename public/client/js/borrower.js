@@ -166,7 +166,7 @@ $(document).ready(function () {
         $('#action-borrower').val('Add');
         $('#sex').select2({ width: '100%' });
         $('#store_image').attr("src", "/img/default-photo.png");
-        $('.modal-title').html("Add course");
+        $('.modal-title').html("Add Borrower");
         $('#save-data').text("Save Changes");
     });
 
@@ -219,7 +219,7 @@ $(document).ready(function () {
                 processData: false,
                 dataType:"json",
                 success:function(data){
-                    if(data.success){
+                    if(data){
                         toastr.success(data.success, 'BORROWER ADDED', {timeOut: 1000});
                         borrowertable.ajax.reload();
                         borrowertable.draw();
@@ -228,16 +228,9 @@ $(document).ready(function () {
                         .html("Submit")
                         .removeClass('uploading');                 
                     }
-                    if(data.error)
-                    {
-                        toastr.error(data.error, 'ERROR', {timeOut: 1000});
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');
-                    }
                 },
-                error: function(jqXHR) {
-                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                error: function(data) {
+                    toastr.error(data.responseJSON.message, "ERROR", {timeOut: 3000});
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
                     .removeClass('uploading');
@@ -256,8 +249,8 @@ $(document).ready(function () {
                 processData: false,
                 dataType:"json",
                 success:function(data){
-                    if(data.success){
-                        toastr.success(data.success, 'ADMIN UPDATED', {timeOut: 1000});
+                    if(data){
+                        toastr.success(data.success, 'BORROWER UPDATED', {timeOut: 1000});
                         borrowertable.ajax.reload();
                         borrowertable.draw();
                         $("#add-borrower .close").click();
@@ -265,16 +258,9 @@ $(document).ready(function () {
                         .html("Submit")
                         .removeClass('uploading');
                     }
-                    if(data.error)
-                    {
-                        toastr.error(data.error, 'ERROR', {timeOut: 1000});
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');
-                    }
                 },
-                error: function(jqXHR) {
-                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                error: function(data) {
+                    toastr.error(data.responseJSON.message, "ERROR", {timeOut: 3000});
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
                     .removeClass('uploading');
