@@ -1,5 +1,11 @@
 $(document).ready(function () {
 
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     $('#add-college').click(function() {
         $('#action').val('1');
         $('#college-form').trigger("reset");         
