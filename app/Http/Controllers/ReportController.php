@@ -64,7 +64,7 @@ class ReportController extends Controller
         $staff = User::where('position', 'Laboratory Staff')->first();
 
         view()->share('reporteditem',$data);
-        $pdf = PDF::loadView('report.reported-item', ['data' => $data, 'head' => $head, 'staff' => $staff]);
+        $pdf = PDF::loadView('report.reported-item', ['data' => $data, 'head' => $head, 'staff' => $staff])->setPaper('a4', 'landscape');
   
         return $pdf->download('TEMS_Reported-Item_'.$this->date.'.pdf');
     }
