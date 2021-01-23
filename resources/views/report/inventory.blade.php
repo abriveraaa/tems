@@ -23,7 +23,7 @@
     </table>
     <hr style="border: 1pt solid black;">
     <div style="margin-top:2rem; text-align: center; text-transform: uppercase;font-family: Calibri;">
-        <h3>INVENTORY CONTROL FORM</h3>
+        <h3>TOOLS AND EQUIPMENT INVENTORY CONTROL FORM</h3>
     </div>
     <div>Inventory Date:<span style="font-weight: 500; text-decoration: underline;"> {{ $date }}<br><br></div>
     
@@ -32,8 +32,7 @@
             <thead>
                 <tr>
                     <th rowspan="3" style="text-align:center">Quantity <br>As Of Prior<br> Inventory</th>
-                    <th rowspan="3" style="width:20%">Item Category</th>
-                    <th rowspan="3" style="width:20%">Item Name</th>
+                    <th rowspan="3" style="width:40%">Item Name</th>
                     <th colspan="3" style="text-align:center">Changes Prior Inventory</th>
                     <th rowspan="3" style="text-align:center">Quantity  <br>on Hand</th>
                 </tr>
@@ -46,17 +45,22 @@
                     <th style="text-align:center">Damaged</th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach($data as $use)
-                <tr>
-                    <td style="text-align:center">{{ $use->previous }}</td>
-                    <td>{{ $use->category }}</td>
-                    <td>{{ $use->itemname }}</td>
-                    <td style="text-align:center">{{ $use->quantityadded }}</td>
-                    <td style="text-align:center">{{ $use->lost_count }}</td>
-                    <td style="text-align:center">{{ $use->damaged_count }}</td>
-                    <td style="text-align:center">{{ $use->quantityonhand }}</td>
-                </tr>
+            <tbody style="">
+                @foreach($data as $key => $value )
+                    <tr style="background-color: #fff;">
+                        <td style="border-right: 0px;"></td>
+                        <td colspan="5" style="border-left: 0px; font-weight: 500; padding:3px; ">{{ $key }}</td>
+                    </tr>
+                    @foreach($value as $category )
+                    <tr>
+                        <td style="text-align:center; padding:3px;">{{ $category->previous }}</td>
+                        <td style="padding:3px;">{{ $category->itemname }}</td>
+                        <td style="text-align:center; padding:3px;">{{ $category->quantityadded }}</td>
+                        <td style="text-align:center; padding:3px;">{{ $category->lost_count }}</td>
+                        <td style="text-align:center; padding:3px;">{{ $category->damaged_count }}</td>
+                        <td style="text-align:center; padding:3px;">{{ $category->quantityonhand }}</td>
+                    </tr>
+                    @endforeach
                 @endforeach
             </tbody>
         </table>
