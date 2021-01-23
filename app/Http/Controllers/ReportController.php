@@ -13,6 +13,11 @@ use DB;
 
 class ReportController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->date = Carbon::now()->format('mdY');
+    }
     public function activeBorrower() {
         $data = Borrower::where('reported_at', '=', null)->with(['borrowercourse'])->get();
 
@@ -23,7 +28,7 @@ class ReportController extends Controller
         view()->share('activeborrower', $data);
         $pdf = PDF::loadView('report.active-borrower', ['data' => $data, 'head' => $head, 'staff' => $staff]);
   
-        return $pdf->download('TEMS_Active-Borrower.pdf');
+        return $pdf->download('TEMS_Active-Borrower_'.$this->date.'.pdf');
     }
 
     public function bannedBorrower() {
@@ -36,7 +41,7 @@ class ReportController extends Controller
         view()->share('bannedborrower',$data);
         $pdf = PDF::loadView('report.banned-borrower', ['data' => $data, 'head' => $head, 'staff' => $staff]);
   
-        return $pdf->download('TEMS_Banned-Borrower.pdf');
+        return $pdf->download('TEMS_Banned-Borrower_'.$this->date.'.pdf');
     }
 
     public function serviceItem() {
@@ -47,9 +52,8 @@ class ReportController extends Controller
         $staff = User::where('position', 'Laboratory Staff')->first();
 
         view()->share('serviceitem',$data);
-        $pdf = PDF::loadView('report.serviceable-item', ['data' => $data, 'head' => $head, 'staff' => $staff]);
-  
-        return $pdf->download('TEMS_Serviceable-Item.pdf');
+        $pdf = PDF::loadView('report.serviceable-item', ['data' => $data, 'head' => $head, 'staff' => $staff])->setPaper('a4', 'landscape');  
+        return $pdf->download('TEMS_Serviceable-Item_'.$this->date.'.pdf');
     }
 
     public function reportedItem() {
@@ -62,7 +66,7 @@ class ReportController extends Controller
         view()->share('reporteditem',$data);
         $pdf = PDF::loadView('report.reported-item', ['data' => $data, 'head' => $head, 'staff' => $staff]);
   
-        return $pdf->download('TEMS_Reported-Item.pdf');
+        return $pdf->download('TEMS_Reported-Item_'.$this->date.'.pdf');
     }
 
     public function usageItem($startdate, $enddate)
@@ -91,7 +95,7 @@ class ReportController extends Controller
 
         view()->share('usageitem',['data' => $data, 'date' => $date]);
         $pdf = PDF::loadView('report.usage-item', ['data' => $data, 'date' => $date, 'head' => $head, 'staff' => $staff]);
-        return $pdf->download('TEMS_Usage-Item.pdf');    
+        return $pdf->download('TEMS_Usage-Item_'.$this->date.'.pdf');    
     }
 
     public function lhofBorrower(Request $request)
@@ -102,7 +106,7 @@ class ReportController extends Controller
         view()->share('lhofborrower',$data);
         $pdf = PDF::loadView('report.lhof-borrower', $data)->setPaper('a6', 'portrait');
   
-        return $pdf->download('TEMS_LHOF-Borrower.pdf');
+        return $pdf->download('TEMS_LHOF-Borrower_'.$this->date.'.pdf');
     }
 
     public function barcodeItem($id)
@@ -112,7 +116,7 @@ class ReportController extends Controller
         view()->share('barcodeitem',$data);
         $pdf = PDF::loadView('report.barcode-item', $data)->setPaper('a7', 'landscape');
   
-        return $pdf->download('TEMS_Barcode-Item.pdf');
+        return $pdf->download('TEMS_Barcode-Item_'.$this->date.'.pdf');
     }
 
     public function allBarcode()
@@ -122,7 +126,7 @@ class ReportController extends Controller
         view()->share('barcode',$data);
         $pdf = PDF::loadView('report.barcode-all', $data)->setPaper('a7', 'landscape');
   
-        return $pdf->download('TEMS_Barcode-All.pdf');
+        return $pdf->download('TEMS_AllBarcode_'.$this->date.'.pdf');
     }
     
     public function inventory($startdate, $enddate)
@@ -142,7 +146,7 @@ class ReportController extends Controller
 
         $staff = User::where('position', 'Laboratory Staff')->first();
         
-        $data = DB::SELECT("SELECT A.id, IFNULL((D.previous_count - B.deleted_count), IFNULL(D.previous_count, 0)) AS previous, A.category, A.itemname, IFNULL(C.added_count, 0) AS quantityadded,IFNULL(E.losts_count, 0) AS lost_count, IFNULL(F.damages_count, 0) AS damaged_count, 
+        $datas = DB::SELECT("SELECT A.id, IFNULL((D.previous_count - B.deleted_count), IFNULL(D.previous_count, 0)) AS previous, A.category, A.itemname, IFNULL(C.added_count, 0) AS quantityadded,IFNULL(E.losts_count, 0) AS lost_count, IFNULL(F.damages_count, 0) AS damaged_count, 
          IFNULL(D.previous_count - B.deleted_count, IFNULL(D.previous_count, 0)) + IFNULL(C.added_count, 0) - IFNULL(E.losts_count, 0) - IFNULL(F.damages_count, 0) as quantityonhand FROM
                             (SELECT tool_names.id, tool_names.description AS itemname, categories.description AS category FROM tool_names
                             INNER JOIN tool_toolnames ON tool_names.id = tool_toolnames.tool_name_id
@@ -197,10 +201,15 @@ class ReportController extends Controller
                             GROUP BY tool_names.id) F
                             ON A.id = F.id
                             ");
-        
-        
-		view()->share('inventory',['data' => $data, 'date' => $date]);
+
+        $data = array();
+
+        foreach ($datas as $key => $item) {
+           $data[$item->category][$key] = $item;
+        }
+
+    	view()->share('inventory',['data' => $data, 'date' => $date]);
         $pdf = PDF::loadView('report.inventory', ['data' => $data, 'date' => $date, 'head' => $head, 'staff' => $staff]);
-        return $pdf->download('TEMS_Inventory.pdf');    
+        return $pdf->download('TEMS_Inventory_'.$this->date.'.pdf');    
     }
 }
