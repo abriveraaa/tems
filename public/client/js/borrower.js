@@ -153,6 +153,7 @@ $(document).ready(function () {
     $(document).on('click', '#borrower-add', function() {
         $('#college').empty();
         $('#course').empty();
+        $('#hide-img').remove();
         $.get("/category/college", function(data){
             if(data)
             {
@@ -189,7 +190,7 @@ $(document).ready(function () {
                     $('#course').val(datares[0].id).trigger('change'); 
                 });
             });
-            $('#store_image').append("<input type='hidden' name='hidden_image' value='"+ data.image +"' />");
+            $('#store_image').append("<div id='hide-img'><input type='hidden' name='hidden_image' value='"+ data.image +"' /></div>");
             $('#studnum').val(data.studnum);
             $('#contact').val(data.contact);
             $('#sex').val(data.sex).trigger("change");
