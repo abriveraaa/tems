@@ -77,13 +77,7 @@
 @stop
 
 @section('footer')
-    <div class="float-left d-none d-sm-block">
-        <strong>Copyright © {{ now()->year }}.</strong> All rights reserved.
-    </div>
-    <div class="float-right d-none d-sm-block">
-        <strong><a href="#">{{ config('adminlte.name') }}</a></strong>
-        <!-- <img src="{{ config('adminlte.facebook') }}" alt=""> -->
-    </div>
+    @include('layout.footer)
 @stop
 @section('css')
     <link rel="stylesheet" href="{{ asset('client/css/custom.css') }}">
