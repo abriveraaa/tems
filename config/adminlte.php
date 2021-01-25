@@ -515,7 +515,7 @@ return [
     |
     */
     
-    'name' => 'Ariel Rivera',
+    'name' => 'Team Drawing',
     'facebook' => 'img/facebook.png',
     'twitter' => null,
     'gmail' => null,
