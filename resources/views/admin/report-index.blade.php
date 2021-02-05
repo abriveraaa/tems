@@ -66,7 +66,7 @@
     @endpermission
 @stop
 @section('footer')
-   @include('layout.footer)
+   @include('layout.footer')
 @stop
 @section('css')
     <link rel="stylesheet" href="{{ asset('client/css/custom.css') }}">
