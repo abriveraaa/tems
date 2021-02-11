@@ -17,7 +17,6 @@ System is mostly generated with [AdminLTE](https://github.com/jeroennoten/Larave
 Other assets used:
 
 - [CoreUI Free theme](https://coreui.io/demo/#main.html) (Bootstrap 4)
-- [Laratrust V6](https://laratrust.santigarcor.me/)
 - [DOMPDF V0.9](https://github.com/dompdf/dompdf)
 - [ID Generator V1](https://github.com/haruncpi/laravel-id-generator)
 - [DataTables V9](https://yajrabox.com/docs/laravel-datatables/master/installation)
