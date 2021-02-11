@@ -41,7 +41,7 @@
                                             <tr>
                                                 <th>Name</th>
                                                 <th># Roles</th>
-                                                <th># Permission</th>
+                                                <th># Permissions</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
