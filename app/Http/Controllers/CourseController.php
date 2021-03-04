@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\CourseQueries;
+
 use App\Http\Resources\CourseResource;
 use App\Http\Requests\CourseRequest;
 
@@ -15,6 +17,7 @@ use Auth;
 
 class CourseController extends Controller
 {
+    use CourseQueries;
        
     /**
      * Display a listing of the resource.
@@ -23,9 +26,8 @@ class CourseController extends Controller
      */
     public function index()
     {
-        // return CourseResource::collection(Course::all());
-        $data = Course::withTrashed()->with('colleges')->get();
-        return Datatables::of($data)
+        $course = $this->allCourse();
+        return Datatables::of($course)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
                     $update = Auth::user()->hasPermission('course-update');
@@ -60,113 +62,51 @@ class CourseController extends Controller
                 ->make(true);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(CourseRequest $request)
     {
         $college = $request->college;
+
+        $validated = $request->validated();
+
+        $course = $this->saveCourse($validated);
+
+        $course->colleges()->sync($college, $course);
         
-        $rules = array(
-            'college' => 'required',
-            'description' => 'required|unique:courses,description',
-            'code' => 'required|unique:courses,code'
-        );
-        
-        $messages = array(
-            'college.required' => 'College is required.<br>',
-            'description.required' => 'Course name is required.<br>',
-            'description.unique' => 'Course name has already been taken.<br>',
-            'code.required' => 'Course code is required.<br>',
-            'code.unique' => 'Course code has already been taken.<br>',
-        );
-            
-        $validate = Validator::make($request->all(), $rules, $messages);
-            
-        if($validate->fails()) {
-            
-            return response()->json(['error' => $validate->errors()->all()]);
-        }else {
-            $course = new Course();
-            $course->description = $request->description;
-            $course->code = strtoupper($request->code);
-            $course->save();
-            
-            $course->colleges()->sync($college, $course);
-            return response()->json(['success' => 'Course added successfully!']);
-        }
+        return response()->json(['success' => 'Course added successfully!']);
     }
 
     public function show($course)
     {
-        if(Course::whereId($course)->exists()) {
-            $course = Course::whereId($course)->with('colleges')->first();
-    		return response()->json($course);
-    	} else {
-    		return response()->json([
-    			"success" => "Course not found"
-    		], 404);
-        }
+        $courses = $this->getCourse($course);
+        $data = CourseResource::collection($courses);
+
+        return response()->json($data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     */
-    public function update(Request $request)
+    public function update(CourseRequest $request)
     {
         $college = $request->college;
-        $course = $request->idcourse;
+        $courseId = $request->id;
+
+        $validated = $request->validated();
+
+        $course = $this->updateCourse($courseId, $validated);
+
+        $course->colleges()->sync($college,$course);
         
-        $rules = array(
-            'college' => 'required',
-            'description' => 'required|unique:courses,description,'.$course,
-            'code' => 'required|unique:courses,code,'.$course,
-        );
-        
-        $messages = array(
-            'college.required' => 'College is required.<br>',
-            'description.required' => 'Course description is required.<br>',
-            'code.required' => 'Course code is required.<br>',
-            'code.unique' => 'Course code has already been taken.<br>',
-            'description.unique' => 'Course name has already been taken.<br>',
-        );
-
-        $validator = \Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails())  
-        {
-            return response()->json(['error' => $validator->errors()->all()]);
-        }
-        else
-        {
-            $data = Course::where('id', $course)->first();
-            $data->description = $request->description;
-            $data->code = strtoupper($request->code);
-            $data->save();
-
-            $data->colleges()->sync($college,$course);
-            
-            return response()->json(['success'=>'Record updated successfully.']);
-        }
+        return response()->json(['success'=>'Record updated successfully.']);
     }
 
     public function destroy($course)
     {
-        Course::whereId($course)->delete();
+        $this->deleteCourse($course);
 
         return response()->json(['success'=>'Record deleted successfully.']);
     }
 
     public function restore($course)
     {
-        Course::withTrashed()
-            ->where('id', $course)
-            ->restore();
+        $this->restoreCourse($course);
 
         return response()->json(['success'=>'Record restored successfully.']);
     }
