@@ -24,23 +24,17 @@ class CourseRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => ['required', 'unique:courses,description'],
-            'code' => ['required', 'unique:courses,code']
-        ];
-    }
-    
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'description.required' => 'Course description is required. <br>',
-            'description.unique' => 'Course description is already in the database. <br>',
-            'code.required' => 'Course code is required. <br>',
-            'code.unique' => 'Course code is already in the database. <br>',
+            'college' => [
+                'required',
+            ],
+            'description' => [
+                'required', 
+                'unique:courses,description,'.$this->id,
+            ],
+            'code' => [
+                'required', 
+                'unique:courses,code,'.$this->id,
+            ],
         ];
     }
 }

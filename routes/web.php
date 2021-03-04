@@ -41,6 +41,7 @@ Route::middleware(['route'])->group(function() {
     
     Route::resource('/roles-permission', RolesAssignmentController::class, ['middleware' => ['auth', 'web', 'permission:manage-dashboard'], 'as' => 'admintrust'])
     ->only(['index', 'edit', 'update']);
+
     //DASHBOARD
     Route::get('/dashboard', ['as' => 'dashboard', 'middleware' => ['permission:manage-dashboard'], 'uses' => 'RouteController@viewDashboard']);
     Route::group(['prefix' => '/data/dashboard', 'middleware' => []], function() {
@@ -84,7 +85,7 @@ Route::middleware(['route'])->group(function() {
         Route::post('/{tools}', ['middleware' => ['permission:tools-update|tools-delete'], 'as' => 'tools.update', 'uses' => 'ToolsController@update']);
         Route::post('/report/{tools}', ['middleware' => ['permission:tools-delete'], 'as' => 'tools.report', 'uses' => 'ToolsController@report']);
     });
-    
+
     //TOOL CATEGORY
     Route::get('/toolcategory', ['as' => 'toolcategory', 'middleware' => ['permission:toolcategory-view|toolcategory-create|toolcategory-update|toolcategory-delete'], 'uses' => 'RouteController@showToolCategoryPage']);
     Route::group(['prefix' => '/data/categories', 'middleware' => []], function() {

@@ -24,14 +24,14 @@
                     <div class="form-group">
                         <label for="description" class="form__label ml-2 pl-1">Course Name</label>
                         <input type="text" class="form__input" name="description" id="description" placeholder="Course Name" autocomplete="off">
-                        <input type="hidden" id="idcourse" name="idcourse">
                     </div>
                     <div class="form-group">
                         <label for="code" class="form__label ml-2 pl-1">Course Code</label>
                         <input type="text" class="form__input" name="code" id="code" placeholder="Course Code" autocomplete="off">
                     </div>
-            </div>
-            <div class="modal-footer">
+                </div>
+                <div class="modal-footer">
+                <input type="hidden" id="id" name="id">
                 <input type="hidden" id="action-course">
                 <button type="submit" id="save-data" class="btn btn-primary text-uppercase">Submit</button>
             </div>
