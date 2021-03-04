@@ -41,7 +41,6 @@ return [
             'port' => env('MAIL_PORT', 465),
             'username' => env('MAIL_USERNAME', 'itechmonitoringsystem@gmail.com'),
             'password' => env('MAIL_PASSWORD', 'krmzjmvrufctzbvo'),
-            'password' => env('MAIL_PASSWORD'),
             'timeout' => 60,
             'auth_mode' => null,
         ],
