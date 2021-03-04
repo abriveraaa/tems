@@ -46,7 +46,7 @@ class CourseController extends Controller
                             $btn .= '<a href="javascript:void(0)" class="btn btn-danger btn-sm" id="del-course" data-id="'. $row->id .'" data-toggle="modal" data-target="#delete"><i class="fas fa-trash mr-2"></i>Delete</a>';
                             return $btn;
                         }else{
-
+                            $btn = '';
                         }
                     }else{
                         if($delete == true){

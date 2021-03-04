@@ -42,6 +42,8 @@ class ToolsController extends Controller
                     }else if($delete == true){
                         $btn = '<a href="javascript:void(0)" class="btn btn-danger btn-sm" id="rep-tools" data-id="'. $row->id .'" data-toggle="modal" data-target="#report"><i class="fas fa-user-lock mr-2"></i>Report</a>';
                         return $btn;
+                    }else{
+                        $btn = "";
                     }
                 }
             })

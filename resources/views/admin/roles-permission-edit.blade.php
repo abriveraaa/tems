@@ -8,7 +8,7 @@
       <form
         method="POST"
         action="{{route('admintrust.roles-permission.update', ['roles_permission' => $user->id, 'model' => $modelKey])}}"
-        class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200 p-8"
+        class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200 p-8 form-roles"
       >
         @csrf
         @method('PUT')

@@ -36,6 +36,8 @@ class UserController extends Controller
                         }else if($delete == true){
                             $btn = '<a href="javascript:void(0)" class="btn btn-danger btn-sm" id="ban-admin" data-id="'. $row->id .'" data-toggle="modal" data-target="#delete"><i class="fas fa-user-lock mr-2"></i>Lock</a>';
                             return $btn;
+                        }else {
+                            $btn = "";
                         }
                     }else{
                         if($delete == true){

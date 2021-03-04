@@ -40,6 +40,8 @@ class BorrowerController extends Controller
                     }else if($delete == true){
                         $btn = '';
                         $btn .= '<a href="javascript:void(0)" class="btn btn-danger btn-sm" id="ban-borrower" data-id="'. $row->id .'" data-toggle="modal" data-target="#delete"><i class="fas fa-user-lock mr-2"></i>Ban</a>';
+                    }else{
+                        $btn = '';
                     }
                 }else{
                     if($delete == true || $update == true){

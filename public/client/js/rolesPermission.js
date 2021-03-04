@@ -16,6 +16,7 @@ $(document).ready(function(){
         $('.add-permissions').remove();
         var id = $(this).attr("data-id");
         var model = $(this).attr("data-model");
+        $('.form-roles').attr("action", "/roles-permission/" + id + "?model="+ model +"");
         $('.roles-edit').trigger("reset");
         $('.modal-title').html("Edit User's Permission");
         $.get("roles-permission/" + id + "/edit?model=" + model, function(data){

@@ -32,6 +32,8 @@ class CollegeController extends Controller
                         }else if($delete == true){
                             $btn = '<a href="javascript:void(0)" class="del-college btn btn-danger btn-sm" data-id="'. $row->id .'" data-toggle="modal" data-target="#delete"><i class="fas fa-trash mr-2"></i>Delete</a>';
                             $btn .= '';
+                        }else{
+                            $btn = '';
                         }
                     } else {
                         if($delete == true){
