@@ -25,8 +25,6 @@ Route::get('/', function () {
 Route::group(['prefix' => '/login'], function() {
     Route::get('', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
     Route::post('', ['as' => '', 'uses' => 'Auth\LoginController@login']);
-    // Route::get('/{provider}', ['as' => 'social.login', 'uses' => 'Auth\LoginController@redirectToProvider']);
-    // Route::get('/{provider}/callback', ['as' => 'social.callback', 'uses' => 'Auth\LoginController@handleProviderCallback']);
 });
 
 //PASSWORD
@@ -41,7 +39,6 @@ Route::group(['prefix' => '/password'], function() {
 
 Route::middleware(['route'])->group(function() {
     
-    // Route::get('/roles-permission', ['as' => 'roles-permission', 'middleware' => ['role:administrator', 'permission:users-create|users-view|users-update|users-delete'], 'uses' => 'RouteController@showRolesPermission']);
     Route::resource('/roles-permission', RolesAssignmentController::class, ['middleware' => ['auth', 'web', 'permission:manage-dashboard'], 'as' => 'admintrust'])
     ->only(['index', 'edit', 'update']);
     //DASHBOARD
@@ -66,6 +63,7 @@ Route::middleware(['route'])->group(function() {
         Route::delete('/{admin}', ['middleware' => ['permission:users-delete'], 'as' => 'admin.destroy', 'uses' => 'UserController@destroy']); 
         Route::put('/{admin}', ['middleware' => ['permission:users-delete'], 'as' => 'admin.restore', 'uses' => 'UserController@restore']); 
     });
+
     //BORROWER
     Route::get('/borrower', ['as' => 'borrower', 'middleware' => ['permission:borrower-view|borrower-create|borrower-update|borrower-delete'], 'uses' => 'RouteController@showBorrowerPage']);
     Route::group(['prefix' => '/data/borrower', 'middleware' => ['web']], function() {
@@ -76,6 +74,7 @@ Route::middleware(['route'])->group(function() {
         Route::delete('/{borrower}', ['middleware' => ['permission:borrower-delete'], 'as' => 'borrower.destroy', 'uses' => 'BorrowerController@destroy']);
         Route::put('/{borrower}', ['middleware' => ['permission:borrower-delete'], 'as' => 'borrower.restore', 'uses' => 'BorrowerController@restore']);
     });
+
     //TOOLS
     Route::get('/tool', ['as' => 'tool', 'middleware' => ['permission:tools-view|tools-create|tools-update|tools-delete|tools-print'], 'uses' => 'RouteController@showToolsPage']);
     Route::group(['prefix' => '/data/tools', 'middleware' => []], function() {
@@ -85,6 +84,7 @@ Route::middleware(['route'])->group(function() {
         Route::post('/{tools}', ['middleware' => ['permission:tools-update|tools-delete'], 'as' => 'tools.update', 'uses' => 'ToolsController@update']);
         Route::post('/report/{tools}', ['middleware' => ['permission:tools-delete'], 'as' => 'tools.report', 'uses' => 'ToolsController@report']);
     });
+    
     //TOOL CATEGORY
     Route::get('/toolcategory', ['as' => 'toolcategory', 'middleware' => ['permission:toolcategory-view|toolcategory-create|toolcategory-update|toolcategory-delete'], 'uses' => 'RouteController@showToolCategoryPage']);
     Route::group(['prefix' => '/data/categories', 'middleware' => []], function() {
@@ -141,7 +141,6 @@ Route::middleware(['route'])->group(function() {
     
     });
     
-
     //REPORT
     Route::group(['prefix' => '/report', 'middleware' => []], function() {
         Route::get('', ['as' => 'report', 'uses' => 'RouteController@showReportPage']);
