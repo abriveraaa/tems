@@ -4,6 +4,17 @@ $(document).ready(function () {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    let loadCollege = async() => {
+        
+        const colleges = await $.get("/category/college", function(data){});
+    
+        $('#college').empty();
+        $("#college").append('<option value="">Select College</option>');
+        $.each(colleges,function(key,value){
+            $("#college").append('<option value="'+key+'">'+value+'</option>');
+        });
+    }
     
     var coursetable = $('#course-table').DataTable({
         processing: true,
@@ -20,10 +31,11 @@ $(document).ready(function () {
                     }else{
                         return data[0].code;
                     }
-                }
+                },
+                searchable: true
             },
-            { data: 'description'},
-            { data: 'code'},
+            { data: 'description', searchable: true },
+            { data: 'code', searchable: true },
             { data: "deleted_at", visible: false },
             { data: "updated_at", visible: false },
             { data: 'action', orderable: false, searchable: false},
@@ -45,24 +57,12 @@ $(document).ready(function () {
 
     $('#college').select2({ width: '100%' });
 
+    loadCollege();
+
     $(document).on('click', '#course-add', function() {
         $('#course-form').trigger("reset");         
         $('#action-course').val('Add');
-        $.ajax({
-            type:"GET",
-            url:"/category/college", 
-            success:function(res)
-            {       
-                if(res)
-                {
-                    $('#college').empty();
-                    $("#college").append('<option value="">Select College</option>');
-                    $.each(res,function(key,value){
-                        $("#college").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }
-            }
-        });
+        $('#college').val("").trigger("change");
         $('.modal-title').html("Add course");
         $('#save-data').text("Submit");
     });
@@ -72,26 +72,13 @@ $(document).ready(function () {
         $('#action-course').val('Edit');
         $.get("data/course/" + id, function (data) { 
             $('#course-form').trigger("reset");   
-            $.ajax({
-                type:"GET",
-                url:"/category/college", 
-                success:function(res)
-                {       
-                    if(res)
-                    {
-                        $('#college').empty();
-                        $("#college").append('<option value="">Select College</option>');
-                        $.each(res,function(key,value){
-                            $("#college").append('<option value="'+key+'">'+value+'</option>');
-                        });
-                        var option = new Option(data.colleges[0].description, data.colleges[0].id, true, true);
-                        $('#college').val(data.colleges[0].id).trigger('change'); 
-                    }
-                }
-            });    
-            $('#description').val(data.description);
-            $('#code').val(data.code);
-            $('#idcourse').val(data.id)
+            data.map((result) => {
+                $('#description').val(result.description);
+                $('#code').val(result.code);
+                $('#id').val(result.id)
+                $('#college').val(result.college.id).trigger('change');  
+            });
+            
             $('.modal-title').html("Edit course");
             $('#save-data').text("Update");
         })
@@ -118,39 +105,26 @@ $(document).ready(function () {
         .addClass('uploading');
         if(action == "Add")
         {
-            $.ajax({
-                url: "data/course",
-                method:"POST",
-                data: info,
-                dataType:"json",
-                success:function(data){
-                    if(data.success){
-                        toastr.success(data.success, 'COURSE ADDED', {timeOut: 3000});
-                        coursetable.ajax.reload();
-                        coursetable.draw();
-                        $("#add-course .close").click();
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');               }
-                    if(data.error)
-                    {
-                        toastr.error(data.error, 'ERROR', {timeOut: 3000});
-                         $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');
-                    }
-                },
-                error: function(jqXHR) {
-                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                    $('#save-data').prop('disabled', false)
-                    .html("Submit")
-                    .removeClass('uploading');
-                }
+            $.post("data/course", function(data){})
+            .done(function(data){
+                toastr.success(data.success, 'COURSE ADDED', {timeOut: 3000});
+                coursetable.ajax.reload();
+                coursetable.draw();
+                $("#add-course .close").click();
+                $('#save-data').prop('disabled', false)
+                .html("Submit")
+                .removeClass('uploading');  
             })
+            .fail(function(jqXHR){
+                toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                $('#save-data').prop('disabled', false)
+                .html("Submit")
+                .removeClass('uploading');
+            });
         }
         if(action == "Edit")
         {
-            var id = $('#idcourse').val();
+            var id = $('#id').val();
             $.ajax({
                 url: "data/course/" + id,
                 method:"PUT",
@@ -206,21 +180,18 @@ $(document).ready(function () {
 
     $(document).on('click', '#confirm-res', function () {
         var course = $('#res-id').val();
-        $.ajax({
-            url: "data/course/" + course,
-            type: "POST",
-            success: function (data) {
-                toastr.success(data.success, 'Restored', {timeOut: 1000});
-                coursetable.ajax.reload();
-                coursetable.draw();
-                $("#restore .close").click();
-            },
-            error: function(jqXHR) {
-                toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                $('#save-data').prop('disabled', false)
-                .html("Submit")
-                .removeClass('uploading');  
-            }
+        $.post("data/course/" + course, function(data){})
+        .done(function(data){
+            toastr.success(data.success, 'Restored', {timeOut: 1000});
+            coursetable.ajax.reload();
+            coursetable.draw();
+            $("#restore .close").click();
+        })
+        .fail(function(jqXHR){
+            toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+            $('#save-data').prop('disabled', false)
+            .html("Submit")
+            .removeClass('uploading');  
         });
     });
 });
