@@ -284,7 +284,7 @@ $(document).ready(function(){
             async: false,
             processing: true,
             serverSide: true,
-            pageLength : 5,
+            pageLength : 20,
             lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
             ajax: "/category/toolcategory/" + id,
             columns: [
@@ -305,8 +305,8 @@ $(document).ready(function(){
                     },
                     searchable: true,
                 },
-                { data: "brand" },
-                { data: "property" },
+                { data: "brand", searchable: true },
+                { data: "property", searchable: true },
                 { data: "toolroom",
                     "render": function ( data, type, row ) {
                         if(data == null || data == ''){
@@ -354,7 +354,7 @@ $(document).ready(function(){
             async: false,
             processing: true,
             serverSide: true,
-            pageLength : 5,
+            pageLength : 20,
             lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
             ajax: "/category/toolcategory/" + id,
             columns: [
@@ -375,8 +375,8 @@ $(document).ready(function(){
                     },
                     searchable: true,
                 },
-                { data: "brand" },
-                { data: "property" },
+                { data: "brand", searchable: true },
+                { data: "property", searchable: true },
                 { data: "toolroom",
                     "render": function ( data, type, row ) {
                         if(data == null || data == ''){
@@ -422,40 +422,28 @@ $(document).ready(function(){
         $('#save-report').prop('disabled', true)
         .html("")
         .addClass('uploading');
-        $.ajax({
-            url: "data/tools/report/" + tools,
-            method: "POST",
-            data: info,
-            dataType: 'json',
-            success: function(data) {
-                if (data.success) {
-                    $('#report-form').trigger('reset');
-                    itemname.ajax.reload();
-                    itemname.draw();
-                    toolTable.ajax.reload();
-                    toolTable.draw();
-                    category.ajax.reload();
-                    category.draw();
-                    report.ajax.reload();
-                    report.draw();
-                    $('#report .close').click();
-                    toastr.success('Item reported succesfully!', 'ADDED', {timeOut: 3000});
-                    $('#save-report').prop('disabled', false)
-                    .html("Report")
-                    .removeClass('uploading');
-                } else {
-                    toastr.error(data.error, 'ERROR', {timeOut: 3000});
-                    $('#save-report').prop('disabled', false)
-                    .html("Report")
-                    .removeClass('uploading');
-                }
-            },
-            error: function(jqXHR) {
-                toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                $('#save-report').prop('disabled', false)
-                .html("Report")
-                .removeClass('uploading');
-            }
+        $.post("data/tools/report" + tools, function(data){})
+        .done(function(data){
+            $('#report-form').trigger('reset');
+            itemname.ajax.reload();
+            itemname.draw();
+            toolTable.ajax.reload();
+            toolTable.draw();
+            category.ajax.reload();
+            category.draw();
+            report.ajax.reload();
+            report.draw();
+            $('#report .close').click();
+            toastr.success('Item reported succesfully!', 'ADDED', {timeOut: 3000});
+            $('#save-report').prop('disabled', false)
+            .html("Report")
+            .removeClass('uploading');
+        })
+        .fail(function(jqXHR){
+            toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+            $('#save-report').prop('disabled', false)
+            .html("Report")
+            .removeClass('uploading');
         });
     });
 
