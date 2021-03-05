@@ -36,9 +36,9 @@ $(document).ready(function(){
                         // console.log(value.assigned == true && value.isRemovable == false);
                         if(value.assigned == true && value.isRemovable == false){
                             if(value.assigned == true){
-                                $('.roles').append('<span class="add-roles col-auto"><label class="inline-flex items-center mr-3 my-2" style="flex: 1 0 20%;"><input type="checkbox" class="form-checkbox focus:shadow-none focus:border-transparent text-gray-500 h-4 w-4" name="roles[]" value="'+ value.id +'" checked> <span class="ml-2 text-gray-600">'+ value.display_name +'</span></span>');
+                                $('.roles').append('<span class="add-roles col-2"><label class="inline-flex items-center mr-3 my-2" style="flex: 1 0 20%;"><input type="checkbox" class="form-checkbox focus:shadow-none focus:border-transparent text-gray-500 h-4 w-4" name="roles[]" value="'+ value.id +'" checked> <span class="ml-2 text-gray-600">'+ value.display_name +'</span></span>');
                             }else{
-                                $('.roles').append('<span class="add-roles col-auto"><label class="inline-flex items-center mr-3 my-2" style="flex: 1 0 20%;"><input type="checkbox" class="form-checkbox focus:shadow-none focus:border-transparent text-gray-500 h-4 w-4" name="roles[]" value="'+ value.id +'"> <span class="ml-2 text-gray-600">'+ value.display_name +'</span></span>');
+                                $('.roles').append('<span class="add-roles col-2"><label class="inline-flex items-center mr-3 my-2" style="flex: 1 0 20%;"><input type="checkbox" class="form-checkbox focus:shadow-none focus:border-transparent text-gray-500 h-4 w-4" name="roles[]" value="'+ value.id +'"> <span class="ml-2 text-gray-600">'+ value.display_name +'</span></span>');
                             }
                         }else{
                             if(value.assigned == true){

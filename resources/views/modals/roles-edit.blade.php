@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col">
                     <label class="form__label">Roles</label>
-                    <div class="roles col">
+                    <div class="roles row">
                         
                     </div>
                 </div>

@@ -19,31 +19,64 @@ $(document).ready(function () {
         }
     });
 
-    $.get("/category/college", function(data){
-        if(data)
-        {
-            $("#college").append('<option value="" selected disabled>Select College</option>');
-            $.each(data,function(key,value){
-                $("#college").append('<option value="'+ key +'">'+ value +'</option>');
-            });
-        }
-    });
+    let loadCollege = async() => {
+        const colleges = await $.get("/category/college", function(data){})
+    
+        $('#college').empty();
+        $("#college").append('<option value="">Select College</option>');
+        $.each(colleges,function(key,value){
+            $("#college").append('<option value="'+key+'">'+value+'</option>');
+        });
+    };
+
+    let loadCourse = async(id) => {
+        const course = await $.get("/category/course/" + id, function(data){});
+        $("#course").empty();
+        $("#course").append('<option value="" selected disabled>Select Course</option>');
+        (course.courses).map((value) => {
+            $("#course").append('<option value="'+value.id+'">'+value.description+'</option>');
+        });
+    }
+
+    let getCollege = async(id) => {
+        const colleges = await $.get("/category/collegeuser/" + id, function(data){});
+        colleges.map((value) => {
+            $('#college').val(value.id).trigger('change'); 
+        });
+
+        const course = await $.get("/category/courseuser/" + id, function(data){});
+        course.map((value) => {
+            $('#course').val(value.id).trigger('change'); 
+        });
+    };
+
+    loadCollege();
 
     $('#college').on('change', function(){
         var id = $(this).val();
-        if(id){
-            $.get("/category/course/" + id, function(data){
-                if(data)
-                {
-                    $("#course").empty();
-                    $("#course").append('<option value="" selected disabled>Select Course</option>');
-                    $.each(data.courses,function(key,value){
-                        $("#course").append('<option value="'+value.id+'">'+value.description+'</option>');
-                    });
-                }
-            });
-        }
+        loadCourse(id);
     });
+
+    let getBorrower = async(id) => {
+        const borrower = await $.get("data/borrower/" + id, function(data){});
+
+        if(borrower.image === null || borrower.image === "null" || borrower.image === ""){
+            $('#store_image').attr("src", "/img/default-photo.png");
+        }else{
+            $('#store_image').attr("src", "/img/borrower/" + borrower.image + "");
+        }
+        getCollege(borrower.id);
+        $('#store_image').append("<div id='hide-img'><input type='hidden' name='hidden_image' value='"+ borrower.image +"' /></div>");
+        $('#studnum').val(borrower.studnum);
+        $('#contact').val(borrower.contact);
+        $('#sex').val(borrower.sex).trigger("change");
+        $('#firstname').val(borrower.firstname);
+        $('#midname').val(borrower.midname);
+        $('#lastname').val(borrower.lastname);
+        $('#year').val(borrower.year);
+        $('#section').val(borrower.section);
+        $('#borrower_id').val(borrower.id);
+    };
 
     var borrowertable = $('#borrower-table').DataTable({
         processing: true,
@@ -151,19 +184,10 @@ $(document).ready(function () {
     $('#course').select2({ width: '100%' });
 
     $(document).on('click', '#borrower-add', function() {
-        $('#college').empty();
+        $('#borrower-form').trigger("reset");         
+        $('#college').val("").trigger("change");
         $('#course').empty();
         $('#hide-img').remove();
-        $.get("/category/college", function(data){
-            if(data)
-            {
-                $("#college").append('<option value="" selected disabled>Select College</option>');
-                $.each(data,function(key,value){
-                    $("#college").append('<option value="'+ key +'">'+ value +'</option>');
-                });
-            }
-        });
-        $('#borrower-form').trigger("reset");         
         $('#action-borrower').val('Add');
         $('#sex').select2({ width: '100%' });
         $('#store_image').attr("src", "/img/default-photo.png");
@@ -178,29 +202,7 @@ $(document).ready(function () {
         $('.modal-title').html("Update borrower");
         $('#save-data').html("Update");
         $('#action-borrower').val("Edit");
-        $.get("data/borrower/" + id, function(data){
-            if(data.image === null || data.image === "null" || data.image === ""){
-                $('#store_image').attr("src", "/img/default-photo.png");
-            }else{
-                $('#store_image').attr("src", "/img/borrower/" + data.image + "");
-            }
-            $.get("/category/collegeuser/" + data.id, function(result){
-                $('#college').val(result[0].id).trigger('change'); 
-                $.get("/category/courseuser/" + data.id, function(datares){
-                    $('#course').val(datares[0].id).trigger('change'); 
-                });
-            });
-            $('#store_image').append("<div id='hide-img'><input type='hidden' name='hidden_image' value='"+ data.image +"' /></div>");
-            $('#studnum').val(data.studnum);
-            $('#contact').val(data.contact);
-            $('#sex').val(data.sex).trigger("change");
-            $('#firstname').val(data.firstname);
-            $('#midname').val(data.midname);
-            $('#lastname').val(data.lastname);
-            $('#year').val(data.year);
-            $('#section').val(data.section);
-            $('#borrower_id').val(data.id);
-        });
+        getBorrower(id);
     });
 
     $('#borrower-form').on('submit', function(e){
