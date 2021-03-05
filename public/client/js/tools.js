@@ -11,186 +11,96 @@ $(document).ready(function(){
     $('#description').select2({ width: '100%' });
     $('#print-tools').hide();
 
-    var load = function(){
-        $.get("/category/toolcategories", function(res){
-            if(res)
-            {
-                $("#category").empty();
-                $("#category").append('<option value="" selected disabled>Please choose one</option>');
-                $.each(res,function(key,value){
-                    $("#category").append('<option value="'+key+'">'+value+'</option>');
-                });
-            }
+    let load = async() => {
+        const toolcategories = await $.get("/category/toolcategories", function(data){});
+        $("#category").empty();
+        $("#category").append('<option value="" selected disabled>Please choose one</option>');
+        $.each(toolcategories,function(key,value){
+            $("#category").append('<option value="'+key+'">'+value+'</option>');
         });
-        
-        $.get("/category/room", function(result){
-            if(result)
-            {
-                $("#room").empty();
-                $("#room").append('<option value="" selected disabled>Select one</option>');
-                $.each(result,function(key,value){
-                    $("#room").append('<option value="'+key+'">'+value+'</option>');
-                });
-            }
+
+        const room = await $.get("/category/room", function(result){});
+        $("#room").empty();
+        $("#room").append('<option value="" selected disabled>Select one</option>');
+        $.each(room,function(key,value){
+            $("#room").append('<option value="'+key+'">'+value+'</option>');
         });
+    };
+
+    let getToolName = async(id) => {
+        const toolname = await $.get("/category/toolname/" + id, function(data){});
+        $("#description").empty();
+        $("#description").append('<option value="" selected disabled>Select Tool Name</option>');
+        $.each(toolname.items,function(key,value){
+            $("#description").append('<option value="'+value.id+'">'+value.description+'</option>');
+        });
+
+        const lastId = await $.get("/category/lastid/" + id, function(data){});
+        $('#barcode').val(lastId);
         $('#category').on('change', function(){
             var id = $(this).val();
-            $.get("/category/toolname/" + id, function(data){
-                if(data)
-                {
-                    $("#description").empty();
-                    $("#description").append('<option value="" selected disabled>Select Tool Name</option>');
-                    $.each(data.items,function(key,value){
-                        $("#description").append('<option value="'+value.id+'">'+value.description+'</option>');
-                    });
-                }
+            $.get("/category/lastid/" + id, function(data){
+                $('#barcode').val(data);
             });
+        }); 
+    };
+
+    let reportTools = async(id) => {
+        const reported = await $.get("data/tools/" + id, function(data) {});
+        $('#rep-barcode').val(reported.barcode);
+        $('#reptoolId').val(reported.id);
+        $('#rep-brand').val(reported.brand);
+        (reported.toolcategory).map((value) => {
+            $('#rep-category').val(value.description);
+            $('#toolcatid').val(value.id);
+        });
+        (reported.toolname).map((value) => {
+            $('#rep-description').val(value.description);
+            $('#toolnameid').val(value.id);
         });
     }
 
-    
-
-    var toolTable = $('#alltools-table').DataTable({
-        async: false,
-        processing: true,
-        serverSide: true,
-        pageLength : 5,
-        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
-        order: [[6, "desc"]],
-        ajax: "/data/tools",
-        columns: [
-            { data: 'barcode', name: 'barcode' },
-            { data: 'toolname',
-                "render": function ( data, type, row ) {
-                    if(data == null || data == ''){
-                        return '';
-                    }else{
-                        return data[0].description;
-                    }
-                },
-                searchable: true,
-            },
-            { data: 'property' },             
-            { data: 'created_at',
-                render: function(d) {
-                    return moment(d).format("MM/DD/YYYY HH:mm:ss");
-                }
-            },
-            { data: 'tooladmin',
-                "render": function (data) {
-                    var getFirstWord = string => {
-                        const words = string.split(' ');
-                        return words[0];
-                    };
-                    if(data == null || data == ''){
-                        return '';
-                    }else{
-                        var nam = getFirstWord(data[0].name);
-                        return nam;
-                    }
-                },
-            },             
-            { data: 'brand', visible: false },
-            { data: 'deleted_at', visible: false },
-            { data: 'updated_at', visible: false },
-            { data: 'action', name: 'action', searchable: false, orderable: false }
-        ],
-        "createdRow": function(row, data, dataIndex){
-            $(row).addClass('deleted');
-            if(data.deleted_at != null){
-                $(row).addClass('bannedClass');
-            }else if(data.reason == 'Borrowed'){
-                $(row).addClass('borrowedClass');
+    let getBorrower = async(borrower) => {
+        try {
+            const borrowers = await $.get("category/borrower/" + borrower, function(data) {});
+            if(borrowers.midname == null || borrowers.midname == ""){
+                $('#rep-name').val(borrowers.firstname + " " + borrowers.lastname);
+            }else{
+                $('#rep-name').val(borrowers.firstname + " " + borrowers.midname[0] + ". " + borrowers.lastname);
             }
-        },
-        "rowCallback": function( row, data, index ) {
-            if (data.toolname.length == 0) {
-                $(row).hide();
-            }
-        },
+            $('#repnum').val(borrowers.id);
+        } catch(error) {
+            $('#rep-borrower').val("");
+            $('#rep-name').val("");
+            $('#repnum').val("");
+            $('#rep-borrower').focus();
+            toastr.error(error.responseJSON.error, "ERROR", {timeOut: 3000});
+        }
+    };
+
+    let editTools = async(id) => {
+        const editTool = await  $.get("data/tools/"+ id, function(data) {});
+        $('#room').val(editTool.toolroom[0].id).trigger('change');  
+        $('#brand').val(editTool.brand);
+        $('#property').val(editTool.property);
+        $('#toolId').val(editTool.id);
+        $('#print-tools').val(editTool.id);
+        $('#action_btn').val("Edit");
+        $('.modal-title').text(editTool.barcode);
+
+        const toolname = await $.get("/category/toolname/" + editTool.toolcategory[0].id, function(results){});
+        $('#category').val(toolname.id).trigger('change');
+
+        const tooldesc = await $.get("/category/tooldesc/" + editTool.id, function(res){});
+        $('#description').val(tooldesc[0].id).trigger('change');
+    }
+
+    $('#category').on('change', function(){
+        var id = $(this).val();
+        getToolName(id);
     });
 
-    var category = $('#categorylisttable').DataTable({
-        async: false,
-        processing: true,
-        serverSide: true,
-        pageLength : 5,
-        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
-        ajax: "/category/sortcategory",
-        columns: [
-            { data: 'description' },
-            { data: 'tools_count' },
-            { data: 'action', orderable: false, searchable: true }
-        ],
-    });
-
-    var report = $('#reportedlist-table').DataTable({
-        async: false,
-        processing: true,
-        serverSide: true,
-        pageLength : 5,
-        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
-        ajax: "/category/reported",
-        columns: [
-            { data: 'toolreport',
-                render: function(data) {
-                    return data[0].studnum;
-                }
-            },
-            { data: 'toolreport',
-                render: function(data) {
-                    if(data[0].midname == null || data[0].midname == ""){
-                        return data[0].lastname + ", " + data[0].firstname;
-                    }else{
-                        return data[0].lastname + ", " + data[0].firstname + " " + data[0].midname[0];
-                    }
-                }
-            },
-            { data: 'barcode', },
-            { data: 'toolname',
-                render: function(data) {
-                    return data[0].description;
-                }
-            },
-            { data: 'brand', },
-            { data: 'reason' },
-            { data: 'deleted_at',
-                render: function(d) {
-                    return moment(d).format("MM/DD/YYYY HH:mm:ss");
-                }
-            },
-            { data: 'tooladmin',
-                "render": function (data) {
-                    var getFirstWord = string => {
-                        const words = string.split(' ');
-                        return words[0];
-                    };
-                    if(data == null || data == ''){
-                        return '';
-                    }else{
-                        var nam = getFirstWord(data[0].name);
-                        return nam;
-                    }
-                },
-            },
-        ],
-    });
-
-    var itemname = $('#itemnamelist-table').DataTable({
-        async: false,
-        processing: true,
-        serverSide: true,
-        pageLength : 5,
-        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
-        ajax: "/category/sortitemname",
-        columns: [
-            { data: 'description' },
-            { data: 'tools_count' },
-            { data: 'action', orderable: false, searchable: false }
-        ],
-    });
-
-    load();
+    load();  
 
     $(document).on('click', '#tools-add', function() {
         $('#tools-form').trigger("reset");
@@ -202,12 +112,6 @@ $(document).ready(function(){
         $('#action_btn').val("Add");
         $('#save-tools').html("Submit");
         $('.modal-title').text("Add tools");
-        $('#category').on('change', function(){
-            var id = $(this).val();
-            $.get("/category/lastid/" + id, function(data){
-                $('#barcode').val(data);
-            });
-        });
     });
 
     $(document).on('click', '#edit-tools', function() {
@@ -215,21 +119,7 @@ $(document).ready(function(){
         $('#print-tools').show();
         $('.barcodes').hide();
         $('#save-tools').html('<i class="fas fa-save mr-2"></i>Update');
-        $.get("data/tools/"+ id, function(data) {
-            $.get("/category/toolname/" + data.toolcategory[0].id, function(results){
-                $('#category').val(results.id).trigger('change');
-                $.get("/category/tooldesc/" + data.id, function(res){
-                    $('#description').val(res[0].id).trigger('change');
-                });
-            });
-            $('#room').val(data.toolroom[0].id).trigger('change');  
-            $('#brand').val(data.brand);
-            $('#property').val(data.property);
-            $('#toolId').val(data.id);
-            $('#print-tools').val(data.id);
-            $('#action_btn').val("Edit");
-            $('.modal-title').text(data.barcode);
-        })
+        editTools(id);
     });
 
     $(document).on('click', '#print-tools', function() {
@@ -241,40 +131,16 @@ $(document).ready(function(){
         var id = $(this).data("id");
         $('#report-form').trigger('reset'); 
         $('.modal-title').html("Report Item");
-        $.get("data/tools/" + id, function(data) {
-            $('#rep-barcode').val(data.barcode);
-            $('#reptoolId').val(data.id);
-            $('#rep-category').val(data.toolcategory[0].description);
-            $('#toolcatid').val(data.toolcategory[0].id);
-            $('#rep-description').val(data.toolname[0].description);
-            $('#toolnameid').val(data.toolname[0].id);
-            $('#rep-brand').val(data.brand);
-            $('#rep-reason').val("");
-            $('#rep-borrower').focus();
-        });
+        reportTools(id);
+        $('#rep-reason').val("");
+        $('#rep-borrower').focus();
     });
 
     $(document).on('click', '.rep-search', function(event){
         var borrower = $('#rep-borrower').val();
-        $.get("category/borrower/" + borrower, function(data) {
-            if(data.midname == null || data.midname == ""){
-                $('#rep-name').val(data.firstname + " " + data.lastname);
-            }else{
-                $('#rep-name').val(data.firstname + " " + data.midname[0] + ". " + data.lastname);
-            }
-            $('#repnum').val(data.id);
-            $('#rep-reason').focus();
-        })
-        .fail(function(data) {
-            $('#rep-borrower').val("");
-            $('#rep-name').val("");
-            $('#repnum').val("");
-            $('#rep-borrower').focus();
-            toastr.error(data.responseJSON.error, "ERROR", {timeOut: 3000});
-        });
+        getBorrower(borrower);
+        $('#rep-reason').focus();
     });
-
-
 
     $(document).on('click', '.view-category', function(e){
         var id = $(this).data("id");
@@ -422,7 +288,7 @@ $(document).ready(function(){
         $('#save-report').prop('disabled', true)
         .html("")
         .addClass('uploading');
-        $.post("data/tools/report" + tools, function(data){})
+        $.post("data/tools/report" + tools, info)
         .done(function(data){
             $('#report-form').trigger('reset');
             itemname.ajax.reload();
@@ -533,5 +399,145 @@ $(document).ready(function(){
                 }
             });
         }
+    });
+
+    var itemname = $('#itemnamelist-table').DataTable({
+        async: false,
+        processing: true,
+        serverSide: true,
+        pageLength : 5,
+        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
+        ajax: "/category/sortitemname",
+        columns: [
+            { data: 'description' },
+            { data: 'tools_count' },
+            { data: 'action', orderable: false, searchable: false }
+        ],
+    });
+
+    var report = $('#reportedlist-table').DataTable({
+        async: false,
+        processing: true,
+        serverSide: true,
+        pageLength : 5,
+        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
+        ajax: "/category/reported",
+        columns: [
+            { data: 'toolreport',
+                render: function(data) {
+                    return data[0].studnum;
+                }
+            },
+            { data: 'toolreport',
+                render: function(data) {
+                    if(data[0].midname == null || data[0].midname == ""){
+                        return data[0].lastname + ", " + data[0].firstname;
+                    }else{
+                        return data[0].lastname + ", " + data[0].firstname + " " + data[0].midname[0];
+                    }
+                }
+            },
+            { data: 'barcode', },
+            { data: 'toolname',
+                render: function(data) {
+                    return data[0].description;
+                }
+            },
+            { data: 'brand', },
+            { data: 'reason' },
+            { data: 'deleted_at',
+                render: function(d) {
+                    return moment(d).format("MM/DD/YYYY HH:mm:ss");
+                }
+            },
+            { data: 'tooladmin',
+                "render": function (data) {
+                    var getFirstWord = string => {
+                        const words = string.split(' ');
+                        return words[0];
+                    };
+                    if(data == null || data == ''){
+                        return '';
+                    }else{
+                        var nam = getFirstWord(data[0].name);
+                        return nam;
+                    }
+                },
+            },
+        ],
+    });
+
+    var category = $('#categorylisttable').DataTable({
+        async: false,
+        processing: true,
+        serverSide: true,
+        pageLength : 5,
+        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
+        ajax: "/category/sortcategory",
+        columns: [
+            { data: 'description' },
+            { data: 'tools_count' },
+            { data: 'action', orderable: false, searchable: true }
+        ],
+    });
+
+    var toolTable = $('#alltools-table').DataTable({
+        async: false,
+        processing: true,
+        serverSide: true,
+        pageLength : 5,
+        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
+        order: [[6, "desc"]],
+        ajax: "/data/tools",
+        columns: [
+            { data: 'barcode', name: 'barcode' },
+            { data: 'toolname',
+                "render": function ( data, type, row ) {
+                    if(data == null || data == ''){
+                        return '';
+                    }else{
+                        return data[0].description;
+                    }
+                },
+                searchable: true,
+            },
+            { data: 'property' },             
+            { data: 'created_at',
+                render: function(d) {
+                    return moment(d).format("MM/DD/YYYY HH:mm:ss");
+                }
+            },
+            { data: 'tooladmin',
+                "render": function (data) {
+                    var getFirstWord = string => {
+                        const words = string.split(' ');
+                        return words[0];
+                    };
+                    if(data == null || data == ''){
+                        return '';
+                    }else{
+                        var nam = getFirstWord(data[0].name);
+                        return nam;
+                    }
+                },
+            },             
+            { data: 'brand', visible: false },
+            { data: 'deleted_at', visible: false },
+            { data: 'updated_at', visible: false },
+            { data: 'action', name: 'action', searchable: false, orderable: false }
+        ],
+        "createdRow": function(row, data, dataIndex){
+            $(row).addClass('deleted');
+            if(data.deleted_at != null){
+                $(row).addClass('bannedClass');
+            }else if(data.reason == 'Borrowed'){
+                $(row).addClass('borrowedClass');
+            }
+        },
+        "rowCallback": function( row, data, index ) {
+            if (data.toolname.length == 0) {
+                $(row).hide();
+            }
+        },
     });
 });

@@ -11,6 +11,8 @@ $(document).ready(function () {
         }
     });
 
+    $('#toolcategory').select2({ width: '100%' });
+
     var toolnametable = $('#toolname-table').DataTable({
         processing: true,
         serverSide: true,
@@ -48,26 +50,35 @@ $(document).ready(function () {
         },
     });
 
-    $('#toolcategory').select2({ width: '100%' });
+    let addTool = async() => {
+        const add = await $.get("/category/toolcategories", function(data){});
+        $('#toolcategory').empty();
+        $("#toolcategory").append('<option value="">Select Tool Category</option>');
+        $.each(add,function(key,value){
+            $("#toolcategory").append('<option value="'+key+'">'+value+'</option>');
+        });
+    };
+
+    let editToolName = async(id) => {
+        const edit = await $.get("data/toolname/" + id, function (data) {});
+        $('#toolname-form').trigger("reset");
+        $('#toolcategory').empty();
+        $("#toolcategory").append('<option value="">Select Tool Category</option>');
+        $('#description').val(edit.description);
+        $('#code').val(edit.code);
+        $('#idtoolname').val(edit.id)
+        
+        const toolcategories = await $.get("/category/toolcategories", function(data){});
+        $.each(toolcategories,function(key,value){
+            $("#toolcategory").append('<option value="'+key+'">'+value+'</option>');
+        });
+        $('#toolcategory').val(edit.categories[0].id).trigger('change'); 
+    };
 
     $(document).on('click', '#toolname-add', function() {
         $('#toolname-form').trigger("reset");         
         $('#action-toolname').val('Add');
-        $.ajax({
-            type:"GET",
-            url:"/category/toolcategories", 
-            success:function(res)
-            {       
-                if(res)
-                {
-                    $('#toolcategory').empty();
-                    $("#toolcategory").append('<option value="">Select Tool Category</option>');
-                    $.each(res,function(key,value){
-                        $("#toolcategory").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }
-            }
-        });
+        addTool();
         $('.modal-title').html("Add toolname");
         $('#save-data').text("Submit");
     });
@@ -75,31 +86,9 @@ $(document).ready(function () {
     $('body').on('click', '#edit-toolname', function () {
         var id = $(this).data('id');
         $('#action-toolname').val('Edit');
-        $.get("data/toolname/" + id, function (data) { 
-            $('#toolname-form').trigger("reset");   
-            $.ajax({
-                type:"GET",
-                url:"/category/toolcategories", 
-                success:function(res)
-                {       
-                    if(res)
-                    {
-                        $('#toolcategory').empty();
-                        $("#toolcategory").append('<option value="">Select Tool Category</option>');
-                        $.each(res,function(key,value){
-                            $("#toolcategory").append('<option value="'+key+'">'+value+'</option>');
-                        });
-                        var option = new Option(data.categories[0].description, data.categories[0].id, true, true);
-                        $('#toolcategory').val(data.categories[0].id).trigger('change'); 
-                    }
-                }
-            });    
-            $('#description').val(data.description);
-            $('#code').val(data.code);
-            $('#idtoolname').val(data.id)
-            $('.modal-title').html("Edit toolname");
-            $('#save-data').text("Update");
-        })
+        editToolName(id);
+        $('.modal-title').html("Edit toolname");
+        $('#save-data').text("Update");
     });
 
     $('body').on('click', '#del-toolname', function () {
@@ -123,35 +112,22 @@ $(document).ready(function () {
         .addClass('uploading');
         if(action == "Add")
         {
-            $.ajax({
-                url: "data/toolname",
-                method:"POST",
-                data: info,
-                dataType:"json",
-                success:function(data){
-                    if(data.success){
-                        toastr.success(data.success, 'toolname ADDED', {timeOut: 3000});
-                        toolnametable.ajax.reload();
-                        toolnametable.draw();
-                        $("#add-toolname .close").click();
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');                      }
-                    if(data.error)
-                    {
-                        toastr.error(data.error, 'ERROR', {timeOut: 3000});
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');  
-                    }
-                },
-                error: function(jqXHR) {
-                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                    $('#save-data').prop('disabled', false)
-                    .html("Submit")
-                    .removeClass('uploading');  
-                }
+            $.post("data/toolname", info)
+            .done(function(data){
+                toastr.success(data.success, 'toolname ADDED', {timeOut: 3000});
+                toolnametable.ajax.reload();
+                toolnametable.draw();
+                $("#add-toolname .close").click();
+                $('#save-data').prop('disabled', false)
+                .html("Submit")
+                .removeClass('uploading');      
             })
+            .fail(function(jqXHR){
+                toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                $('#save-data').prop('disabled', false)
+                .html("Submit")
+                .removeClass('uploading');  
+            });
         }
         if(action == "Edit")
         {
@@ -211,21 +187,18 @@ $(document).ready(function () {
 
     $(document).on('click', '#confirm-res', function () {
         var toolname = $('#res-id').val();
-        $.ajax({
-            url: "data/toolname/" + toolname,
-            type: "POST",
-            success: function (data) {
-                toastr.success(data.success, 'Restored', {timeOut: 3000});
-                toolnametable.ajax.reload();
-                toolnametable.draw();
-                $("#restore .close").click();
-            },
-            error: function(jqXHR) {
-                toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                $('#save-data').prop('disabled', false)
-                .html("Submit")
-                .removeClass('uploading');  
-            }
+        $.post("data/toolname/" + toolname, function(data){})
+        .done(function(data){
+            toastr.success(data.success, 'Restored', {timeOut: 3000});
+            toolnametable.ajax.reload();
+            toolnametable.draw();
+            $("#restore .close").click();
+        })
+        .fail(function(jqXHR){
+            toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+            $('#save-data').prop('disabled', false)
+            .html("Submit")
+            .removeClass('uploading');  
         });
     });
 });

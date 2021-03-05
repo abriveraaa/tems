@@ -105,7 +105,7 @@ $(document).ready(function () {
         .addClass('uploading');
         if(action == "Add")
         {
-            $.post("data/course", function(data){})
+            $.post("data/course", info)
             .done(function(data){
                 toastr.success(data.success, 'COURSE ADDED', {timeOut: 3000});
                 coursetable.ajax.reload();
