@@ -87,7 +87,7 @@ $(document).ready(function(){
                     },
                     ticks    : $.extend({
                     beginAtZero : true,
-                    suggestedMax: response.max
+                    suggestedMax: chartdata.max
                     }, ticksStyle)
                 }],
                 xAxes: [{
