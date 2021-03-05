@@ -46,8 +46,7 @@ return [
     */
 
     'logo' => '<b>ITECH</b> Laboratory',
-    // 'logo_img' => 'img/pup_logo.png',
-    'logo_img' => '',
+    'logo_img' => 'img/pup_logo.png',
     'logo_img_class' => 'brand-image-xs mr-2 ml-3 pr-1',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -146,7 +145,7 @@ return [
     */
 
     'sidebar_mini' => true,
-    'sidebar_collapse' => true,
+    'sidebar_collapse' => false,
     'sidebar_collapse_auto_size' => false,
     'sidebar_collapse_remember' => false,
     'sidebar_collapse_remember_no_transition' => true,
