@@ -16,21 +16,9 @@
             @csrf
             @method('PUT')
             <div class="row">
-                <div class="col-4">
-                    <label class="form__label">Name</label>
-                    <input
-                        class="form__input user-name mt-1 block w-full"
-                        name="name"
-                        placeholder=""
-                        value=""
-                        readonly
-                        autocomplete="off"
-                    >
-                </div>
-                <div class="col-1"></div>
                 <div class="col">
                     <label class="form__label">Roles</label>
-                    <div class="roles">
+                    <div class="roles col">
                         
                     </div>
                 </div>
@@ -39,7 +27,7 @@
             <div class="row">
                 <div class="col">
                     <label class="form__label mt-4">Permissions</label>
-                    <div class="permissions">
+                    <div class="permissions row">
                         
                     </div>
                 </div>

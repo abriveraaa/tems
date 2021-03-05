@@ -14,17 +14,17 @@ return [
     'roles_structure' => [
         'administrator' => [
             'borrower' => 'c,v,u,d',
-            'barcode' => 'v,p',
-            'report' => 'v,p',
             'college' => 'c,v,u,d',
             'course' => 'c,v,u,d',
-            'manage' => 'ds,re',
             'users' => 'c,v,u,d',
             'room' => 'c,v,u,d',
-            'transaction' => 'v,p',
             'toolcategory' => 'c,v,u,d',
             'toolname' => 'c,v,u,d',
             'tools' => 'c,v,u,d,p',
+            'barcode' => 'v,p',
+            'report' => 'v,p',
+            'transaction' => 'v,p',
+            'manage' => 'ds,re',
         ],
         'assistant' => [
             'manage' => 'ds,re',

@@ -66,7 +66,7 @@ class RolesAssignmentController
                 return $role;
             });
         if ($this->assignPermissions) {
-            $permissions = $this->permissionModel::orderBy('name')
+            $permissions = $this->permissionModel::orderBy('id')
                 ->get(['id', 'name', 'display_name'])
                 ->map(function ($permission) use ($user) {
                     $permission->assigned = $user->permissions
