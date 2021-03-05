@@ -20,18 +20,18 @@ $(document).ready(function () {
     });
 
     let loadCollege = async() => {
+        $('#college').empty();
         const colleges = await $.get("/category/college", function(data){})
     
-        $('#college').empty();
-        $("#college").append('<option value="">Select College</option>');
+        $("#college").append('<option value="" selected disabled>Select College</option>');
         $.each(colleges,function(key,value){
             $("#college").append('<option value="'+key+'">'+value+'</option>');
         });
     };
 
     let loadCourse = async(id) => {
-        const course = await $.get("/category/course/" + id, function(data){});
         $("#course").empty();
+        const course = await $.get("/category/course/" + id, function(data){});
         $("#course").append('<option value="" selected disabled>Select Course</option>');
         (course.courses).map((value) => {
             $("#course").append('<option value="'+value.id+'">'+value.description+'</option>');
@@ -186,7 +186,6 @@ $(document).ready(function () {
     $(document).on('click', '#borrower-add', function() {
         $('#borrower-form').trigger("reset");         
         $('#college').val("").trigger("change");
-        $('#course').empty();
         $('#hide-img').remove();
         $('#action-borrower').val('Add');
         $('#sex').select2({ width: '100%' });
@@ -198,6 +197,7 @@ $(document).ready(function () {
     $(document).on('click', '#edit-borrower', function(e){
         var id = $(this).data("id");
         $('#borrower-form').trigger("reset");
+        $('#course').val("").trigger("change");
         $('.chance').hide();
         $('.modal-title').html("Update borrower");
         $('#save-data').html("Update");

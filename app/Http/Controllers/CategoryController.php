@@ -168,9 +168,9 @@ class CategoryController extends Controller
     public function toolCategory()
     {
         $tools = Tools::with(['toolcategory', 'toolname', 'toolroom', 'tooladmin'])->get();
-
+       
         return Datatables::of($tools)
-            ->make(true);   
+        ->make(true);   
     }
 
     public function itemName()

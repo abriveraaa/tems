@@ -33,6 +33,7 @@ $(document).ready(function(){
 
     let linechartdata = async() => {
         const chartdata = await $.get("/data/dashboard/borrower", function(data){});
+        console.log(chartdata);
         createCompletedJobsChart(chartdata);
     };
 

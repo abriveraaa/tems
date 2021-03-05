@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function getAllHour()
     {
         $date = Carbon::today()->toDateString();
-        $hour_array = array();
+        $hour_array = [];
         $allhour = Requests::orderBy('created_at', 'ASC')->whereDate('created_at', '=', $date)->pluck('created_at');
         if(!empty($allhour))
         {
@@ -37,9 +37,9 @@ class DashboardController extends Controller
 
     public function getHourlyData()
     {
-        $borrowed_count_array = array();
+        $borrowed_count_array = [];
         $hour_array = $this->getAllHour();
-        $hour_12_array = array();
+        $hour_12_array = [];
         if(!empty($hour_array))
         {
             foreach($hour_array as $hour_24 => $hour_12)
@@ -51,17 +51,17 @@ class DashboardController extends Controller
         }
         $max_no = max($borrowed_count_array);
         $max = round( ($max_no + 10/2) / 10) * 10;
-        $borrowed_data_array = array(
+        $borrowed_data_array = [
             'hours' => $hour_12_array, 
             'borrowed_count' => $borrowed_count_array,
             'max' => $max,
-        );
+        ];
         return $borrowed_data_array;
     }
 
     public function getAllCategory()
     {
-        $category_array = array();
+        $category_array = [];
         $allcategory = DB::SELECT("SELECT id, description FROM categories");
         if(!empty($allcategory))
         {
