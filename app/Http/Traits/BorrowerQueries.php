@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Borrower;
 
+use Carbon\Carbon;
 use DataTables;
 use Auth;
 
@@ -83,11 +84,13 @@ trait BorrowerQueries {
         return $image_name;
     }
 
-    public function syncAcademic($request, $borrower)
+    public function updateReportedDate($borrower)
     {
-        $borrower->borrowercourse()->sync($request->course, $borrower);
-        $borrower->borrowercollege()->sync($request->college, $borrower);
+        $banneduser = Borrower::where('id', $borrower)->first();
+        $banneduser->reported_at = Carbon::now()->toDateTimeString();
+        $banneduser->save();
 
-        return $borrower;
+        return $banneduser;
     }
+
 }

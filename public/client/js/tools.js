@@ -100,8 +100,6 @@ $(document).ready(function(){
         getToolName(id);
     });
 
-    load();  
-
     $(document).on('click', '#tools-add', function() {
         $('#tools-form').trigger("reset");
         $('#print-tools').hide();
@@ -540,4 +538,6 @@ $(document).ready(function(){
             }
         },
     });
+
+    load();
 });

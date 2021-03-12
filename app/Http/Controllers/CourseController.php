@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\CourseQueries;
+use App\Http\Traits\SyncQueries;
 
 use App\Http\Resources\CourseResource;
 use App\Http\Requests\CourseRequest;
@@ -17,7 +18,7 @@ use Auth;
 
 class CourseController extends Controller
 {
-    use CourseQueries;
+    use CourseQueries, SyncQueries;
        
     /**
      * Display a listing of the resource.
@@ -64,13 +65,12 @@ class CourseController extends Controller
 
     public function store(CourseRequest $request)
     {
-        $college = $request->college;
 
         $validated = $request->validated();
 
         $course = $this->saveCourse($validated);
 
-        $course->colleges()->sync($college, $course);
+        $this->syncCourse($request, $course);
         
         return response()->json(['success' => 'Course added successfully!']);
     }
@@ -85,14 +85,13 @@ class CourseController extends Controller
 
     public function update(CourseRequest $request)
     {
-        $college = $request->college;
         $courseId = $request->id;
 
         $validated = $request->validated();
 
         $course = $this->updateCourse($courseId, $validated);
 
-        $course->colleges()->sync($college,$course);
+        $this->syncCourse($request, $course);
         
         return response()->json(['success'=>'Record updated successfully.']);
     }

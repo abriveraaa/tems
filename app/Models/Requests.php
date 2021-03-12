@@ -15,6 +15,34 @@ class Requests extends Model
     protected $primaryKey = 'id';
     protected $fillable = [ 'lhof', 'tool', 'status' ];
 
+    public function scopeGroupByLhof($query)
+    {
+        return $query->where('status', 'Borrowed')->groupBy('lhof')->with(['borrower', 'item', 'room', 'borrow'])->get();
+    }
+
+    public function scopeBorrowed($query, $item)
+    {
+        return $query->where('tool', $item)->where('status', 'Borrowed')->first();
+    }
+
+    public function scopeBorrowedItem($query, $item)
+    {
+        return $query->where('status', 'Borrowed')->where('tool', $item)->with(['borrower', 'item', 'room', 'borrow'])->get();
+    }
+
+    public function scopeHasBorrower($query, $borrower, $item)
+    {
+        return $query->with(['borrower' => function($q) use($borrower) {
+            $q->where('borrower_id', $borrower);
+        }])
+        ->whereHas('borrower', function ($q) use($borrower) {
+            $q->where('borrowers.id', $borrower);
+        }) 
+        ->where('status', 'Borrowed')
+        ->where('tool', $item)
+        ->exists();
+    }
+
     public function room()
     {
         return $this->belongsToMany(Room::class, 'request_room');

@@ -21,6 +21,9 @@ Route::get('/', function () {
     }
 });
 
+Route::get('/sample', ['as' => 'sample', 'uses' => 'RequestController@sample']);
+
+
 //LOGIN
 Route::group(['prefix' => '/login'], function() {
     Route::get('', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
@@ -185,7 +188,6 @@ Route::middleware(['route'])->group(function() {
         Route::get('/countbanned', ['as' => 'dashboard.countbanned', 'uses' => 'CategoryController@countBannedBorrower']);
         Route::get('/counttools', ['as' => 'dashboard.counttools', 'uses' => 'CategoryController@countServiceableItems']);
         Route::get('/inventorycount', ['as' => 'dashboard.inventorycount', 'uses' => 'CategoryController@inventoryItem']);
-        Route::get('/countnew', ['as' => 'dashboard.countnew', 'uses' => 'CategoryController@countNewItem']);
         Route::get('/countborrowed', ['as' => 'dashboard.countborrowed', 'uses' => 'DashboardController@countBorrowedItem']);
         Route::get('/lastlhof', ['as' => 'dashboard.lastlhof', 'uses' => 'CategoryController@getLastLHOF']);
         Route::get('/lhofid', ['as' => 'dashboard.lhofid', 'uses' => 'CategoryController@getLastIdLhof']);

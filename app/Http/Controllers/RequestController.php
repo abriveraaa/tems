@@ -6,48 +6,44 @@ use App\Models\Requests;
 use App\Models\Borrower;
 use App\Models\Lhof;
 use App\Models\Tools;
+
 use Illuminate\Http\Request;
+
+use App\Http\Traits\SyncQueries;
+use App\Http\Traits\RequestQueries;
+use App\Http\Traits\ToolQueries;
+
 use Carbon\Carbon;
 use DataTables;
 
 class RequestController extends Controller
 {
+   use SyncQueries, RequestQueries, ToolQueries;
+
     public function createRequestLog(Request $request)
     {
-        $borrower = $request->borrower;
-        $item = $request->hiddendesc;
-        $room = $request->room;
-        $borrow = $request->admin;
-        $course = $request->course;
-
         $lhof = Lhof::updateOrCreate(['id' => $request->lhofid],['code' => $request->lhofhidden]);
-              
-        $requestlog = new Requests;
-        $requestlog->lhof = strtoupper($request->lhofhidden);
-        $requestlog->tool = strtoupper($request->search_item);
-        $requestlog->status = "Borrowed";
-        $requestlog->save();
-
-        $requestlog->borrower()->sync($borrower, $requestlog);
-        $requestlog->course()->sync($course, $requestlog);
-        $requestlog->item()->sync($item, $requestlog);
-        $requestlog->room()->sync($room, $requestlog);
-        $requestlog->borrow()->sync($borrow, $requestlog);
         
-        $changestat = Tools::where('barcode', strtoupper($request->search_item))->first();
-        $changestat->reason = "Borrowed";
-        $changestat->save(); 
+        $requestlog = $this->newRequest($request);
+
+        $this->syncRequest($request, $requestlog);
+        
+        $changestat = Tools::Barcode(strtoupper($request->search_item));
+        
+        $this->updateReason('Borrowed', $changestat);
     }
 
     public function BorrowedItem()
     {
-        $lhofnum = Requests::where('status', 'Borrowed')->groupBy('lhof')->with(['borrower', 'item', 'room', 'borrow'])->get();
+        $lhofnum = Requests::GroupByLhof();
+
         return response()->json($lhofnum);
     }
 
     public function lhofDataGetUser()
     {
         $lhofdata = Requests::select(\DB::raw('COUNT(lhof) as item_count'),'lhof', 'id', 'tool', 'status', 'created_at', 'updated_at')->groupBy('lhof')->with(['borrower', 'item', 'room', 'borrow'])->get();
+
         return Datatables::of($lhofdata)
             ->addIndexColumn()
             ->addColumn('action', function($row){
@@ -59,42 +55,29 @@ class RequestController extends Controller
             ->make(true);    
     }
 
-
     public function getRequestLog($item, $borrower, $admin)
     {
-        $borr = Requests::with(['borrower' => function($q) use($borrower) {
-            $q->where('borrower_id', $borrower);
-        }])
-        ->whereHas('borrower', function ($q) use($borrower) {
-            $q->where('borrowers.id', $borrower);
-        }) 
-        ->where('status', 'Borrowed')
-        ->where('tool', $item)
-        ->exists();
+        $hasBorrower = Requests::HasBorrower($borrower, $item);
         
-        if($borr){
-            $requestdata = Requests::where('status', 'Borrowed')->where('tool', $item)->with(['borrower', 'item', 'room', 'borrow'])->get();
-            $available = Tools::where('barcode', $item)->where('reason', 'Borrowed')->first();
-            $available->reason = null;
-            $available->save();
+        if($hasBorrower){
+            $requestdata = Requests::BorrowedItem($item);
+            $available = Tools::Borrowed($item);
+            $this->updateReason(null, $available);
 
-            $returned = Requests::where('tool', $item)->where('status', 'Borrowed')->first();
-            $returned->status = "Returned";
-            $returned->save();
+            $returned = Requests::Borrowed($item);
+            $this->updateStatus($returned);
 
-            $returned->return()->sync($admin, $returned);
+            $this->syncRequestReturned($admin, $returned);
             
-            // /// IF OVER 20:30:00 ////    
+            // IF OVER 20:30:00
+            $date = $returned->created_at;
+            $bannedDate =  Carbon::parse($date)->format('Y-m-d');
             $bannedhours = "20:30:00";
-            $timenow = Carbon::now()->toTimeString();
-            if($timenow >= $bannedhours){
+            $dateTimeString = $bannedDate." ".$bannedhours;
+            $dueDateTime = Carbon::createFromFormat('Y-m-d H:i:s', $dateTimeString, 'Asia/Manila');
+            $timenow = Carbon::now();
 
-                $banneduser = Borrower::where('id', $borrower)->first();
-                $banneduser->reported_at = Carbon::now()->toDateTimeString();
-                $banneduser->save();
-
-                return response()->json(['banned' => true, 'data' => $requestdata]);
-            }
+            if($dueDateTime->lt($timenow)){ $this->updateReportedDate($borrower); }
 
             return response()->json(['status' => true, 'data' => $requestdata]);    
         }
@@ -106,7 +89,9 @@ class RequestController extends Controller
     public function itemLhof(Request $request)
     {
         $lhofId = $request->dat;
+
         $data = Requests::where('lhof', $lhofId)->with(['borrower', 'item', 'room', 'borrow', 'return'])->withCount('item')->get();
+
         return Datatables::of($data)
             ->make(true);    
     }

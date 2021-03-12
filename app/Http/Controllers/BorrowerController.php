@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Traits\BorrowerQueries;
+use App\Http\Traits\SyncQueries;
 use App\Http\Requests\BorrowerRequest;
 
 use App\Models\Borrower;
@@ -14,7 +15,7 @@ use DataTables;
 
 class BorrowerController extends Controller
 {
-    use BorrowerQueries;
+    use BorrowerQueries, SyncQueries;
 
     public function __construct()
     {

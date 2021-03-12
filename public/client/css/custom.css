@@ -80,9 +80,14 @@ table.dataTable thead th, table.dataTable thead td {
     color: black !important;
 }
 
+.inventorylist {
+    cursor: pointer;
+}
+
 .borrow-item{
-    overflow: scroll;
-    max-height: 325px !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 195px !important;
 }
 
 .head-search{
@@ -320,11 +325,6 @@ background-color: #f0eeee;
 height: 20px;
 width: 20px;
 fill: #ccc; 
-}
-
-.borrow-item {
-overflow-y: auto;
-max-height: 325px !important;
 }
 
 @-webkit-keyframes spin {

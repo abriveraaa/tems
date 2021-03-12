@@ -18,6 +18,16 @@ class Tools extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['barcode', 'brand', 'property', 'reason'];
 
+    public function scopeBarcode($query, $barcode)
+    {
+        return $query->where('barcode', $barcode)->first();
+    }
+
+    public function scopeBorrowed($query, $item)
+    {
+        return $query->where('barcode', $item)->where('reason', 'Borrowed')->first();
+    }
+
     public function toolcategory()
     {
         return $this->belongsToMany(Category::class, 'tool_category');

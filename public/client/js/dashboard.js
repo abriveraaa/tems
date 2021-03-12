@@ -10,9 +10,9 @@ $(document).ready(function(){
         const item = await $.get("/category/borroweditem", function(data){});
         item.map((value) => {
             if(value.borrower[0].image == null){
-                $(".borrow-list").append('<li class="item"><div class="product-img"><img src="/img/default-photo.png" alt="User Image" class="img-size-50"></div><div class="product-info"><a href="javascript:void(0)" class="product-title">'+ value.borrower[0].firstname + " " + value.borrower[0].lastname + '<span class="badge badge-success float-right lhof" data-id="'+ value.lhof +'" data-num="'+ value.borrower[0].id +'">'+ value.lhof +'</span></a><span class="product-description">Room: '+ value.room[0].code +'</span></div></li>');
+                $(".borrow-list").append('<li class="item"><div class="product-img"><img src="/img/default-photo.png" alt="User Image" class="img-size-50"></div><div class="product-info"><a href="javascript:void(0)" class="product-title">'+ value.borrower[0].firstname + " " + value.borrower[0].lastname + '<span class="badge badge-success float-right lhof" data-id="'+ value.lhof +'" data-toggle="modal" data-target="#lhof-data" data-num="'+ value.borrower[0].id +'">'+ value.lhof +'</span></a><span class="product-description">Room: '+ value.room[0].code +'</span></div></li>');
             }else{
-                $(".borrow-list").append('<li class="item"><div class="product-img"><img src="/img/borrower/' + value.borrower[0].image +'" alt="User Image" class="img-size-50"></div><div class="product-info"><a href="javascript:void(0)" class="product-title">'+ value.borrower[0].firstname + " " + value.borrower[0].lastname + '<span class="badge badge-success float-right lhof" data-id="'+ value.lhof +'" data-num="'+ value.borrower[0].id +'">'+ value.lhof +'</span></a><span class="product-description">Room: '+ value.room[0].code +'</span></div></li>');
+                $(".borrow-list").append('<li class="item"><div class="product-img"><img src="/img/borrower/' + value.borrower[0].image +'" alt="User Image" class="img-size-50"></div><div class="product-info"><a href="javascript:void(0)" class="product-title">'+ value.borrower[0].firstname + " " + value.borrower[0].lastname + '<span class="badge badge-success float-right lhof" data-toggle="modal" data-target="#lhof-data" data-id="'+ value.lhof +'" data-num="'+ value.borrower[0].id +'">'+ value.lhof +'</span></a><span class="product-description">Room: '+ value.room[0].code +'</span></div></li>');
             }
         });
     };
@@ -27,8 +27,6 @@ $(document).ready(function(){
         const tools = await $.get("/category/counttools", function(data){});
         $('#toolscount').html(tools);
 
-        const newTool = await $.get("/category/countnew", function(data){});
-        $('#newcount').html(newTool);
     };
 
     let linechartdata = async() => {
@@ -101,6 +99,61 @@ $(document).ready(function(){
             }
         });
     };
+
+    $(document).on('click', '.inventorylist', function(e){
+        window.location.href = '/tool';
+    });
+
+    $(document).on('click', '.borrower', function(e){
+        window.location.href = '/borrower';
+    });
+
+    $(document).on('click', '.lhof', function(e){
+        var dat = $(this).data("id");
+        $('.modal-title').html("LHOF NO: "+dat);
+        $('#lhofdatatable').DataTable().clear().destroy();
+        $('#lhofdatatable').DataTable({
+            processing: true,
+            serverSide: true,
+            lengthChange: false,
+            paging: false,
+            info: false,
+            searching: false,
+            ajax: "/category/itemlhof/" + dat,
+                columns: [
+                    { data: "tool" },
+                    { data: "item",
+                            render: function(data) {
+                                return data[0].description;
+                            }
+                        },
+                    { data: null,
+                        render: function(data) {
+                            var getFirstWord = string => {
+                                const words = string.split(' ');
+                                return words[0];
+                            };
+                            var nam = getFirstWord(data.borrow[0].name);
+                            return moment(data.created_at).format("MM/DD/YYYY HH:mm:ss") + '  -  ' + nam;
+                        }
+                    },
+                    { data: null,
+                        render: function(data) {
+                            var getFirstWord = string => {
+                                const words = string.split(' ');
+                                return words[0];
+                            };
+                            if(data.return.length > 0){
+                                var nam = getFirstWord(data.return[0].name);
+                                return moment(data.updated_at).format("MM/DD/YYYY HH:mm:ss") + '  -  ' + nam;
+                            }else{
+                                return '';
+                            }
+                        }
+                    },
+                ]
+        });
+    });
 
     getItemBorrowed();
     counter();
