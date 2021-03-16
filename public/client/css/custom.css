@@ -83,7 +83,7 @@ table.dataTable thead th, table.dataTable thead td {
 .borrow-item{
     overflow-x: hidden;
     overflow-y: auto;
-    max-height: 260px !important;
+    max-height: 265px !important;
 }
 
 .head-search{

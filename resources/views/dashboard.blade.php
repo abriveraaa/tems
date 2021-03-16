@@ -24,6 +24,9 @@
                     </p>
                     <p class="d-flex flex-column text-right">
                         <span class="text-muted text-uppercase">INVENTORY LIST</span>
+                        @permission('tools-view')
+                        <a href="{{ url('/tool') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        @endpermission
                     </p>
                 </div>
                 <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
@@ -32,6 +35,9 @@
                     </p>
                     <p class="d-flex flex-column text-right">
                         <span class="text-muted text-uppercase">TOTAL BORROWED</span>
+                        @permission('tools-view')
+                        <a href="{{ url('/tool') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        @endpermission
                     </p>
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-0">
@@ -40,51 +46,18 @@
                     </p>
                     <p class="d-flex flex-column text-right">
                         <span class="text-muted text-uppercase">INVENTORY ONHAND</span>
+                        @permission('tools-view')
+                        <a href="{{ url('/tool') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        @endpermission
                     </p>
                 </div>
             </div>
         </div>
     </div>
-    {{-- <div class="col-lg-3 col-12">
-        <div class="small-box bg-success">
-            <div class="inner">
-                <h3 id="toolscount">0</h3>
-                <p>Inventory List</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-hammer"></i>
-            </div>
-            @permission('tools-view')
-            <a href="{{ url('/tool') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            @endpermission
-        </div>
-    </div>
-    <div class="col-lg-3 col-12">
-        <div class="small-box bg-warning">
-            <div class="inner">
-                <h3 id="activecount">0</h3>
-                <p>Borrowers</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-person-add"></i>
-            </div>
-            @permission('borrower-view')
-            <a href="{{ url('/borrower') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            @endpermission
-        </div>
-    </div> --}}
     <div class="col-lg-6">
         <div class="card">
             <div class="card-header bg-danger">
                 <h3 class="card-title text-uppercase">Borrowed Items</h3>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                        <i class="fas fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-tool" data-card-widget="remove">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
             </div>
             <div class="card-body p-0  borrow-item">
                 <ul class="products-list borrow-list product-list-in-card pl-2 pr-2" id="sample">
