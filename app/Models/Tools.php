@@ -38,9 +38,9 @@ class Tools extends Model
         return $this->belongsToMany(ToolName::class, 'tool_toolnames');
     }
 
-    public function toolroom()
+    public function toolsource()
     {
-        return $this->belongsToMany(Room::class, 'tool_rooms');
+        return $this->belongsToMany(Source::class, 'tool_source');
     }
 
     public function toolreport()

@@ -27,6 +27,16 @@ trait SyncQueries {
         return $requestlog;
     }
 
+    public function syncTools($validated, $tools)
+    {
+        $tools->toolname()->sync($validated['description'], $tools);
+        $tools->toolcategory()->sync($validated['category'], $tools);
+        $tools->toolsource()->sync($validated['source'], $tools);
+        $tools->tooladmin()->sync($validated['admin_num'], $tools);
+
+        return $tools;
+    }
+
     public function syncAcademic($request, $borrower)
     {
         $borrower->borrowercourse()->sync($request->course, $borrower);

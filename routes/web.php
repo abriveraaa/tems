@@ -133,6 +133,17 @@ Route::middleware(['route'])->group(function() {
         Route::post('/{room}', ['middleware' => ['permission:room-delete'], 'as' => 'room.restore', 'uses' => 'RoomController@restore']);
     });
 
+    //SOURCE
+    Route::get('/source', ['as' => 'source', 'middleware' => ['permission:source-view|source-create|source-update|source-delete'], 'uses' => 'RouteController@showSourcePage']);
+    Route::group(['prefix' => '/data/source', 'middleware' => []], function() {
+        Route::get('', ['middleware' => ['permission:source-view'], 'as' => 'source.index', 'uses' => 'SourceController@index']);
+        Route::post('', ['middleware' => ['permission:source-create'], 'as' => 'source.store', 'uses' => 'SourceController@store']);
+        Route::get('/{source}', ['middleware' => ['permission:source-view'], 'as' => 'source.show', 'uses' => 'SourceController@show']);
+        Route::put('/{source}', ['middleware' => ['permission:source-update'], 'as' => 'source.update', 'uses' => 'SourceController@update']);
+        Route::delete('/{source}', ['middleware' => ['permission:source-delete'], 'as' => 'source.destroy', 'uses' => 'SourceController@destroy']);
+        Route::post('/{source}', ['middleware' => ['permission:source-delete'], 'as' => 'source.restore', 'uses' => 'SourceController@restore']);
+    });
+
     //COURSE
     Route::get('/course', ['as' => 'course', 'middleware' => ['permission:course-view|course-create|course-update|course-delete'], 'uses' => 'RouteController@showCoursePage']);
     Route::group(['prefix' => '/data/course', 'middleware' => []], function() {
@@ -165,6 +176,7 @@ Route::middleware(['route'])->group(function() {
         Route::get('/role', ['as' => 'category.role', 'uses' => 'CategoryController@getRole']);
         Route::get('/college', ['as' => 'category.college', 'uses' => 'CategoryController@getCollege']);
         Route::get('/room', ['as' => 'category.room', 'uses' => 'CategoryController@getRoom']);
+        Route::get('/source', ['as' => 'category.source', 'uses' => 'CategoryController@getSource']);
         Route::get('/collegeuser/{college}', ['as' => 'category.collegeuser', 'uses' => 'CategoryController@getCollegeUser']);
         Route::get('/course/{course}', ['as' => 'category.course', 'uses' => 'CategoryController@getCourse']);
         Route::get('/toolname/{toolname}', ['as' => 'category.toolname', 'uses' => 'CategoryController@getToolName']);

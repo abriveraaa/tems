@@ -20,6 +20,7 @@ return [
             'room' => 'v,c,u,d',
             'toolcategory' => 'v,c,u,d',
             'toolname' => 'v,c,u,d',
+            'source' => 'v,c,u,d',
             'tools' => 'v,c,u,d,p',
             'barcode' => 'v,p',
             'report' => 'v,p',

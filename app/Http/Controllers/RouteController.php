@@ -42,6 +42,11 @@ class RouteController extends Controller
         return view('borrower.room-index');
     }
 
+    public function showSourcePage()
+    {
+        return view('borrower.source-index');
+    }
+
     public function showToolsPage()
     {
         return view('admin.tool-index');

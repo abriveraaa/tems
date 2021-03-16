@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Http\Traits\ToolQueries;
+use App\Http\Traits\SyncQueries;
+
+use App\Http\Requests\ToolRequest;
+
 use App\Models\Tools;
 use App\Models\Category;
 use App\Models\Borrower;
@@ -16,17 +21,14 @@ use Auth;
 
 class ToolsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    use ToolQueries, SyncQueries;
+
     public function index()
     {
 
-        $data = Tools::with('toolname')->with(['tooladmin', 'toolcategory', 'toolname', 'toolroom'])->get();
+        $tools = $this->allTools();
 
-        return Datatables::of($data)
+        return Datatables::of($tools)
             ->addIndexColumn()
             ->addColumn('action', function($row){
                 $update = Auth::user()->hasPermission('tools-update');
@@ -51,61 +53,22 @@ class ToolsController extends Controller
             ->make(true);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(ToolRequest $request)
     {
-        $description = $request->description;
-        $room = $request->room;
-        $category = $request->category;
-        $admin = $request->admin_num;
+        $validated = $request->validated();
 
-        $rules = array(
-            'category' => 'required',
-            'description' => 'required',
-            'barcode' => 'required',
-            'room' => 'required',
-            'property' => 'unique:tools,property',
-        );
+        $tools = $this->saveTools($validated);
 
-            $messages = array(
-            'category.required' => 'Category is required. <br>',
-            'description.required' => 'Description is required. <br>',
-            'barcode.required' => 'Barcode is required. <br>',
-            'room.required' => 'Room is required.<br>',
-            'property.unique' => 'Property number has already been taken.<br>',
-        );
+        $this->syncTools($validated, $tools);
 
-        $validate = Validator::make($request->all(), $rules, $messages);
-
-        if($validate->fails())
-        {
-            return response()->json(['error' => $validate->errors()->all()]);
-        }else {
-            $tools = new Tools;
-            $tools->barcode = $request->barcode;
-            $tools->brand = $request->brand;
-            $tools->property = strtoupper($request->property);
-            $tools->save();
-    
-            $tools->toolname()->sync($description, $tools);
-            $tools->toolcategory()->sync($category, $tools);
-            $tools->toolroom()->sync($room, $tools);
-            $tools->tooladmin()->sync($admin, $tools);
-    
-            return response()->json(["success" => "Borrower's record added successfully!"], 201);
-        }
+        return response()->json(["success" => "Tool's record added successfully!"], 201);
     }
 
     public function show($tools)
     {
         if(Tools::whereId($tools)->exists()) {
-            $tools = Tools::whereId($tools)->with('toolcategory')->with('toolname')->with('toolroom')->with('tooladmin')->first();
-    		return response()->json($tools);
+            $tool = $this->getTool($tools);
+    		return response()->json($tool);
     	} else {
     		return response()->json([
     			"success" => "Tools not found"
@@ -113,51 +76,17 @@ class ToolsController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     */
-    public function update(Request $request)
+    public function update(ToolRequest $request)
     {
-        $description = $request->description;
         $toolId = $request->toolId;
-        $room = $request->room;
-        $category = $request->category;
-        $admin = $request->admin_num;
+
+        $validated = $request->validated();
        
-        $rules = array(
-            'category' => 'required',
-            'description' => 'required',
-            'room' => 'required',
-            'property' => 'unique:tools,property,'.$toolId,
-        );
+        $tools = $this->updateTool($validated, $toolId);
 
-            $messages = array(
-            'category.required' => 'Category is required. <br>',
-            'description.required' => 'Description is required. <br>',
-            'room.required' => 'Room is required.<br>',
-            'property.unique' => 'Property number has already been taken.<br>', 
-        );
-
-        $validate = Validator::make($request->all(), $rules, $messages);
-
-        if($validate->fails())
-        {
-            return response()->json(['error' => $validate->errors()->all()]);
-        }
-
-        $tools = Tools::where('id', $toolId)->first();
-        $tools->brand = $request->brand;
-        $tools->property = strtoupper($request->property);
-        $tools->save();
-
-        $tools->toolname()->sync($description, $tools);
-        $tools->toolcategory()->sync($category, $tools);
-        $tools->toolroom()->sync($room, $tools);
-        $tools->tooladmin()->sync($admin, $tools);
+        $this->syncTools($validated, $tools);
         
-    	return response()->json(["success" => "Borrower's record updated successfully!"], 201);
+    	return response()->json(["success" => "Tool's record updated successfully!"], 201);
     }
 
     public function report(Request $request)

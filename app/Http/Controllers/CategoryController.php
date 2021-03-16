@@ -14,6 +14,7 @@ use App\Models\Requests;
 use App\Models\ToolName;
 use App\Models\Tools;
 use App\Models\Room;
+use App\Models\Source;
 use App\Models\User;
 use App\Models\Lhof;
 use DataTables;
@@ -43,6 +44,14 @@ class CategoryController extends Controller
         return response()->json($type);
     }
 
+    public function getSource()
+    {
+        $type = Source::orderBy('description', 'ASC')
+            ->pluck('description', 'id');
+
+        return response()->json($type);
+    }
+
     public function getToolCategories()
     {
         $type = Category::orderBy('description', 'ASC')
@@ -65,7 +74,7 @@ class CategoryController extends Controller
 
     public function getReportedTools()
     {
-        $tools = Tools::onlyTrashed()->with(['toolreport', 'toolcategory', 'toolname', 'toolroom', 'tooladmin'])->get();
+        $tools = Tools::onlyTrashed()->with(['toolreport', 'toolcategory', 'toolname', 'toolsource', 'tooladmin'])->get();
         return Datatables::of($tools)
             ->make(true); 
     }
@@ -167,7 +176,7 @@ class CategoryController extends Controller
 
     public function toolCategory()
     {
-        $tools = Tools::with(['toolcategory', 'toolname', 'toolroom', 'tooladmin'])->get();
+        $tools = Tools::with(['toolcategory', 'toolname', 'toolsource', 'tooladmin'])->get();
        
         return Datatables::of($tools)
         ->make(true);   
@@ -175,7 +184,7 @@ class CategoryController extends Controller
 
     public function itemName()
     {
-        $tools = Tools::with(['toolcategory', 'toolname', 'toolroom', 'tooladmin'])->get();
+        $tools = Tools::with(['toolcategory', 'toolname', 'toolsource', 'tooladmin'])->get();
         return Datatables::of($tools)
             ->make(true);   
     }
@@ -196,7 +205,7 @@ class CategoryController extends Controller
 
     public function countServiceableItems()
     {
-        $tools = Tools::where('deleted_at', '=', null)->count();
+        $tools = Tools::where('deleted_at', '=', null)->where('reason', NULL)->count();
 
         return response()->json($tools);
     }
@@ -231,7 +240,7 @@ class CategoryController extends Controller
     public function toolBarcode($barcode)
     {
         if(Tools::where('barcode', $barcode)->where('reason', null)->exists()) {
-            $tool = Tools::select(['id', 'barcode', 'reason'])->where('barcode', $barcode)->where('reason', null)->with(['toolcategory', 'toolname', 'toolroom'])->first();
+            $tool = Tools::select(['id', 'barcode', 'reason'])->where('barcode', $barcode)->where('reason', null)->with(['toolcategory', 'toolname', 'toolsource'])->first();
     		return response()->json(["status" => true, "data" => $tool]);
     	} else {
     		return response()->json([
@@ -242,14 +251,14 @@ class CategoryController extends Controller
 
     public function activeItem()
     {
-        $data = Tools::with(['tooladmin', 'toolcategory', 'toolname', 'toolroom'])->get();
+        $data = Tools::with(['tooladmin', 'toolcategory', 'toolname', 'toolsource'])->get();
 
         return response()->json($data);
     }
 
     public function reportedItem()
     {
-        $data = Tools::onlyTrashed()->with(['tooladmin', 'toolcategory', 'toolname', 'toolroom', 'toolreport'])->get();
+        $data = Tools::onlyTrashed()->with(['tooladmin', 'toolcategory', 'toolname', 'toolsource', 'toolreport'])->get();
 
         return response()->json($data);
     }

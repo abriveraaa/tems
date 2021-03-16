@@ -5,7 +5,7 @@ $(document).ready(function(){
         }
     });
 
-    $('#room').select2({ width: '100%' });
+    $('#source').select2({ width: '100%' });
     $('#repreason').select2({ width: '100%' });
     $('#category').select2({ width: '100%' });
     $('#description').select2({ width: '100%' });
@@ -19,11 +19,11 @@ $(document).ready(function(){
             $("#category").append('<option value="'+key+'">'+value+'</option>');
         });
 
-        const room = await $.get("/category/room", function(result){});
-        $("#room").empty();
-        $("#room").append('<option value="" selected disabled>Select one</option>');
-        $.each(room,function(key,value){
-            $("#room").append('<option value="'+key+'">'+value+'</option>');
+        const source = await $.get("/category/source", function(result){});
+        $("#source").empty();
+        $("#source").append('<option value="" selected disabled>Select one</option>');
+        $.each(source,function(key,value){
+            $("#source").append('<option value="'+key+'">'+value+'</option>');
         });
     };
 
@@ -80,7 +80,7 @@ $(document).ready(function(){
 
     let editTools = async(id) => {
         const editTool = await  $.get("data/tools/"+ id, function(data) {});
-        $('#room').val(editTool.toolroom[0].id).trigger('change');  
+        $('#source').val(editTool.toolsource[0].id).trigger('change');  
         $('#brand').val(editTool.brand);
         $('#property').val(editTool.property);
         $('#toolId').val(editTool.id);
@@ -106,7 +106,7 @@ $(document).ready(function(){
         $('#description').empty();
         $('.barcodes').show();
         $('#category').val("").trigger('change');
-        $('#room').val("").trigger('change');
+        $('#source').val("").trigger('change');
         $('#action_btn').val("Add");
         $('#save-tools').html("Submit");
         $('.modal-title').text("Add tools");
@@ -171,12 +171,12 @@ $(document).ready(function(){
                 },
                 { data: "brand", searchable: true },
                 { data: "property", searchable: true },
-                { data: "toolroom",
+                { data: "toolsource",
                     "render": function ( data, type, row ) {
                         if(data == null || data == ''){
                             return '';
                         }else{
-                            return data[0].code;
+                            return data[0].description;
                         }
                     },
                     searchable: true,
@@ -241,12 +241,12 @@ $(document).ready(function(){
                 },
                 { data: "brand", searchable: true },
                 { data: "property", searchable: true },
-                { data: "toolroom",
+                { data: "toolsource",
                     "render": function ( data, type, row ) {
                         if(data == null || data == ''){
                             return '';
                         }else{
-                            return data[0].code;
+                            return data[0].description;
                         }
                     },
                     searchable: true,

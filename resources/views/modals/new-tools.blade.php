@@ -42,10 +42,10 @@
                 <input type="text" class="form__input" name="property" id="property" placeholder="Property Number" autocomplete="off">
               </div>
             </div>
-            <div class="col-3">
+            <div class="col">
                 <div class="form-group">
-                    <label for="room" class="form__label" style="width:100%; display:block;">Room Assigned</label>
-                    <select class="form__input" name="room" id="room">
+                    <label for="source" class="form__label" style="width:100%; display:block;">Source</label>
+                    <select class="form__input" name="source" id="source">
                     </select>
                 </div>
             </div>

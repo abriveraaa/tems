@@ -328,6 +328,12 @@ return [
                     'url'  => '/room',
                     'permission' => ['room-create', 'room-view', 'room-update', 'room-delete'],
                 ],
+                [
+                    'text' => 'Source',
+                    'icon' => 'fas fa-fw fa-door-closed',
+                    'url'  => '/source',
+                    'permission' => ['source-create', 'source-view', 'source-update', 'source-delete'],
+                ],
             ], 
         ], 
         [
