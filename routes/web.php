@@ -199,8 +199,10 @@ Route::middleware(['route'])->group(function() {
         Route::get('/bannedborrower', ['as' => 'dashboard.bannedborrower', 'uses' => 'CategoryController@bannedBorrower']);
         Route::get('/countbanned', ['as' => 'dashboard.countbanned', 'uses' => 'CategoryController@countBannedBorrower']);
         Route::get('/counttools', ['as' => 'dashboard.counttools', 'uses' => 'CategoryController@countServiceableItems']);
+        Route::get('/countonhand', ['as' => 'dashboard.countonhand', 'uses' => 'CategoryController@countOnHandItems']);
         Route::get('/inventorycount', ['as' => 'dashboard.inventorycount', 'uses' => 'CategoryController@inventoryItem']);
-        Route::get('/countborrowed', ['as' => 'dashboard.countborrowed', 'uses' => 'DashboardController@countBorrowedItem']);
+        Route::get('/countborrowed', ['as' => 'dashboard.countborrowed', 'uses' => 'CategoryController@countBorrowed']);
+        Route::get('/countreported', ['as' => 'dashboard.countreported', 'uses' => 'CategoryController@countReportedItem']);
         Route::get('/lastlhof', ['as' => 'dashboard.lastlhof', 'uses' => 'CategoryController@getLastLHOF']);
         Route::get('/lhofid', ['as' => 'dashboard.lhofid', 'uses' => 'CategoryController@getLastIdLhof']);
         Route::get('/barcode/{barcode}', ['as' => 'dashboard.barcode', 'uses' => 'CategoryController@toolBarcode']);

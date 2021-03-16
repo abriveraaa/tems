@@ -9,7 +9,7 @@ $(document).ready(function(){
         $(".borrow-list").empty();
         const item = await $.get("/category/borroweditem", function(data){});
         item.map((value) => {
-            if(value.borrower[0].image == null){
+            if(value.borrower[0].image == null || value.borrower[0].image == 'null'){
                 $(".borrow-list").append('<li class="item"><div class="product-img"><img src="/img/default-photo.png" alt="User Image" class="img-size-50"></div><div class="product-info"><a href="javascript:void(0)" class="product-title">'+ value.borrower[0].firstname + " " + value.borrower[0].lastname + '<span class="badge badge-success float-right lhof" data-id="'+ value.lhof +'" data-toggle="modal" data-target="#lhof-data" data-num="'+ value.borrower[0].id +'">'+ value.lhof +'</span></a><span class="product-description">Room: '+ value.room[0].code +'</span></div></li>');
             }else{
                 $(".borrow-list").append('<li class="item"><div class="product-img"><img src="/img/borrower/' + value.borrower[0].image +'" alt="User Image" class="img-size-50"></div><div class="product-info"><a href="javascript:void(0)" class="product-title">'+ value.borrower[0].firstname + " " + value.borrower[0].lastname + '<span class="badge badge-success float-right lhof" data-toggle="modal" data-target="#lhof-data" data-id="'+ value.lhof +'" data-num="'+ value.borrower[0].id +'">'+ value.lhof +'</span></a><span class="product-description">Room: '+ value.room[0].code +'</span></div></li>');
@@ -18,15 +18,14 @@ $(document).ready(function(){
     };
 
     let counter = async() => {
-        const active = await $.get("/category/countactive", function(data){});
-        $('#activecount').html(active);
-
-        const banned = await $.get("/category/countbanned", function(data){});
-        $('#bannedcount').html(banned);
-
         const tools = await $.get("/category/counttools", function(data){});
         $('#toolscount').html(tools);
 
+        const borrowed = await $.get("/category/countborrowed", function(data){});
+        $('#toolsborrowed').html(borrowed);
+
+        const onhand = await $.get("/category/countonhand", function(data){});
+        $('#toolsonhand').html(onhand);
     };
 
     let linechartdata = async() => {

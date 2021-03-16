@@ -521,7 +521,7 @@ return [
     |
     */
     
-    'name' => 'Team Drawing',
+    'name' => 'Tools and Equipment Monitoring System',
     'facebook' => 'img/facebook.png',
     'twitter' => null,
     'gmail' => null,

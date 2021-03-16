@@ -205,9 +205,30 @@ class CategoryController extends Controller
 
     public function countServiceableItems()
     {
+        $tools = Tools::where('deleted_at', '=', null)->count();
+
+        return response()->json($tools);
+    }
+
+    public function countOnHandItems()
+    {
         $tools = Tools::where('deleted_at', '=', null)->where('reason', NULL)->count();
 
         return response()->json($tools);
+    }
+
+    public function countReportedItem()
+    {
+        $tools = Tools::onlyTrashed()->count();
+
+        return response()->json($tools);
+    }
+
+    public function countBorrowed()
+    {
+        $borrowed = Tools::where('deleted_at', '=', null)->where('reason', 'Borrowed')->count();
+
+        return response()->json($borrowed);
     }
 
     public function countNewItem()

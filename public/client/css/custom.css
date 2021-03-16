@@ -80,14 +80,10 @@ table.dataTable thead th, table.dataTable thead td {
     color: black !important;
 }
 
-.inventorylist {
-    cursor: pointer;
-}
-
 .borrow-item{
     overflow-x: hidden;
     overflow-y: auto;
-    max-height: 195px !important;
+    max-height: 260px !important;
 }
 
 .head-search{
