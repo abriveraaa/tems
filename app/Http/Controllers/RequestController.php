@@ -15,6 +15,7 @@ use App\Http\Traits\ToolQueries;
 
 use Carbon\Carbon;
 use DataTables;
+use Auth;
 
 class RequestController extends Controller
 {
@@ -55,8 +56,9 @@ class RequestController extends Controller
             ->make(true);    
     }
 
-    public function getRequestLog($item, $borrower, $admin)
+    public function getRequestLog($item, $borrower)
     {
+        $adminId = Auth::user()->id;
         $hasBorrower = Requests::HasBorrower($borrower, $item);
         
         if($hasBorrower){
@@ -67,7 +69,7 @@ class RequestController extends Controller
             $returned = Requests::Borrowed($item);
             $this->updateStatus($returned);
 
-            $this->syncRequestReturned($admin, $returned);
+            $this->syncRequestReturned($adminId, $returned);
             
             // IF OVER 20:30:00
             $date = $returned->created_at;

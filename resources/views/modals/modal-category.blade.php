@@ -18,7 +18,7 @@
                                     <th class="changing">Item Name</th>
                                     <th>Brand</th>
                                     <th>Property No</th>
-                                    <th>Room</th>
+                                    <th>Source</th>
                                     <th>Date Added</th>
                                     <th>Admin</th>
                                 </tr>

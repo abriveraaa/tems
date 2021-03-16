@@ -228,8 +228,7 @@ $(document).ready(function () {
             }else if(action == "Return"){
                 var item = $('#search-item').val();
                 var borrower = $('#borrower').val();
-                var admin = $('#admin').val();
-                $.get("/category/returnitem/"+item+'/borrower/'+borrower+'/admin/'+admin, function(data){
+                $.get("/category/returnitem/"+item+'/borrower/'+borrower, function(data){
                     var d = new Date();
                     var month = d.getMonth() + 1;
                     var day = d.getDate();

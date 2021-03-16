@@ -205,7 +205,7 @@ Route::middleware(['route'])->group(function() {
         Route::get('/lhofid', ['as' => 'dashboard.lhofid', 'uses' => 'CategoryController@getLastIdLhof']);
         Route::get('/barcode/{barcode}', ['as' => 'dashboard.barcode', 'uses' => 'CategoryController@toolBarcode']);
         Route::get('/borroweditem', ['as' => 'dashboard.borroweditem', 'uses' => 'RequestController@BorrowedItem']);
-        Route::get('/returnitem/{item}/borrower/{borrower}/admin/{admin}', ['as' => 'dashboard.return', 'uses' => 'RequestController@getRequestLog']);
+        Route::get('/returnitem/{item}/borrower/{borrower}', ['as' => 'dashboard.return', 'uses' => 'RequestController@getRequestLog']);
         Route::get('/userlhof', ['as' => 'dashboard.userlhof', 'uses' => 'RequestController@lhofDataGetUser']);
         Route::get('/itemlhof/{dat}', ['as' => 'dashboard.itemlhof', 'uses' => 'RequestController@itemLhof']);
     });

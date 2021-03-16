@@ -16,7 +16,6 @@
               <input type="hidden" id="lhofid" name="lhofid" value="">
               <input type="hidden" id="borrower" name="borrower" value="">
               <input type="hidden" id="course" name="course" value="">
-              <input type="hidden" name="admin" id="admin" value="{{ Auth()->user()->id }}">
               <select class="form-control" name="room" id="room" style="width: 100%;">
               </select>
             </div>
