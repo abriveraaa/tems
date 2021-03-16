@@ -21,9 +21,6 @@ Route::get('/', function () {
     }
 });
 
-Route::get('/sample', ['as' => 'sample', 'uses' => 'RequestController@sample']);
-
-
 //LOGIN
 Route::group(['prefix' => '/login'], function() {
     Route::get('', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
@@ -173,6 +170,7 @@ Route::middleware(['route'])->group(function() {
 
     //CATEGORY
     Route::group(['prefix' => '/category', 'middleware' => []], function() {
+        Route::get('/test', ['as' => 'test', 'uses' => 'ToolsController@test']);
         Route::get('/role', ['as' => 'category.role', 'uses' => 'CategoryController@getRole']);
         Route::get('/college', ['as' => 'category.college', 'uses' => 'CategoryController@getCollege']);
         Route::get('/room', ['as' => 'category.room', 'uses' => 'CategoryController@getRoom']);
