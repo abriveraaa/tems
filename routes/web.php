@@ -21,6 +21,7 @@ Route::get('/', function () {
     }
 });
 
+Route::get('test', ['as' => 'test', 'uses' => 'DashboardController@getCategoryCount']);
 //LOGIN
 Route::group(['prefix' => '/login'], function() {
     Route::get('', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
@@ -201,6 +202,7 @@ Route::middleware(['route'])->group(function() {
         Route::get('/inventorycount', ['as' => 'dashboard.inventorycount', 'uses' => 'CategoryController@inventoryItem']);
         Route::get('/countborrowed', ['as' => 'dashboard.countborrowed', 'uses' => 'CategoryController@countBorrowed']);
         Route::get('/countreported', ['as' => 'dashboard.countreported', 'uses' => 'CategoryController@countReportedItem']);
+        Route::get('/countcategory', ['as' => 'dashboard.countcategory', 'uses' => 'DashboardController@getCategoryCount']);
         Route::get('/lastlhof', ['as' => 'dashboard.lastlhof', 'uses' => 'CategoryController@getLastLHOF']);
         Route::get('/lhofid', ['as' => 'dashboard.lhofid', 'uses' => 'CategoryController@getLastIdLhof']);
         Route::get('/barcode/{barcode}', ['as' => 'dashboard.barcode', 'uses' => 'CategoryController@toolBarcode']);

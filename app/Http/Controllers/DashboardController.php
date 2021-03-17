@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\Models\Requests;
-use DB;
+use App\Models\Category;
+use App\Models\ToolName;
+use App\Models\Tools;
+
 use Carbon\Carbon;
+use DB;
 
 class DashboardController extends Controller
 {
@@ -59,46 +64,15 @@ class DashboardController extends Controller
         return $borrowed_data_array;
     }
 
-    public function getAllCategory()
+    public function getCategoryCount()
     {
-        $category_array = [];
-        $allcategory = DB::SELECT("SELECT id, description FROM categories");
-        if(!empty($allcategory))
-        {
-            foreach($allcategory as $category_id)
-            {
-                $category_num = $category_id->id;
-                $category_name = $category_id->description;
-                $category_array[$category_num] = $category_name; 
-            }
-        }
-        return $category_array;
-    }
+        $category = Category::select('id', 'description')->get();
 
-    public function getCategoryCount($category_num)
-    {
-        $category_count = DB::table('items')->where('category', '=', $category_num)->where('stat', '=', 1)->get()->count();
-        return $category_count; 
-    }
+        $sort = ToolName::with(['tools', 'categories'])->withCount(['tools' => function (\Illuminate\Database\Eloquent\Builder $query) {
+            $query->whereNull('tools.reason');
+        }])->get();
+        
+        return ['toolname' => $sort, 'category' => $category];
 
-    public function getCategoryData()
-    {
-        $category_count_array = array();
-        $category_array = $this->getAllCategory();
-        $category_id_array = array();
-        if(!empty($category_array))
-        {
-            foreach($category_array as $category_num => $category_name)
-            {
-                $borrowed_count = $this->getCategoryCount($category_num);
-                array_push($category_count_array, $borrowed_count);
-                array_push($category_id_array, $category_name);
-            }
-        }
-        $borrowed_data_array = array(
-            'category_name' => $category_id_array, 
-            'category_count' => $category_count_array,
-        );
-        return $borrowed_data_array;
     }
 }

@@ -23,11 +23,13 @@ class RequestController extends Controller
 
     public function createRequestLog(Request $request)
     {
+        $adminId = Auth::user()->id;
+        
         $lhof = Lhof::updateOrCreate(['id' => $request->lhofid],['code' => $request->lhofhidden]);
         
         $requestlog = $this->newRequest($request);
 
-        $this->syncRequest($request, $requestlog);
+        $this->syncRequest($adminId, $request, $requestlog);
         
         $changestat = Tools::Barcode(strtoupper($request->search_item));
         

@@ -10,12 +10,31 @@ $(document).ready(function(){
         const item = await $.get("/category/borroweditem", function(data){});
         item.map((value) => {
             if(value.borrower[0].image == null || value.borrower[0].image == 'null'){
-                $(".borrow-list").append('<li class="item"><div class="product-img"><img src="/img/default-photo.png" alt="User Image" class="img-size-50"></div><div class="product-info"><a href="javascript:void(0)" class="product-title">'+ value.borrower[0].firstname + " " + value.borrower[0].lastname + '<span class="badge badge-success float-right lhof" data-id="'+ value.lhof +'" data-toggle="modal" data-target="#lhof-data" data-num="'+ value.borrower[0].id +'">'+ value.lhof +'</span></a><span class="product-description">Room: '+ value.room[0].code +'</span></div></li>');
+                $(".borrow-list").append('<li class="item"><div class="product-img"><img src="/img/default-photo.png" alt="User Image" class="img-size-50"></div><div class="product-info"><a href="javascript:void(0)" class="product-title">'+ value.borrower[0].firstname + " " + value.borrower[0].lastname + '<span class="badge badge-warning float-right lhof" data-id="'+ value.lhof +'" data-toggle="modal" data-target="#lhof-data" data-num="'+ value.borrower[0].id +'">'+ value.lhof +'</span></a><span class="product-description">Room: '+ value.room[0].code +'</span></div></li>');
             }else{
-                $(".borrow-list").append('<li class="item"><div class="product-img"><img src="/img/borrower/' + value.borrower[0].image +'" alt="User Image" class="img-size-50"></div><div class="product-info"><a href="javascript:void(0)" class="product-title">'+ value.borrower[0].firstname + " " + value.borrower[0].lastname + '<span class="badge badge-success float-right lhof" data-toggle="modal" data-target="#lhof-data" data-id="'+ value.lhof +'" data-num="'+ value.borrower[0].id +'">'+ value.lhof +'</span></a><span class="product-description">Room: '+ value.room[0].code +'</span></div></li>');
+                $(".borrow-list").append('<li class="item"><div class="product-img"><img src="/img/borrower/' + value.borrower[0].image +'" alt="User Image" class="img-size-50"></div><div class="product-info"><a href="javascript:void(0)" class="product-title">'+ value.borrower[0].firstname + " " + value.borrower[0].lastname + '<span class="badge badge-warning float-right lhof" data-toggle="modal" data-target="#lhof-data" data-id="'+ value.lhof +'" data-num="'+ value.borrower[0].id +'">'+ value.lhof +'</span></a><span class="product-description">Room: '+ value.room[0].code +'</span></div></li>');
             }
         });
     };
+
+    let getOnHandsItem = async() => {
+        $(".product-list").empty();
+        const item = await $.get("/category/countcategory", function(data){});
+        (item.category).map((value)=> {
+            $('.categoryy').append('<div class="card"><a class="card-header bg-info collapsed" href="#toolname-'+ value.id +'" data-toggle="collapse" aria-expanded="false" aria-controls="toolname"><h3 class="card-title text-uppercase" id="category_name">'+ value.description +'</h3></a><div class="card-body p-0 collapse" id="toolname-'+ value.id +'"><ul class="category-'+ value.id +' products-list product-list-in-card pl-2 pr-2"></ul></div></div></div>'); 
+        });
+
+        (item.toolname).map((result)=> {
+            if(result.tools_count == 0){
+                $(".category-" + result.categories[0].id).append('<li class="item"><div class="product-info ml-0"><span class="product-title text-default">'+ result.description +'<span class="badge badge-danger float-right">Not Available</span></span></div></li>');
+            }else{
+                $(".category-" + result.categories[0].id).append('<li class="item"><div class="product-info ml-0"><span class="product-title text-default">'+ result.description +'<span class="badge badge-success float-right">Available: '+ result.tools_count +'</span></span></div></li>');
+            }
+        });
+       
+    };
+
+    
 
     let counter = async() => {
         const tools = await $.get("/category/counttools", function(data){});
@@ -155,6 +174,7 @@ $(document).ready(function(){
     });
 
     getItemBorrowed();
+    getOnHandsItem();
     counter();
     linechartdata();
 });

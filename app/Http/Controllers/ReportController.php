@@ -45,7 +45,7 @@ class ReportController extends Controller
     }
 
     public function serviceItem() {
-        $data = Tools::with(['tooladmin', 'toolcategory', 'toolname', 'toolroom', 'toolreport'])->get();
+        $data = Tools::with(['tooladmin', 'toolcategory', 'toolname', 'toolsource', 'toolreport'])->get();
 
         $head = User::where('position', 'Laboratory Head')->first();
 
@@ -57,7 +57,7 @@ class ReportController extends Controller
     }
 
     public function reportedItem() {
-        $data = Tools::onlyTrashed()->with(['tooladmin', 'toolcategory', 'toolname', 'toolroom', 'toolreport'])->get();
+        $data = Tools::onlyTrashed()->with(['tooladmin', 'toolcategory', 'toolname', 'toolsource', 'toolreport'])->get();
 
         $head = User::where('position', 'Laboratory Head')->first();
 
@@ -111,7 +111,7 @@ class ReportController extends Controller
 
     public function barcodeItem($id)
     {
-        $data = Tools::where('id',$id)->with(['tooladmin', 'toolcategory', 'toolname', 'toolroom', 'toolreport'])->get();
+        $data = Tools::where('id',$id)->with(['tooladmin', 'toolcategory', 'toolname', 'toolsource', 'toolreport'])->get();
 
         view()->share('barcodeitem',$data);
         $pdf = PDF::loadView('report.barcode-item', $data)->setPaper('a7', 'landscape');

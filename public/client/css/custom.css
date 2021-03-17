@@ -80,12 +80,6 @@ table.dataTable thead th, table.dataTable thead td {
     color: black !important;
 }
 
-.borrow-item{
-    overflow-x: hidden;
-    overflow-y: auto;
-    max-height: 265px !important;
-}
-
 .head-search{
     position: relative;
     height: 8rem;

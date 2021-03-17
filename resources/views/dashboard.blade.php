@@ -2,6 +2,7 @@
 
 @section('title', 'Dashboard')
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 @section('content_header')
 <div class="row mb-2">
     <div class="col-sm-6">
@@ -14,9 +15,6 @@
 <div class="row">
     <div class="col-lg-6 col12">
         <div class="card">
-            <div class="card-header border-0">
-                <h3 class="card-title">Overview</h3>
-            </div>
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
                     <p class="text-success text-xl">
@@ -29,39 +27,46 @@
                         @endpermission
                     </p>
                 </div>
-                <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-0">
                     <p class="text-warning text-xl">
                         <span id="toolsborrowed"></span>
                     </p>
                     <p class="d-flex flex-column text-right">
-                        <span class="text-muted text-uppercase">TOTAL BORROWED</span>
-                        @permission('tools-view')
-                        <a href="{{ url('/tool') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                        @endpermission
+                        <span class="text-muted text-uppercase">BORROWED TOOLS</span>
+                        <a href="#borroweditems" class="small-box-footer collapsed" data-toggle="collapse" aria-expanded="false" aria-controls="borroweditems"> View More
+                            <i class="fas fa-plus-circle"></i>
+                        </a>
+                        
                     </p>
                 </div>
-                <div class="d-flex justify-content-between align-items-center mb-0">
-                    <p class="text-danger text-xl">
-                        <span id="toolsonhand"></span>
-                    </p>
-                    <p class="d-flex flex-column text-right">
-                        <span class="text-muted text-uppercase">INVENTORY ONHAND</span>
-                        @permission('tools-view')
-                        <a href="{{ url('/tool') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                        @endpermission
-                    </p>
+                <div class="collapse" id="borroweditems">
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <ul class="products-list borrow-list product-list-in-card pl-2 pr-2" id="sample">
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-lg-6">
         <div class="card">
-            <div class="card-header bg-danger">
-                <h3 class="card-title text-uppercase">Borrowed Items</h3>
-            </div>
-            <div class="card-body p-0  borrow-item">
-                <ul class="products-list borrow-list product-list-in-card pl-2 pr-2" id="sample">
-                </ul>
+            <div class="card-body">               
+                <div class="d-flex justify-content-between align-items-center border-bottom mb-0">
+                    <p class="text-danger text-xl">
+                        <span id="toolsonhand">3</span>
+                    </p>
+                    <p class="d-flex flex-column text-right">
+                        <span class="text-muted text-uppercase">ONHAND TOOLS</span>
+                        <a href="#onhanditems" class="small-box-footer collapsed" data-toggle="collapse" aria-controls="onhanditems" aria-expanded="false">View More
+                            <i class="fas fa-plus-circle"></i>
+                        </a>
+                    </p>
+                </div>
+                <div class="collapse" id="onhanditems" style="">
+                    <div class="categoryy"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -80,19 +85,26 @@
                     <p class="d-flex flex-column">
                         <span>Transaction Over Time</span>
                     </p>
-                    
                 </div>
-                <div class="position-relative mb-4"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                <canvas id="visitors-chart" height="200" width="487" class="chartjs-render-monitor" style="display: block; width: 487px; height: 200px;"></canvas>
-            </div>
-            <div class="d-flex flex-row justify-content-end">
-                <span class="mr-2">
-                    <i class="fas fa-square text-primary"></i> Transaction
-                </span>
+                <div class="position-relative mb-4">
+                    <div class="chartjs-size-monitor">
+                        <div class="chartjs-size-monitor-expand">
+                            <div class=""></div>
+                        </div>
+                        <div class="chartjs-size-monitor-shrink">
+                            <div class=""></div>
+                        </div>
+                    </div>
+                    <canvas id="visitors-chart" height="200" width="487" class="chartjs-render-monitor" style="display: block; width: 487px; height: 200px;"></canvas>
+                </div>
+                <div class="d-flex flex-row justify-content-end">
+                    <span class="mr-2">
+                        <i class="fas fa-square text-primary"></i> Transaction
+                    </span>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 @permission('transaction-view')
 @include('modals.lhof-data')

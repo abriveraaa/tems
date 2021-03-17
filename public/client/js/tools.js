@@ -499,7 +499,16 @@ $(document).ready(function(){
                 },
                 searchable: true,
             },
-            { data: 'property' },             
+            { data: "toolsource",
+                "render": function ( data, type, row ) {
+                    if(data == null || data == ''){
+                        return '';
+                    }else{
+                        return data[0].description;
+                    }
+                },
+                searchable: true,
+            },          
             { data: 'created_at',
                 render: function(d) {
                     return moment(d).format("MM/DD/YYYY HH:mm:ss");
