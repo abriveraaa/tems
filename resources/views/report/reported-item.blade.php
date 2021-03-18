@@ -16,7 +16,7 @@
                     <th>Tool Name</th>
                     <th>Brand</th>
                     <th>Property</th>
-                    <th>Room</th>
+                    <th>Source</th>
                     <th>Date Added</th>
                 </tr>
             </thead>
@@ -32,8 +32,8 @@
                     @endforeach
                     <td style="text-align:left; padding: 2px 5px;">{{ $reported->brand }}</td>
                     <td style="text-align:left; padding: 2px 5px;">{{ $reported->property }}</td>
-                    @foreach($reported->toolroom as $room)
-                    <td style="text-align:left; padding: 2px 5px;">{{ $room->code }}</td>
+                    @foreach($reported->toolsource as $source)
+                    <td style="text-align:left; padding: 2px 5px;">{{ $source->description }}</td>
                     @endforeach
                     <td style="text-align:left; padding: 2px 5px;">{{ $reported->created_at }}</td>
                     <!-- @foreach($reported->tooladmin as $admin)

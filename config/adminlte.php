@@ -330,7 +330,7 @@ return [
                 ],
                 [
                     'text' => 'Source',
-                    'icon' => 'fas fa-fw fa-door-closed',
+                    'icon' => 'fas fa-fw fa-box-open',
                     'url'  => '/source',
                     'permission' => ['source-create', 'source-view', 'source-update', 'source-delete'],
                 ],

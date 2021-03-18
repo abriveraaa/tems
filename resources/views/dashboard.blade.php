@@ -18,7 +18,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
                     <p class="text-success text-xl">
-                        <span id="toolscount">0</span>
+                        <span id="toolscount"></span>
                     </p>
                     <p class="d-flex flex-column text-right">
                         <span class="text-muted text-uppercase">INVENTORY LIST</span>
@@ -55,7 +55,7 @@
             <div class="card-body">               
                 <div class="d-flex justify-content-between align-items-center border-bottom mb-0">
                     <p class="text-danger text-xl">
-                        <span id="toolsonhand">3</span>
+                        <span id="toolsonhand"></span>
                     </p>
                     <p class="d-flex flex-column text-right">
                         <span class="text-muted text-uppercase">ONHAND TOOLS</span>

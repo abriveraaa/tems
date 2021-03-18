@@ -140,7 +140,9 @@ class CategoryController extends Controller
 
     public function sortCategory()
     {
-        $sortcategory = Category::with('tools')->withCount('tools')->get();
+        $sortcategory = Category::with('tools')->withCount(['tools' => function (\Illuminate\Database\Eloquent\Builder $query) {
+            $query->whereNull('tools.reason');
+        }])->get();
         return Datatables::of($sortcategory)
             ->addIndexColumn()
             ->addColumn('action', function($row){
@@ -158,7 +160,9 @@ class CategoryController extends Controller
 
     public function sortItemName()
     {
-        $sortitemname = ToolName::with('tools')->withCount('tools')->get();
+        $sortitemname = ToolName::with('tools')->withCount(['tools' => function (\Illuminate\Database\Eloquent\Builder $query) {
+            $query->whereNull('tools.reason');
+        }])->get();
         return Datatables::of($sortitemname)
             ->addIndexColumn()
             ->addColumn('action', function($row){
