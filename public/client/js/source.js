@@ -72,15 +72,19 @@ $(document).ready(function () {
                         toastr.success('New record has been saved successfully', 'SAVED', {timeOut: 3000});
                         sourcetable.ajax.reload();
                         sourcetable.draw();
-                    } else {
-                        toastr.error(data.error, 'ERROR', {timeOut: 3000});
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');  
-                    }
+                    } 
                 },
-                error: function(jqXHR) {
-                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                error: function(data) {
+                    var errors = data.responseJSON.errors;
+                    var errorsHtml= '';
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += value[0]; 
+                    });
+                    toastr.error(
+                        errorsHtml, 
+                        'ERROR', 
+                        {timeOut: 3000}
+                    );
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
                     .removeClass('uploading');  
@@ -108,15 +112,19 @@ $(document).ready(function () {
                         toastr.success('Record has been updated successfully', 'SAVED', {timeOut: 3000});
                         sourcetable.ajax.reload();
                         sourcetable.draw();
-                    } else {
-                        toastr.error(data.error, 'ERROR', {timeOut: 3000});
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');  
                     }
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                error: function(data) {
+                    var errors = data.responseJSON.errors;
+                    var errorsHtml= '';
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += value[0]; 
+                    });
+                    toastr.error(
+                        errorsHtml, 
+                        'ERROR', 
+                        {timeOut: 3000}
+                    );
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
                     .removeClass('uploading');  

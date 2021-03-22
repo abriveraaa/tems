@@ -68,11 +68,11 @@ class DashboardController extends Controller
     {
         $category = Category::select('id', 'description')->get();
 
-        $sort = ToolName::with(['tools', 'categories'])->withCount(['tools' => function (\Illuminate\Database\Eloquent\Builder $query) {
+        $toolname = ToolName::with(['tools', 'categories'])->withCount(['tools' => function (\Illuminate\Database\Eloquent\Builder $query) {
             $query->whereNull('tools.reason');
         }])->get();
         
-        return ['toolname' => $sort, 'category' => $category];
+        return ['toolname' => $toolname, 'category' => $category];
 
     }
 }

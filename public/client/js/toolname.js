@@ -114,7 +114,7 @@ $(document).ready(function () {
         {
             $.post("data/toolname", info)
             .done(function(data){
-                toastr.success(data.success, 'toolname ADDED', {timeOut: 3000});
+                toastr.success(data.success, 'ADDED', {timeOut: 3000});
                 toolnametable.ajax.reload();
                 toolnametable.draw();
                 $("#add-toolname .close").click();
@@ -122,8 +122,17 @@ $(document).ready(function () {
                 .html("Submit")
                 .removeClass('uploading');      
             })
-            .fail(function(jqXHR){
-                toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+            .fail(function(data){
+                var errors = data.responseJSON.errors;
+                var errorsHtml= '';
+                $.each( errors, function( key, value ) {
+                    errorsHtml += value[0]; 
+                });
+                toastr.error(
+                    errorsHtml, 
+                    'ERROR', 
+                    {timeOut: 3000}
+                );
                 $('#save-data').prop('disabled', false)
                 .html("Submit")
                 .removeClass('uploading');  
@@ -139,7 +148,7 @@ $(document).ready(function () {
                 dataType:"json",
                 success:function(data){
                     if(data.success){
-                        toastr.success(data.success, 'toolname UPDATED', {timeOut: 3000});
+                        toastr.success(data.success, 'UPDATED', {timeOut: 3000});
                         toolnametable.ajax.reload();
                         toolnametable.draw();
                         $("#add-toolname .close").click();
@@ -147,16 +156,18 @@ $(document).ready(function () {
                         .html("Submit")
                         .removeClass('uploading');  
                     }
-                    if(data.error)
-                    {
-                        toastr.error(data.error, 'ERROR', {timeOut: 3000});
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');  
-                    }
                 },
-                error: function(jqXHR) {
-                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                error: function(data) {
+                    var errors = data.responseJSON.errors;
+                    var errorsHtml= '';
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += value[0]; 
+                    });
+                    toastr.error(
+                        errorsHtml, 
+                        'ERROR', 
+                        {timeOut: 3000}
+                    );
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
                     .removeClass('uploading');  

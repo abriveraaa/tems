@@ -79,7 +79,16 @@ $(document).ready(function () {
                     }
                 },
                 error: function(data) {
-                    toastr.error(data.responseJSON.message, "ERROR", {timeOut: 3000});
+                    var errors = data.responseJSON.errors;
+                    var errorsHtml= '';
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += value[0]; 
+                    });
+                    toastr.error(
+                        errorsHtml, 
+                        'ERROR', 
+                        {timeOut: 3000}
+                    );
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
                     .removeClass('uploading');
@@ -110,7 +119,16 @@ $(document).ready(function () {
                     }
                 },
                 error: function(data) {
-                    toastr.error(data.responseJSON.message, "ERROR", {timeOut: 3000});
+                    var errors = data.responseJSON.errors;
+                    var errorsHtml= '';
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += value[0]; 
+                    });
+                    toastr.error(
+                        errorsHtml, 
+                        'ERROR', 
+                        {timeOut: 3000}
+                    );
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
                     .removeClass('uploading');

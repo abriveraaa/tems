@@ -38,6 +38,20 @@ trait SyncQueries {
         return $tools;
     }
 
+    public function syncToolReport($borrower, $tools)
+    {
+        $tools->toolreport()->sync($borrower, $tools);
+
+        return $tools;
+    }
+
+    public function syncToolAdmin($admin, $tools)
+    {
+        $tools->tooladmin()->sync($admin, $tools);
+
+        return $tools;
+    }
+
     public function syncAcademic($request, $borrower)
     {
         $borrower->borrowercourse()->sync($request->course, $borrower);
@@ -60,6 +74,13 @@ trait SyncQueries {
         $returned->return()->sync($admin, $returned);
 
         return $returned;
+    }
+
+    public function syncToolName($toolcategory, $toolname)
+    {
+        $toolname->categories()->sync($toolcategory, $toolname);
+
+        return $toolname;
     }
 
 }

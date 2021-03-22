@@ -37,4 +37,15 @@ class CourseRequest extends FormRequest
             ],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'college.required' => 'College is required.<br>',
+            'description.required' => 'Course name is required.<br>',
+            'description.unique' => 'Course name has already been taken.<br>',
+            'code.required' => 'Course code is required.<br>',
+            'code.unique' => 'Course code has already been taken.',
+        ];
+    }
 }

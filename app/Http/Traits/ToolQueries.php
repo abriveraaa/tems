@@ -6,7 +6,38 @@ use Illuminate\Http\Request;
 
 use App\Models\Tools;
 
+use Carbon\Carbon;
+use DataTables;
+use Auth;
+
 trait ToolQueries {
+
+    public function toolDataTable($tools)
+    {
+        return Datatables::of($tools)
+            ->addIndexColumn()
+            ->addColumn('action', function($row){
+                $update = Auth::user()->hasPermission('tools-update');
+                $delete = Auth::user()->hasPermission('tools-delete');
+                if($row->deleted_at == null){
+                    if($update == true && $delete == true){
+                        $btn = '<a href="javascript:void(0)" class="btn btn-primary btn-sm mr-2" id="edit-tools" data-id="'. $row->id .'" data-toggle="modal" data-target="#add-tools"><i class="fas fa-pen mr-2"></i>Edit</a>';
+                        $btn .= '<a href="javascript:void(0)" class="btn btn-danger btn-sm" id="rep-tools" data-id="'. $row->id .'" data-toggle="modal" data-target="#report"><i class="fas fa-user-lock mr-2"></i>Report</a>';
+                        return $btn;
+                    }else if($update == true){
+                        $btn = '<a href="javascript:void(0)" class="btn btn-primary btn-sm mr-2" id="edit-tools" data-id="'. $row->id .'" data-toggle="modal" data-target="#add-tools"><i class="fas fa-pen mr-2"></i>Edit</a>';
+                        return $btn;
+                    }else if($delete == true){
+                        $btn = '<a href="javascript:void(0)" class="btn btn-danger btn-sm" id="rep-tools" data-id="'. $row->id .'" data-toggle="modal" data-target="#report"><i class="fas fa-user-lock mr-2"></i>Report</a>';
+                        return $btn;
+                    }else{
+                        $btn = "";
+                    }
+                }
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
 
     public function allTools()
     {
@@ -49,6 +80,16 @@ trait ToolQueries {
         $changestat->save(); 
 
         return $changestat;
+    }
+
+    public function updateReportedTool($toolId, $validated)
+    {
+        $tools = Tools::whereId($toolId)->first();
+        $tools->reason = $validated['repreason'];
+        $tools->deleted_at = Carbon::now()->toDateTimeString();
+        $tools->save();
+
+        return $tools;
     }
 
 }

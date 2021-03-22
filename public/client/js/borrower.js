@@ -223,7 +223,7 @@ $(document).ready(function () {
                 dataType:"json",
                 success:function(data){
                     if(data){
-                        toastr.success(data.success, 'BORROWER ADDED', {timeOut: 1000});
+                        toastr.success(data.success, 'ADDED', {timeOut: 1000});
                         borrowertable.ajax.reload();
                         borrowertable.draw();
                         $("#add-borrower .close").click();
@@ -233,10 +233,19 @@ $(document).ready(function () {
                     }
                 },
                 error: function(data) {
-                    toastr.error(data.responseJSON.message, "ERROR", {timeOut: 3000});
+                    var errors = data.responseJSON.errors;
+                    var errorsHtml= '';
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += value[0]; 
+                    });
+                    toastr.error(
+                        errorsHtml, 
+                        'ERROR', 
+                        {timeOut: 3000}
+                    );
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
-                    .removeClass('uploading');
+                    .removeClass('uploading');  
                 }
             })
         }
@@ -253,7 +262,7 @@ $(document).ready(function () {
                 dataType:"json",
                 success:function(data){
                     if(data){
-                        toastr.success(data.success, 'BORROWER UPDATED', {timeOut: 1000});
+                        toastr.success(data.success, 'UPDATED', {timeOut: 1000});
                         borrowertable.ajax.reload();
                         borrowertable.draw();
                         $("#add-borrower .close").click();
@@ -263,10 +272,19 @@ $(document).ready(function () {
                     }
                 },
                 error: function(data) {
-                    toastr.error(data.responseJSON.message, "ERROR", {timeOut: 3000});
+                    var errors = data.responseJSON.errors;
+                    var errorsHtml= '';
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += value[0]; 
+                    });
+                    toastr.error(
+                        errorsHtml, 
+                        'ERROR', 
+                        {timeOut: 3000}
+                    );
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
-                    .removeClass('uploading');
+                    .removeClass('uploading'); 
                 }
             })
         }

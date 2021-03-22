@@ -47,8 +47,8 @@ $(document).ready(function () {
         $('#action').val('2');
         $.get("data/categories/" + id, function (data) { 
             $('#categories-form').trigger("reset");         
-            $('#description').val(data[0].description);
-            $('#id').val(data[0].id)
+            $('#description').val(data.description);
+            $('#id').val(data.id)
             $('.modal-title').html("Edit categories");
             $('#save-data').text("Update");
         })
@@ -79,15 +79,19 @@ $(document).ready(function () {
                         $('#save-data').prop('disabled', false)
                         .html("Submit")
                         .removeClass('uploading');  
-                    } else {
-                        toastr.error(data.error, 'ERROR', {timeOut: 5000});
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');  
                     }
                 },
-                error: function(jqXHR) {
-                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                error: function(data) {
+                    var errors = data.responseJSON.errors;
+                    var errorsHtml= '';
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += value[0]; 
+                    });
+                    toastr.error(
+                        errorsHtml, 
+                        'ERROR', 
+                        {timeOut: 3000}
+                    );
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
                     .removeClass('uploading');  
@@ -116,15 +120,19 @@ $(document).ready(function () {
                         toastr.success('Record has been updated successfully', 'SAVED', {timeOut: 5000});
                         categoriestable.ajax.reload();
                         categoriestable.draw();
-                    } else {
-                        toastr.error(data.error, 'ERROR', {timeOut: 5000});
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');  
                     }
                 },
-                error: function(jqXHR) {
-                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                error: function(data) {
+                    var errors = data.responseJSON.errors;
+                    var errorsHtml= '';
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += value[0]; 
+                    });
+                    toastr.error(
+                        errorsHtml, 
+                        'ERROR', 
+                        {timeOut: 3000}
+                    );
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
                     .removeClass('uploading');              

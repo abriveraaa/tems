@@ -12,6 +12,38 @@ use Auth;
 
 trait BorrowerQueries {
 
+    public function borrowerDataTable($borrower)
+    {
+        return Datatables::of($borrower)
+            ->addIndexColumn()
+            ->addColumn('action', function($row){
+                $update = Auth::user()->hasPermission('borrower-update');
+                $delete = Auth::user()->hasPermission('borrower-delete');
+                if($row->reported_at == null){
+                    if($update == true && $delete == true){
+                        $btn = '<a href="javascript:void(0)" class="btn btn-warning btn-sm mr-2" id="edit-borrower" data-id="'. $row->id .'" data-toggle="modal" data-target="#add-borrower"><i class="fas fa-pen mr-2"></i>Edit</a>';
+                        $btn .= '<a href="javascript:void(0)" class="btn btn-danger btn-sm" id="ban-borrower" data-id="'. $row->id .'" data-toggle="modal" data-target="#delete"><i class="fas fa-user-lock mr-2"></i>Ban</a>';
+                    }else if($update == true){
+                        $btn = '<a href="javascript:void(0)" class="btn btn-warning btn-sm mr-2" id="edit-borrower" data-id="'. $row->id .'" data-toggle="modal" data-target="#add-borrower"><i class="fas fa-pen mr-2"></i>Edit</a>';
+                        $btn .= '';
+                    }else if($delete == true){
+                        $btn = '';
+                        $btn .= '<a href="javascript:void(0)" class="btn btn-danger btn-sm" id="ban-borrower" data-id="'. $row->id .'" data-toggle="modal" data-target="#delete"><i class="fas fa-user-lock mr-2"></i>Ban</a>';
+                    }else{
+                        $btn = '';
+                    }
+                }else{
+                    if($delete == true || $update == true){
+                        $btn = '';
+                        $btn .= '<a href="javascript:void(0)" class="btn btn-success btn-sm" id="res-borrower" data-id="'. $row->id .'" data-toggle="modal" data-target="#restore"><i class="fas fa-user-check mr-2"></i>Unlock</a>';
+                    }
+                }
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
     public function allBorrower()
     {
         $data = Borrower::withTrashed()->with(['borrowercourse', 'borrowercollege'])->get();
@@ -60,7 +92,7 @@ trait BorrowerQueries {
         return $borrower;   	
     }
 
-    public function updateReport($borrowerId, $report)
+    public function banBorrower($borrowerId, $report)
     {
         $borrower = Borrower::where('id', $borrowerId)->first();
         $borrower->reported_at = $report;

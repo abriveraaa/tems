@@ -21,7 +21,7 @@ $(document).ready(function(){
         $(".product-list").empty();
         const item = await $.get("/category/countcategory", function(data){});
         (item.category).map((value)=> {
-            $('.categoryy').append('<div class="card"><a class="card-header bg-info collapsed" href="#toolname-'+ value.id +'" data-toggle="collapse" aria-expanded="false" aria-controls="toolname"><h3 class="card-title text-uppercase" id="category_name">'+ value.description +'</h3></a><div class="card-body p-0 collapse" id="toolname-'+ value.id +'"><ul class="category-'+ value.id +' products-list product-list-in-card pl-2 pr-2"></ul></div></div></div>'); 
+            $('.categoryy').append('<div class="card card-success collapsed-card "><div class="card-header"><h3 class="card-title text-uppercase">'+ value.description +'</h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button></div></div><div class="card-body p-0"><ul class="category-'+ value.id +' products-list product-list-in-card pl-2 pr-2"></ul></div></div>'); 
         });
 
         (item.toolname).map((result)=> {
@@ -35,7 +35,6 @@ $(document).ready(function(){
     };
 
     
-
     let counter = async() => {
         const tools = await $.get("/category/counttools", function(data){});
         $('#toolscount').html(tools);

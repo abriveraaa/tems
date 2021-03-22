@@ -73,10 +73,11 @@ $(document).ready(function () {
         $.get("data/course/" + id, function (data) { 
             $('#course-form').trigger("reset");   
             data.map((result) => {
+                console.log(result);
                 $('#description').val(result.description);
                 $('#code').val(result.code);
                 $('#id').val(result.id)
-                $('#college').val(result.college.id).trigger('change');  
+                $('#college').val(result.colleges[0].id).trigger('change');  
             });
             
             $('.modal-title').html("Edit course");
@@ -115,8 +116,17 @@ $(document).ready(function () {
                 .html("Submit")
                 .removeClass('uploading');  
             })
-            .fail(function(jqXHR){
-                toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+            .fail(function(data){
+                var errors = data.responseJSON.errors;
+                var errorsHtml= '';
+                $.each( errors, function( key, value ) {
+                    errorsHtml += value[0]; 
+                });
+                toastr.error(
+                    errorsHtml, 
+                    'ERROR', 
+                    {timeOut: 3000}
+                );
                 $('#save-data').prop('disabled', false)
                 .html("Submit")
                 .removeClass('uploading');
@@ -140,16 +150,18 @@ $(document).ready(function () {
                         .html("Submit")
                         .removeClass('uploading');  
                     }
-                    if(data.error)
-                    {
-                        toastr.error(data.error, 'ERROR', {timeOut: 3000});
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');  
-                    }
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                error: function(data) {
+                    var errors = data.responseJSON.errors;
+                    var errorsHtml= '';
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += value[0]; 
+                    });
+                    toastr.error(
+                        errorsHtml, 
+                        'ERROR', 
+                        {timeOut: 3000}
+                    );
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
                     .removeClass('uploading');  

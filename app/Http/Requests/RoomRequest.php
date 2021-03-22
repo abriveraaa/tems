@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CollegeRequest extends FormRequest
+class RoomRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,25 +25,25 @@ class CollegeRequest extends FormRequest
     {
         return [
             'description' => [
+                'bail',
                 'required',
-                'unique:colleges,description,'.$this->id,
+                'unique:rooms,description,'.$this->id,
             ],
             'code' => [
+                'bail',
                 'required',
-                'max:10',
-                'unique:colleges,code,'.$this->id,
-            ],
+                'unique:rooms,code,'.$this->id,
+            ]
         ];
     }
 
     public function messages()
     {
         return [
-            'description.required' => 'College description is required.<br>',
-            'description.unique' => 'College description has already been taken.<br>',
-            'code.required' => 'College code is required.<br>',
-            'code.max' => 'College code must not exceed to 10 characters.<br>',
-            'code.unique' => 'College code has already been taken.',
+            'description.required' => 'Room name is required.<br>',
+            'description.unique' => 'Room name has already been taken.<br>',
+            'code.required' => 'Room number is required.<br>',
+            'code.unique' => 'Room number has already been taken.',
         ];
     }
 }

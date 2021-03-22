@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SourceRequest extends FormRequest
+class ToolReportRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,20 @@ class SourceRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => [
-                'required', 
-                'unique:source,description,'.$this->id,
+            'rep-borrower' => [
+                'required',
+            ],
+            'repreason' => [
+                'required',
+            ],
+            'repnum' => [
+                '',
+            ],
+            'reptoolId' => [
+                '',
+            ],
+            'repBarcode' => [
+                '',
             ],
         ];
     }
@@ -34,8 +45,8 @@ class SourceRequest extends FormRequest
     public function messages()
     {
         return [
-            'description.required' => 'Source description is required.<br>',
-            'description.unique' => 'Source description has already been taken.<br>',
+            'rep-borrower' => 'Borrower is required.<br>',
+            'repreason' => 'Reason is required.<br>',
         ];
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SourceRequest extends FormRequest
+class CategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,17 +25,17 @@ class SourceRequest extends FormRequest
     {
         return [
             'description' => [
-                'required', 
-                'unique:source,description,'.$this->id,
-            ],
+                'required',
+                'unique:categories,description,'.$this->id,
+            ]
         ];
     }
 
     public function messages()
     {
         return [
-            'description.required' => 'Source description is required.<br>',
-            'description.unique' => 'Source description has already been taken.<br>',
+            'description.required' => 'Category description is required.<br>',
+            'description.unique' => 'Category description has already been taken.',
         ];
     }
 }

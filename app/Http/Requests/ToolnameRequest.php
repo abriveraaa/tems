@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SourceRequest extends FormRequest
+class ToolnameRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,18 +24,25 @@ class SourceRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => [
-                'required', 
-                'unique:source,description,'.$this->id,
+            'toolcategory' => [
+                'required',
             ],
+            'description' => [
+                'required',
+                'unique:tool_names,description,'.$this->toolname,
+            ],
+            'idtoolname' => [
+                '',
+            ]
         ];
     }
 
     public function messages()
     {
         return [
-            'description.required' => 'Source description is required.<br>',
-            'description.unique' => 'Source description has already been taken.<br>',
+            'toolcategory.required' => 'Tool Category is required.<br>',
+            'description.required' => 'Tool Name is required.<br>',
+            'description.unique' => 'Tool Name has already been taken.<br>',
         ];
     }
 }

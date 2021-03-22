@@ -47,4 +47,15 @@ class ToolRequest extends FormRequest
             ],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'category.required' => 'Category is required.<br>',
+            'description.required' => 'Tool description is required.<br>',
+            'barcode.required' => 'Barcode is required.<br>',
+            'source.required' => 'Source is required.<br>',
+            'property.unique' => 'Property has already been taken.<br>',
+        ];
+    }
 }

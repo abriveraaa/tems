@@ -303,8 +303,17 @@ $(document).ready(function(){
             .html("Report")
             .removeClass('uploading');
         })
-        .fail(function(jqXHR){
-            toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+        .fail(function(data){
+            var errors = data.responseJSON.errors;
+            var errorsHtml= '';
+            $.each( errors, function( key, value ) {
+                errorsHtml += value[0]; 
+            });
+            toastr.error(
+                errorsHtml, 
+                'ERROR', 
+                {timeOut: 3000}
+            );
             $('#save-report').prop('disabled', false)
             .html("Report")
             .removeClass('uploading');
@@ -343,19 +352,23 @@ $(document).ready(function(){
                         .html("")
                         .removeClass('uploading');
                         toastr.success('Item added succesfully!', 'ADDED', {timeOut: 5000});
-                    } else {
-                        toastr.error(data.error, 'ERROR', {timeOut: 5000});
-                         $('#save-tools').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');
-                        }
-                    },
-                    error: function(jqXHR){
-                        toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
-                        $('#save-tools').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');
-                    }
+                    } 
+                },
+                error: function(data){
+                    var errors = data.responseJSON.errors;
+                    var errorsHtml= '';
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += value[0]; 
+                    });
+                    toastr.error(
+                        errorsHtml, 
+                        'ERROR', 
+                        {timeOut: 3000}
+                    );
+                    $('#save-tools').prop('disabled', false)
+                    .html("Submit")
+                    .removeClass('uploading');
+                }
             });
         }
         if (action == "Edit") {
@@ -382,15 +395,19 @@ $(document).ready(function(){
                         $('#save-tools').prop('disabled', false)
                         .html("")
                         .removeClass('uploading');
-                    } else {
-                        toastr.error(data.error, 'ERROR', {timeOut: 5000});
-                         $('#save-tools').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');
                     }
                 },
-                error: function(jqXHR){
-                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                error: function(data){
+                    var errors = data.responseJSON.errors;
+                    var errorsHtml= '';
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += value[0]; 
+                    });
+                    toastr.error(
+                        errorsHtml, 
+                        'ERROR', 
+                        {timeOut: 3000}
+                    );
                     $('#save-tools').prop('disabled', false)
                         .html("Submit")
                         .removeClass('uploading');

@@ -33,6 +33,7 @@
                     </p>
                     <p class="d-flex flex-column text-right">
                         <span class="text-muted text-uppercase">BORROWED TOOLS</span>
+                       
                         <a href="#borroweditems" class="small-box-footer collapsed" data-toggle="collapse" aria-expanded="false" aria-controls="borroweditems"> View More
                             <i class="fas fa-plus-circle"></i>
                         </a>
@@ -41,6 +42,7 @@
                 </div>
                 <div class="collapse" id="borroweditems">
                     <div class="card">
+                        
                         <div class="card-body p-0">
                             <ul class="products-list borrow-list product-list-in-card pl-2 pr-2" id="sample">
                             </ul>

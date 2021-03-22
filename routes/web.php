@@ -21,7 +21,7 @@ Route::get('/', function () {
     }
 });
 
-Route::get('test', ['as' => 'test', 'uses' => 'DashboardController@getCategoryCount']);
+Route::get('test', ['as' => 'test', 'uses' => 'RequestController@BorrowedItem']);
 //LOGIN
 Route::group(['prefix' => '/login'], function() {
     Route::get('', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);

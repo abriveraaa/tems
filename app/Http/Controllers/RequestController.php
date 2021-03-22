@@ -69,7 +69,7 @@ class RequestController extends Controller
             $this->updateReason(null, $available);
 
             $returned = Requests::Borrowed($item);
-            $this->updateStatus($returned);
+            $this->updateStatus($returned, 'Returned');
 
             $this->syncRequestReturned($adminId, $returned);
             

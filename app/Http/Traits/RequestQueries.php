@@ -19,9 +19,9 @@ trait RequestQueries {
         return $requestlog;
     }
 
-    public function updateStatus($returned)
+    public function updateStatus($returned, $status)
     {
-        $returned->status = "Returned";
+        $returned->status = $status;
         $returned->save();
 
         return $returned;

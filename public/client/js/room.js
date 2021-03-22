@@ -60,35 +60,35 @@ $(document).ready(function () {
         {
             var info = $('#room-form').serialize();
             $(this).html("Sending...");
-            $.ajax({
-                url: "data/room",
-                method: "POST",
-                data: info,
-                dataType: 'json',
-                success: function(data) {
-                    if (data.success) {
-                        $('#room-form').trigger('reset');
-                        $('.show').hide();
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');  
-                        toastr.success('New record has been saved successfully', 'SAVED', {timeOut: 3000});
-                        roomtable.ajax.reload();
-                        roomtable.draw();
-                    } else {
-                        toastr.error(data.error, 'ERROR', {timeOut: 3000});
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');  
-                    }
-                },
-                error: function(jqXHR) {
-                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+            $.post("data/room", info)
+            .done(function(data){
+                if (data.success) {
+                    $('#room-form').trigger('reset');
+                    $('.show').hide();
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
                     .removeClass('uploading');  
+                    toastr.success('New record has been saved successfully', 'SAVED', {timeOut: 3000});
+                    roomtable.ajax.reload();
+                    roomtable.draw();
                 }
+            })
+            .fail(function(data){
+                var errors = data.responseJSON.errors;
+                var errorsHtml= '';
+                $.each( errors, function( key, value ) {
+                    errorsHtml += value[0]; 
+                });
+                toastr.error(
+                    errorsHtml, 
+                    'ERROR', 
+                    {timeOut: 3000}
+                );
+                $('#save-data').prop('disabled', false)
+                .html("Submit")
+                .removeClass('uploading');  
             });
+           
             $('#room-form').trigger("reset"); 
         }
         if(action == 2)
@@ -111,15 +111,19 @@ $(document).ready(function () {
                         toastr.success('Record has been updated successfully', 'SAVED', {timeOut: 3000});
                         roomtable.ajax.reload();
                         roomtable.draw();
-                    } else {
-                        toastr.error(data.error, 'ERROR', {timeOut: 3000});
-                        $('#save-data').prop('disabled', false)
-                        .html("Submit")
-                        .removeClass('uploading');  
                     }
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    toastr.error(jqXHR.responseJSON.message, jqXHR.statusText, {timeOut: 3000});
+                error: function(data) {
+                    var errors = data.responseJSON.errors;
+                    var errorsHtml= '';
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += value[0]; 
+                    });
+                    toastr.error(
+                        errorsHtml, 
+                        'ERROR', 
+                        {timeOut: 3000}
+                    );
                     $('#save-data').prop('disabled', false)
                     .html("Submit")
                     .removeClass('uploading');  
